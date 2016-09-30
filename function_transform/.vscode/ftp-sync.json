@@ -1,0 +1,16 @@
+{
+    "remotePath": "/var/www/jda",
+    "host": "172.17.100.244",
+    "username": "root",
+    "password": "root",
+    "port": 22,
+    "protocol": "sftp",
+    "uploadOnSave": true,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "ignore": [
+        "\\.vscode",
+        "\\.git"
+    ]
+}
