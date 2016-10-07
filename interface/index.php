@@ -5,13 +5,13 @@
     <title>Interface</title>
     <link rel="stylesheet" href="src/css/style.css" media="screen" title="no title">
     <script type="text/javascript" src="assets/jquery.min.js"></script>
-    <script type="text/javascript" src="src/js/mainzmov.js.js"></script>
+    <script type="text/javascript" src="src/js/mainzmov.js"></script>
   </head>
   <body>
     <div id="hiddenData"></div>
     <header>
       <div id="cnt-search">
-        <input type="text" placeholder="Search"/>
+        <input id="in-search" type="text" placeholder="Search"/>
         <img src="src/img/search.png"/>
       </div>
       <div id="btnSettings">
@@ -20,7 +20,7 @@
     </header>
     <div id="cnt-main">
       <div id="cnt-movieList"><!-- CONTAINER MOVIE LIST -->
-        <div class="cnt-movieItem"><!-- MOVIE ITEM -->
+        <div data-itemid="0" class="cnt-movieItem"><!-- MOVIE ITEM -->
           <div class="cnt-thumnails">
             <img src="src/img/ns.jpg" alt="" />
           </div>
@@ -37,7 +37,7 @@
           </div>
         </div><!-- END MOVIE ITEM -->
 
-        <div class="cnt-movieItem"><!-- MOVIE ITEM -->
+        <div data-itemid="1" class="cnt-movieItem"><!-- MOVIE ITEM -->
           <div class="cnt-thumnails">
             <img src="src/img/ns.jpg" alt="" />
           </div>
@@ -54,7 +54,7 @@
           </div>
         </div><!-- END MOVIE ITEM -->
 
-        <div class="cnt-movieItem"><!-- MOVIE ITEM -->
+        <div data-itemid="2" class="cnt-movieItem"><!-- MOVIE ITEM -->
           <div class="cnt-thumnails">
             <img src="src/img/ns.jpg" alt="" />
           </div>
@@ -109,5 +109,9 @@ acteur3
     <footer>
       2016/BeerWare@ESO;JDA;DDG
     </footer>
+    <script type="text/javascript">
+      var zm = new mainZMov();
+      zm.initEvents();
+    </script>
   </body>
 </html>

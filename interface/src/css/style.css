@@ -7,6 +7,7 @@ body {
     bottom: 0px;
     overflow: hidden;
     font-family: sans-serif;
+    background-color: #bbb;
 }
 
 header {
@@ -31,7 +32,7 @@ header {
   padding-right: 35px;
   box-sizing: border-box;
   background-color: transparent;
-  /*!  */
+  padding-left: 15px;
   border: 0px;
   border-bottom: 1px solid rgba(0,0,0,.3);
   color: rgba(0,0,0,.6);
@@ -59,8 +60,6 @@ header {
     width: 30vw;
     height: calc(100vh - 60px);
     overflow: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 #cnt-movieInfo {
@@ -139,4 +138,8 @@ header {
 }
 #hiddenData{
   display: none;
+}
+
+input:focus{
+  outline: none;
 }
