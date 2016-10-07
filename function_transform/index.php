@@ -1,5 +1,8 @@
 <?php
-	require('info.php');
+	error_reporting(E_ALL);
+	ini_set('display_errors',1);
+	
+	require('info.php');  
 	if(isset($_POST['entree']) && $_POST['entree'] != ''){
 		api_search($_POST['entree']);
 	}
