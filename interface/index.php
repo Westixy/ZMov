@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <title>Interface</title>
     <link rel="stylesheet" href="src/css/style.css" media="screen" title="no title">
+    <script type="text/javascript" src="assets/jquery.min.js"></script>
+    <script type="text/javascript" src="src/js/mainzmov.js.js"></script>
   </head>
   <body>
+    <div id="hiddenData"></div>
     <header>
       <div id="cnt-search">
         <input type="text" placeholder="Search"/>
@@ -16,10 +19,7 @@
       </div>
     </header>
     <div id="cnt-main">
-
       <div id="cnt-movieList"><!-- CONTAINER MOVIE LIST -->
-
-
         <div class="cnt-movieItem"><!-- MOVIE ITEM -->
           <div class="cnt-thumnails">
             <img src="src/img/ns.jpg" alt="" />
