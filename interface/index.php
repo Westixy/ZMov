@@ -5,9 +5,11 @@
     <title>Interface</title>
     <link rel="stylesheet" href="src/css/style.css" media="screen" title="no title">
     <script type="text/javascript" src="assets/jquery.min.js"></script>
+    <script type="text/javascript" src="src/js/loader.js"></script>
     <script type="text/javascript" src="src/js/mainzmov.js"></script>
   </head>
   <body>
+    <div id="loader"></div>
     <div id="hiddenData"></div>
     <header>
       <div id="cnt-search">

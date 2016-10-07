@@ -44,12 +44,22 @@ header {
     text-align: right;
 }
 
-#btnSettings {
-    text-align: right;
-}
 
 #btnSettings img{
   width:35px;
+  cursor: pointer;
+  transition: 500ms;
+  padding:5px;
+  border-radius: 50%;
+}
+
+#btnSettings img:hover {
+    transform: rotate(180deg);
+    background-color: #bbb;
+}
+#btnSettings img:active {
+    background-color: #aaa;
+    transition: 200ms;
 }
 
 #cnt-main {
@@ -73,17 +83,18 @@ header {
 
 .cnt-movieItem {
     display: flex;
-    padding: 5px;
+    /*! padding: 5px; */
     background-color: #eee;
     margin: 6px 0px 0px 6px;
     box-sizing: border-box;
-    height: 127px;
+    height: 120px;
     box-shadow: 0px 1px 2px rgba(0,0,0,.2);
     cursor: pointer;
     transition:300ms;
 }
 .cnt-movieItem:hover,.cnt-movieItem:active {
     background-color: #ddd;
+    box-shadow: 0px 1px 4px rgba(0,0,0,.6);
 }
 
 .cnt-thumnails img {
@@ -142,4 +153,9 @@ header {
 
 input:focus{
   outline: none;
+}
+
+
+#loader{
+  
 }

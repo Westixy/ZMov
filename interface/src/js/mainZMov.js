@@ -5,12 +5,13 @@ function mainZMov(){
   }
 
 
-// vvv EVENTS vvv
+// vvv EVENTS USER vvv //
   this.initEvents=function(){
     $('#hiddenData').bind("DOMSubtreeModified",that.onDataChange);
     $(window).on("resize",that.onWinResize);
     $('#in-search').on("change",that.onSearchChange);
     $('#cnt-movieList').on('click','.cnt-movieItem',that.onItemClick);
+    $('#btnSettings').on('click',that.onSettingsClick)
   }
 
   this.onDataChange=function(){
@@ -27,8 +28,20 @@ function mainZMov(){
 
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
-    console.log("onItemClick");
-    console.log($(elem).attr('data-itemid'));
+    console.log("onItemClick -> "+$(elem).attr('data-itemid'));
   }
 
+  this.onSettingsClick=function(){
+    console.log("onSettingsClick");
+  }
+
+  // vvv EVENTS ZMov vvv //
+
+  this.onLoad=function(){}
+  this.afterInit=function(){}
+  this.onDataRecived=function(data){}
+  this.onSearchEnd=function(){}
+
+  this.on=function(){}
+  this.onx=function(){}
 }
