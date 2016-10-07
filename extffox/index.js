@@ -10,7 +10,7 @@ var folder = [];
 var allFiles = [];
 var SDBarWorker = null;
 var ConfigPath = "data/config.json";
-var urlBase = "http://eso.dev";
+var urlBase = "http://";
 
 
 // -------------------------------------------------

@@ -1,0 +1,139 @@
+body {
+    margin: 0px;
+    left: 0px;
+    right: 0px;
+    position: relative;
+    top: 0px;
+    bottom: 0px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    background-color: #ccc;
+    box-sizing: border-box;
+    height: 60px;
+}
+
+#cnt-search {
+    display: flex;
+    width: 90vw;
+    padding-left: 15px;
+}
+
+#cnt-search input{
+  padding: 5px;
+  width: 29vw;
+  padding-right: 35px;
+  box-sizing: border-box;
+  background-color: transparent;
+  /*!  */
+  border: 0px;
+  border-bottom: 1px solid rgba(0,0,0,.3);
+  color: rgba(0,0,0,.6);
+}
+
+#btnSettings {
+    display: inline-block;
+    width: 10vw;
+    text-align: right;
+}
+
+#btnSettings {
+    text-align: right;
+}
+
+#btnSettings img{
+  width:35px;
+}
+
+#cnt-main {
+    overflow: auto;
+    display: flex;
+}
+#cnt-movieList {
+    width: 30vw;
+    height: calc(100vh - 60px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#cnt-movieInfo {
+    width: 70vw;
+    height: calc(100vh - 60px);
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cnt-movieItem {
+    display: flex;
+    padding: 5px;
+    background-color: #eee;
+    margin: 6px 0px 0px 6px;
+    box-sizing: border-box;
+    height: 127px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,.2);
+    cursor: pointer;
+    transition:300ms;
+}
+.cnt-movieItem:hover,.cnt-movieItem:active {
+    background-color: #ddd;
+}
+
+.cnt-thumnails img {
+    max-width: 80px;
+    max-height: 100%;
+}
+
+.cnt-miText {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.miTitle {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.miName {
+    font-family: monospace;
+}
+
+.miDate {
+    font-size: 13px;
+}
+
+#cnt-movieInfo img {
+    max-width: 250px;
+}
+
+
+#cnt-search img {
+    width: 30px;
+    height:30px;
+    margin-left: -35px;
+}
+
+#cnt-movieCard {
+    display: flex;
+    background-color: #eee;
+    padding: 5px;
+    box-sizing: border-box;
+    width: 98%;
+    height: 98%;
+}
+.cnt-textInfo {
+    padding-left: 15px;
+}
+.preRawText {
+    font-family: sans-serif;
+}
