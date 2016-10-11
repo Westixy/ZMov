@@ -4,13 +4,15 @@ function mainZMov(){
   this.l={};
 
   this.init=function(){
-    this.initEvents();
     this.initLoaders();
+    this.initEvents();
+
   }
 
   this.initLoaders=function(){
-    that.l.b=new Loader("body");
-    that.l.flst=new Loader("#cnt-movieList");
+    that.l.b=new Loader("#bdy2");
+    that.l.flst=new Loader("#loader-mvlst");
+    that.l.info=new Loader("#loader-info");
   }
 
 // vvv EVENTS USER vvv //
@@ -39,6 +41,8 @@ function mainZMov(){
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
     console.log("onItemClick -> "+$(elem).attr('data-itemid'));
+    that.l.info.show();
+    var x = setTimeout(function(){that.l.info.hide();},1000);
   }
 
   this.onSettingsClick=function(){
@@ -54,4 +58,62 @@ function mainZMov(){
 
   this.on=function(){}
   this.onx=function(){}
+}
+
+function itemZMov(data,onclick){
+  var that=this;
+  this.events={
+    onclick:function(){}
+  };
+  this.css={
+    item:{
+      container:".cnt-movieItem",
+      thumbnails:".cnt-thumnails",
+      miniTxt:".cnt-miText",
+      title:".miTitle",
+      name:".miName"
+      date:".miDate"
+    },
+    full:{
+      container:"#cnt-movieCard",
+      img:"#cnt-movieCard > div > img"
+      cntInfo:"cnt-textInfo",
+      title:"movieTitle",
+      rawText:"preRawText"
+      cntDesc:"cnt-desc",
+      cntAct:"",
+      cntMore:"",
+      desc:"txt-desc",
+      acteurs:"txt-acteurs",
+      more:"cnt-pinfo"
+    }
+  };
+
+  this.data={
+    title:"",
+    fname:"",
+    date:"",
+    acteurs:[],
+    more:"",
+    id:"",
+    imgSrcBig:"",
+    imgSrcSmall:""
+  }
+
+  this.init=function(data,onclick){
+    that.data.title=data.title;
+    that.data.fname=data.fname;
+    that.data.date=data.date;
+    that.data.acteurs=data.acteurs;
+    that.data.more=data.more;
+    that.data.imgSrcBig=data.imgSrcBig;
+    that.data.imgSrcSmall=data.imgSrcSmall;
+
+    that.events.onclick=onclick;
+  }
+
+}
+
+function n(text){
+  return text.substring(1, text.length)
 }
