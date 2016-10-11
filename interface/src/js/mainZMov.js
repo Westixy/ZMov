@@ -1,9 +1,17 @@
 function mainZMov(){
   var that=this;
-  this.prop={
+  this.prop={};
+  this.l={};
 
+  this.init=function(){
+    this.initEvents();
+    this.initLoaders();
   }
 
+  this.initLoaders=function(){
+    that.l.b=new Loader("body");
+    that.l.flst=new Loader("#cnt-movieList");
+  }
 
 // vvv EVENTS USER vvv //
   this.initEvents=function(){
@@ -24,6 +32,8 @@ function mainZMov(){
 
   this.onSearchChange=function(){
     console.log("onSearchChange");
+    that.l.flst.show();
+    var x = setTimeout(function(){that.l.flst.hide();},1000);
   }
 
   this.onItemClick=function(ev){

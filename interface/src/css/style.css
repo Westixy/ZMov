@@ -83,7 +83,6 @@ header {
 
 .cnt-movieItem {
     display: flex;
-    /*! padding: 5px; */
     background-color: #eee;
     margin: 6px 0px 0px 6px;
     box-sizing: border-box;
@@ -126,7 +125,6 @@ header {
     max-width: 250px;
 }
 
-
 #cnt-search img {
     width: 30px;
     height:30px;
@@ -155,7 +153,6 @@ input:focus{
   outline: none;
 }
 
-
-#loader{
-  
+.cnt-miText > div {
+    word-break: break-all;
 }

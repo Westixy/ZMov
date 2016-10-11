@@ -1,0 +1,48 @@
+.loader {
+    position: absolute;
+    background-color: rgba(0,0,0,.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition:300ms;
+    text-align:center;
+    color: #fff;
+    font-size: 40px;
+}
+.cntload {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.cntload>.htmlload{
+  transition: 300ms;
+}
+
+.cntload.loadhide{
+  overflow: auto;
+}
+.cntload.loadhide>.loader{
+  bottom:100%;
+  opacity: 0;
+}
+.cntload.loadhide>.htmlload{
+  filter: blur(0px) contrast(100%);
+}
+
+.cntload.loadshow{
+  overflow: hidden;
+}
+.cntload.loadshow>.loader{
+  bottom:0;
+  opacity: 0.8;
+}
+.cntload.loadshow>.htmlload{
+  filter: blur(3px) contrast(200%);
+}

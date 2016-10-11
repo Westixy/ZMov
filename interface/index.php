@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="src/css/style.css" media="screen" title="no title">
     <script type="text/javascript" src="assets/jquery.min.js"></script>
     <script type="text/javascript" src="src/js/loader.js"></script>
+    <link rel="stylesheet" href="src/css/loader.css" media="screen" title="no title">
     <script type="text/javascript" src="src/js/mainzmov.js"></script>
   </head>
-  <body>
-    <div id="loader"></div>
+  <body id="bdy">
     <div id="hiddenData"></div>
     <header>
       <div id="cnt-search">
@@ -112,8 +112,8 @@ acteur3
       2016/BeerWare@ESO;JDA;DDG
     </footer>
     <script type="text/javascript">
-      var zm = new mainZMov();
-      zm.initEvents();
+    var zm = new mainZMov();
+    window.onload=zm.init();
     </script>
   </body>
 </html>
