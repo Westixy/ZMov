@@ -1,12 +1,12 @@
-function loader(){
+function Loader(){
   var that=this;
 
   this.state=0;
 
   this.css={
     elem:"#loader",
-    hide:"hide",
-    show:"show"
+    hide:"loadhide",
+    show:"loadshow"
   };
 
   this.show=function(){
