@@ -156,3 +156,16 @@ input:focus{
 .cnt-miText > div {
     word-break: break-all;
 }
+
+footer{
+  position: fixed;
+  text-align: center;
+  font-size: 9px;
+  background-color: #000;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  color:#fff;
+  opacity: 0.5;
+  padding: 3px 0px;
+}
