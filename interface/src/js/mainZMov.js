@@ -60,32 +60,29 @@ function mainZMov(){
   this.onx=function(){}
 }
 
-function itemZMov(data,onclick){
+function itemZMov(data){
   var that=this;
-  this.events={
-    onclick:function(){}
-  };
   this.css={
     item:{
       container:".cnt-movieItem",
       thumbnails:".cnt-thumnails",
       miniTxt:".cnt-miText",
       title:".miTitle",
-      name:".miName"
+      name:".miName",
       date:".miDate"
     },
     full:{
       container:"#cnt-movieCard",
-      img:"#cnt-movieCard > div > img"
-      cntInfo:"cnt-textInfo",
-      title:"movieTitle",
-      rawText:"preRawText"
-      cntDesc:"cnt-desc",
-      cntAct:"",
-      cntMore:"",
-      desc:"txt-desc",
-      acteurs:"txt-acteurs",
-      more:"cnt-pinfo"
+      img:"#cnt-movieCard > div > img",
+      cntInfo:".cnt-textInfo",
+      title:".movieTitle",
+      rawText:".preRawText",
+      cntDesc:".cnt-desc",
+      cntAct:".cnt-acteurs",
+      cntMore:".cnt-moreinfo",
+      desc:"#txt-desc",
+      acteurs:"#txt-acteurs",
+      more:"#cnt-pinfo"
     }
   };
 
@@ -108,12 +105,18 @@ function itemZMov(data,onclick){
     that.data.more=data.more;
     that.data.imgSrcBig=data.imgSrcBig;
     that.data.imgSrcSmall=data.imgSrcSmall;
-
-    that.events.onclick=onclick;
   }
+
+  this.events={
+    itemOnClick:function(){
+      console.log("itemOnClick");
+    }
+  };
+
+  this.includeToList=function(){};
 
 }
 
 function n(text){
-  return text.substring(1, text.length)
+  return text.substring(1, text.length);
 }

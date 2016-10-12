@@ -1,6 +1,7 @@
 function Loader(selector,text){
   var that=this;
 
+  this.iterate=0;
   this.state=0;
   this.text=text||'Loading';
   this.loaderAnimation='<img src="src/img/load.svg" alt="loader">';
@@ -19,7 +20,7 @@ function Loader(selector,text){
 
   this.pointer=$(that.css.elem+' > .'+that.css.cont);
 
-  this.show=function(){
+  this.s=function(){
     var el = that.pointer;
     if(el.hasClass(that.css.hide))
       el.removeClass(that.css.hide);
@@ -28,13 +29,27 @@ function Loader(selector,text){
     this.onShow();
   }
 
-  this.hide=function(){
+  this.show=function(){
+    this.iterate++;
+    if(this.iterate==1){
+      this.s();
+    }
+  }
+
+  this.h=function(){
     var el = that.pointer;
     if(el.hasClass(that.css.show))
       el.removeClass(that.css.show);
     el.addClass(that.css.hide);
     that.state=0;
     this.onHide();
+  }
+
+  this.hide=function(){
+    this.iterate--;
+      if(this.iterate<=0){
+        this.h();
+      }
   }
 
   // state : show=1 ; hide=0
