@@ -64,6 +64,7 @@ function itemZMov(data){
   var that=this;
   this.css={
     item:{
+      parent:"#cnt-movieList",
       container:".cnt-movieItem",
       thumbnails:".cnt-thumnails",
       miniTxt:".cnt-miText",
@@ -97,12 +98,13 @@ function itemZMov(data){
     imgSrcSmall:""
   }
 
-  this.init=function(data,onclick){
+  this.init=function(data){
     that.data.title=data.title;
     that.data.fname=data.fname;
     that.data.date=data.date;
     that.data.acteurs=data.acteurs;
     that.data.more=data.more;
+    that.data.id=data.id;
     that.data.imgSrcBig=data.imgSrcBig;
     that.data.imgSrcSmall=data.imgSrcSmall;
   }
@@ -113,7 +115,37 @@ function itemZMov(data){
     }
   };
 
-  this.includeToList=function(){};
+  this.includeToList=function(){
+    var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
+    iB+='<div class="'+n(that.css.item.thumbnails)+'">';
+    iB+='    <img src="'+that.data.imgSrcSmall+'" alt="thumbnails small img '+that.data.title+'" />';
+    iB+='  </div>';
+    iB+='  <div class="'+n(that.css.item.miniTxt)+'">';
+    iB+='    <div class="'+n(that.css.item.title)+'">';
+    iB+='      '+that.data.title;
+    iB+='    </div>';
+    iB+='    <div class="'+n(that.css.item.name)+'">';
+    iB+='      '+that.data.fname;
+    iB+='    </div>';
+    iB+='    <div class="'+n(that.css.item.date)+'">';
+    iB+='      '+that.data.date;
+    iB+='    </div>';
+    iB+='  </div>';
+    iB+='</div>';
+    $(that.css.item.parent).append(iB);
+  };
+
+  this.updateCard=function(){
+    $(that.css.full.img).src(that.data.imgSrcBig);
+    $(that.css.full.title).text(that.data.title);
+    $(that.css.full.desc).text(that.data.desc);
+    var m="";
+    that.data.acteurs.forEach(function(act){
+      m+=act+'\n';
+    });
+    $(that.css.full.acteurs).text(that.data.acteurs);
+    $(that.css.full.more).html(that.data.more);
+  };
 
 }
 
