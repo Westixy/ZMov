@@ -10,7 +10,7 @@ var folder = [];
 var allFiles = [];
 var SDBarWorker = null;
 var ConfigPath = "data/config.json";
-var urlBase = "http://";
+var urlBase = "http://maw.dev";
 
 
 // -------------------------------------------------
@@ -171,7 +171,7 @@ function writeFile(content, path) {
     let prom = OS.File.writeAtomic(path, array, // Write the array atomically to "file.txt", using as temporary
         { tmpPath: path + ".tmp" }); // buffer "file.txt.tmp".
     prom.then(function() {
-        //console.log("=== FILE WRITED : " + path); 
+        //console.log("=== FILE WRITED : " + path);
     });
 }
 

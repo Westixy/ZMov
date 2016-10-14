@@ -25,56 +25,6 @@
         <div id="cnt-main">
           <div id="loader-mvlst">
             <div id="cnt-movieList"><!-- CONTAINER MOVIE LIST -->
-              <div data-itemid="0" class="cnt-movieItem"><!-- MOVIE ITEM -->
-                <div class="cnt-thumnails">
-                  <img src="src/img/ns.jpg" alt="" />
-                </div>
-                <div class="cnt-miText">
-                  <div class="miTitle">
-                    Titre du film
-                  </div>
-                  <div class="miName">
-                    nom-du_fichier.originel.avi
-                  </div>
-                  <div class="miDate">
-                    12.05.2016
-                  </div>
-                </div>
-              </div><!-- END MOVIE ITEM -->
-
-              <div data-itemid="1" class="cnt-movieItem"><!-- MOVIE ITEM -->
-                <div class="cnt-thumnails">
-                  <img src="src/img/ns.jpg" alt="" />
-                </div>
-                <div class="cnt-miText">
-                  <div class="miTitle">
-                    Titre du film
-                  </div>
-                  <div class="miName">
-                    nom-du_fichier.originel.avi
-                  </div>
-                  <div class="miDate">
-                    12.05.2016
-                  </div>
-                </div>
-              </div><!-- END MOVIE ITEM -->
-
-              <div data-itemid="2" class="cnt-movieItem"><!-- MOVIE ITEM -->
-                <div class="cnt-thumnails">
-                  <img src="src/img/ns.jpg" alt="" />
-                </div>
-                <div class="cnt-miText">
-                  <div class="miTitle">
-                    Titre du film
-                  </div>
-                  <div class="miName">
-                    nom-du_fichier.originel.avi
-                  </div>
-                  <div class="miDate">
-                    12.05.2016
-                  </div>
-                </div>
-              </div><!-- END MOVIE ITEM -->
 
             </div><!-- END CONTAINER MOVIE LIST -->
           </div>
@@ -86,19 +36,17 @@
                   <h1 class="movieTitle">Titre du film</h1>
                   <div class="cnt-desc">
                     <h2>Description</h2>
-                    <p>
-                      <pre id="txt-desc" class="preRawText">Une petite description au calme
+                      <p id="txt-desc" class="preRawText">Une petite description au calme
 sur plusieurs lignes
-                      </pre>
-                    </p>
+                      </p>
                   </div>
                   <div class="cnt-acteurs">
                     <h2>Acteurs</h2>
                     <p>
-                      <pre id="txt-acteurs" class="preRawText">acteur1
+                      <p id="txt-acteurs" class="preRawText">acteur1
 acteur2
 acteur3
-                      </pre>
+                      </p>
                     </p>
                   </div>
                   <div class="cnt-moreinfo">

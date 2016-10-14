@@ -1,11 +1,47 @@
+/*
+
+888b     d888          d8b
+8888b   d8888          Y8P
+88888b.d88888
+888Y88888P888  8888b.  888 88888b.
+888 Y888P 888     "88b 888 888 "88b
+888  Y8P  888 .d888888 888 888  888
+888   "   888 888  888 888 888  888
+888       888 "Y888888 888 888  888
+
+*/
+
 function mainZMov(){
   var that=this;
   this.prop={};
   this.l={};
 
+  this.il=new ItemListZMov();
+
+  var d={
+    title:"My title",
+    fname:"ma_fname.waw",
+    date:"10.10.2016",
+    acteurs:["John", "CENA", "Cartman"],
+    more:"<small>noMore</small><strong> Héhéhé</strong>",
+    id:"0",
+    desc:"MariaDb on fire",
+    imgSrcBig:"http://images.fan-de-cinema.com/affiches/large/65/67886.jpg",
+    imgSrcSmall:"http://s3images.coroflot.com/user_files/individual_files/projects/491612_1284695_cover_ps27yjaxigno7jzp2dhx.jpg"
+  };
+
   this.init=function(){
     this.initLoaders();
     this.initEvents();
+
+    for(var i =0;i<50;i++){
+      if(i%2==0)
+        this.il.addItemToList(d);
+      else
+        this.il.addItem(d);
+    }
+
+
 
   }
 
@@ -14,6 +50,7 @@ function mainZMov(){
     that.l.flst=new Loader("#loader-mvlst");
     that.l.info=new Loader("#loader-info");
   }
+
 
 // vvv EVENTS USER vvv //
   this.initEvents=function(){
@@ -40,8 +77,10 @@ function mainZMov(){
 
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
-    console.log("onItemClick -> "+$(elem).attr('data-itemid'));
+    var id = $(elem).attr('data-itemid');
+    console.log("onItemClick -> "+id);
     that.l.info.show();
+    that.il.list[id].updateCard();
     var x = setTimeout(function(){that.l.info.hide();},1000);
   }
 
@@ -59,6 +98,24 @@ function mainZMov(){
   this.on=function(){}
   this.onx=function(){}
 }
+
+
+
+
+
+
+/*
+
+8888888 888
+  888   888
+  888   888
+  888   888888 .d88b.  88888b.d88b.
+  888   888   d8P  Y8b 888 "888 "88b
+  888   888   88888888 888  888  888
+  888   Y88b. Y8b.     888  888  888
+8888888  "Y888 "Y8888  888  888  888
+
+*/
 
 function itemZMov(data){
   var that=this;
@@ -102,18 +159,13 @@ function itemZMov(data){
     that.data.title=data.title;
     that.data.fname=data.fname;
     that.data.date=data.date;
-    that.data.acteurs=data.acteurs;
+    that.data.acteurs=data.acteurs||[];
     that.data.more=data.more;
     that.data.id=data.id;
+    that.data.desc=data.desc;
     that.data.imgSrcBig=data.imgSrcBig;
     that.data.imgSrcSmall=data.imgSrcSmall;
   }
-
-  this.events={
-    itemOnClick:function(){
-      console.log("itemOnClick");
-    }
-  };
 
   this.includeToList=function(){
     var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
@@ -136,16 +188,94 @@ function itemZMov(data){
   };
 
   this.updateCard=function(){
-    $(that.css.full.img).src(that.data.imgSrcBig);
+    $(that.css.full.img).attr("src",that.data.imgSrcBig);
     $(that.css.full.title).text(that.data.title);
-    $(that.css.full.desc).text(that.data.desc);
+    $(that.css.full.desc).html(that.data.desc);
     var m="";
     that.data.acteurs.forEach(function(act){
-      m+=act+'\n';
+      m+=act+'<br>';
     });
-    $(that.css.full.acteurs).text(that.data.acteurs);
+    $(that.css.full.acteurs).html(m);
     $(that.css.full.more).html(that.data.more);
   };
+
+  this.init(data);
+
+  /*this.init(
+    {
+      title:"My title",
+      fname:"ma_fname.waw",
+      date:"10.10.2016",
+      acteurs:["John", "CENA", "Cartman"],
+      more:"<small>noMore</small><strong> Héhéhé</strong>",
+      id:"0",
+      desc:"MariaDb on fire",
+      imgSrcBig:"http://images.fan-de-cinema.com/affiches/large/65/67886.jpg",
+      imgSrcSmall:"http://s3images.coroflot.com/user_files/individual_files/projects/491612_1284695_cover_ps27yjaxigno7jzp2dhx.jpg"
+    }
+  );*/
+
+}
+
+/*
+
+8888888 888                          888      d8b          888
+  888   888                          888      Y8P          888
+  888   888                          888                   888
+  888   888888 .d88b.  88888b.d88b.  888      888 .d8888b  888888
+  888   888   d8P  Y8b 888 "888 "88b 888      888 88K      888
+  888   888   88888888 888  888  888 888      888 "Y8888b. 888
+  888   Y88b. Y8b.     888  888  888 888      888      X88 Y88b.
+8888888  "Y888 "Y8888  888  888  888 88888888 888  88888P'  "Y888
+
+*/
+
+function ItemListZMov(){
+  var that=this;
+  this.cnt="#cnt-movieList";
+  this.item=".cnt-movieItem";
+  this.list=[];
+  this.showed=[];
+
+  this.addItem=function(data){
+    var mitem=new itemZMov(data);
+    that.list.push(mitem);
+    data.id=that.list.lastIndexOf(mitem);
+    mitem.data.id=data.id;
+
+  }
+
+  this.addItemToList=function(data){
+    that.addItem(data);
+    that.itemToList(data.id);
+  }
+
+  this.itemToList=function(id){
+    that.showed[id]=that.list[id];
+    that.list[id].includeToList();
+  }
+
+  this.rmItemFromList=function(id){
+    var els = $(that.cnt+" "+that.item).toArray();
+    els.forEach(function(item,ind){
+      var it = $(item);
+      if(it.attr("data-itemid")==id){
+
+        that.showed.splice(id,1);
+        $(item).remove();
+      }
+    });
+  }
+
+  this.rmItem=function(id){
+    that.rmItemFromList(id);
+    that.list.splice(id,1);
+  }
+
+  this.resetShowedList=function(){
+    that.showed=[];
+    $(that.cnt).html("");
+  }
 
 }
 
