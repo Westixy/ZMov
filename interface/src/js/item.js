@@ -93,12 +93,15 @@ function itemZMov(data){
     $(that.css.full.more).html(that.data.more);
   };
 
+<<<<<<< Updated upstream
   this.match = function(text){
     //TODO : match avec this.data return true or false
     var element = text.split(";");
     return false;
   }
 
+=======
+>>>>>>> Stashed changes
   this.init(data);
 
   /*this.init(

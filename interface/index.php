@@ -7,6 +7,8 @@
     <script type="text/javascript" src="assets/jquery.min.js"></script>
     <script type="text/javascript" src="src/js/loader.js"></script>
     <link rel="stylesheet" href="src/css/loader.css" media="screen" title="no title">
+    <script type="text/javascript" src="src/js/item.js"></script>
+    <script type="text/javascript" src="src/js/itemlist.js"></script>
     <script type="text/javascript" src="src/js/mainzmov.js"></script>
   </head>
   <body>
@@ -62,7 +64,7 @@ acteur3
         </div>
       </div>
       <footer>
-        2016/BeerWare@ESO;JDA;DDG
+        2016 &copy; BeerWare @ ESO JDA DDG
       </footer>
       <script type="text/javascript">
       var zm = new mainZMov();
