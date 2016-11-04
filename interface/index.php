@@ -66,10 +66,10 @@ acteur3
       <footer>
         2016 &copy; BeerWare @ ESO JDA DDG
       </footer>
-      <script type="text/javascript">
-      var zm = new mainZMov();
-      window.onload=zm.init();
-      </script>
     </div>
+    <script type="text/javascript">
+    var zm = new mainZMov();
+    window.onload=zm.init();
+    </script>
   </body>
 </html>
