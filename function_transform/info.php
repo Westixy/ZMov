@@ -19,12 +19,15 @@
 		
 		$movieResults = json_decode($response, true);
 
+		return $movieResults['results'][0];
+		
+		/*
 		// affichage !
 		echo '<img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2'.$movieResults['results'][0]['poster_path'].'"/>';
 
 		
-		/*echo '<pre>';
+		echo '<pre>';
 		print_r($movieResults);
-		echo '</pre>';*/
-		//var_dump($response);
+		echo '</pre>';
+		//var_dump($response);*/
 	}

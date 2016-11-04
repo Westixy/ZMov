@@ -4,19 +4,16 @@
 
 
 require('info.php'); // relie la page de la foncion API
-
+nameTransform();
 	// transforme le nom des films dans $_POST et retourne une chaine json
 	function nameTransform(){
 		
-		$_POST[0] = 'test.avi';
-		$_POST[1] = 'test2-lol.mkv';
+		//$_POST[0] = '300';
 		
 		// active le mode delete --> écrire dans l'url ?mode=delete pour supprimer des mot clés
 		if(isset($_GET['mot']) && isset($_GET['mode']) && $_GET['mode'] == 'delete'){
 			getforgivenWords($_GET['mot']);
 		}
-		
-		$json = array();
 		
 		for($i = 0; $i < count($_POST); $i++){
 			$_POST[$i] = str_replace(".", " ", $_POST[$i]); // remplace les points par des espaces
@@ -39,7 +36,7 @@ require('info.php'); // relie la page de la foncion API
 					}
 				}
 			}
-			$json[$i] = $film[$i];
+			return json_encode(api_search($film[$i]));
 		}
 		
 		return json_encode($json);
