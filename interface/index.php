@@ -13,7 +13,8 @@
     <script type="text/javascript" src="src/js/mainzmov.js"></script>
   </head>
   <body>
-    <div id="hiddenData"></div>
+    <div id="hiddenData">
+    [{"isDir":false,"isSymLink":false,"name":"13.2010.LiMiTED.FRENCH.DVDRip.XviD-AYMO.avi","winCreationDate":"2016-08-26T09:38:00.771Z","winLastWriteDate":"2015-12-24T12:00:31.000Z","winLastAccessDate":"2016-08-26T09:38:00.771Z","path":"K:\\SI-T1a\\Cours\\MAW11\\data\\FILM_a_trier\\13.2010.LiMiTED.FRENCH.DVDRip.XviD-AYMO.avi"},{"isDir":false,"isSymLink":false,"name":"A.Resurrection.2013.TRUEFRENCH.DVDRip.XviD-UTT.avi","winCreationDate":"2016-08-26T09:38:00.787Z","winLastWriteDate":"2015-12-24T12:00:31.000Z","winLastAccessDate":"2016-08-26T09:38:00.787Z","path":"K:\\SI-T1a\\Cours\\MAW11\\data\\FILM_a_trier\\A.Resurrection.2013.TRUEFRENCH.DVDRip.XviD-UTT.avi"}]</div>
     <header>
       <div id="cnt-search">
         <input id="in-search" type="text" placeholder="Search"/>

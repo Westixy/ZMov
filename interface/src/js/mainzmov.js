@@ -18,6 +18,8 @@ function mainZMov(){
 
   this.il=new ItemListZMov();
 
+  this.ajx=new AjaxSender();
+
   var d={
     title:"My title",
     fname:"ma_fname.waw",
@@ -30,19 +32,15 @@ function mainZMov(){
     imgSrcSmall:"http://s3images.coroflot.com/user_files/individual_files/projects/491612_1284695_cover_ps27yjaxigno7jzp2dhx.jpg"
   };
 
+  this.ratio={
+    ok:0,
+    fail:0
+  }
+
   this.init=function(){
+    this.initAjax();
     this.initLoaders();
     this.initEvents();
-
-    for(var i =0;i<50;i++){
-      if(i%2==0)
-        this.il.addItemToList(d);
-      else
-        this.il.addItem(d);
-    }
-
-
-
   }
 
   this.initLoaders=function(){
@@ -50,7 +48,83 @@ function mainZMov(){
     that.l.flst=new Loader("#loader-mvlst");
     that.l.info=new Loader("#loader-info");
   }
+  this.initAjax=function(){
+    this.ajx.url="../function_transform/index1.php";
+    this.ajx.onSendAll=this.onAjaxSendAll;
+    this.ajx.onDone=this.onAjaxDone;
+    this.ajx.onFail=this.onAjaxFail;
+    this.ajx.onResult=this.onAjaxResult;
+    this.ajx.onEnd=this.onAjaxEnd;
+  }
 
+  this.sendRequestFromChanged=function(){
+    var n = JSON.parse($('#hiddenData').html());
+    var tmplist = [];
+    for (var i=0 ; i<n.length ; i++){
+      if(that.il.indexOfx(n[i].name)==-1){
+        tmplist.push(n[i].name);
+        var izm = new ItemZMov();
+        izm.data.fname=n[i].name;
+        izm.data.path=n[i].path;
+        var id = that.il.add(izm);
+      }
+    }
+    that.ajx.setData(tmplist);
+    that.ajx.sendAll();
+  }
+
+
+// vvv AJAX EVENTS vvv //
+this.onAjaxSendAll=function(){
+  that.ratio={ok:0,fail:0};
+  that.l.flst.show();
+}
+
+this.onAjaxDone=function(datas){
+  var d = JSON.parse(datas)
+  var it = that.il.getFromFname(d.fname);
+  //console.log(it);
+  //return;
+  if(d.response == 'ok'){
+    that.ratio.ok++;
+    it.tested=true;
+    it.finded=true;
+    var dt = it.data;
+    dt.title=d.title;
+    dt.date=d.release_date;
+    dt.acteurs=[]; // TODO : ACTEURS !!!!! pas dans la BDD
+    dt.genreids=d.genre_ids; // TODO : on a que les ids des genres
+    dt.more=d.overview;
+    dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+d.poster_path;
+    dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+d.poster_path;
+
+  }else{
+    that.ratio.fail++;
+    it.tested=true;
+    it.finded=false;
+    var dt=it.data;
+    dt.title='NoTitle';
+    dt.date='NoDate';
+    dt.acteurs=[];
+    dt.genreids=[];
+    dt.more='NoMore';
+    dt.imgSrcBig='src/img/noimgbig.jpg';
+    dt.imgSrcSmall='src/img/noimgsmall.jpg';
+  }
+  it.includeToList();
+  console.log(d);
+}
+this.onAjaxFail=function(err,status){
+  console.log("-X- AJAX_ERROR --- "+status+" -> ");
+  console.log(err);
+}
+this.onAjaxResult=function(){
+  console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+}
+this.onAjaxEnd=function(){
+    that.l.flst.hide();
+    console.log('ratio : '+ (that.ratio.ok*100/(that.ratio.ok+that.ratio.fail)) +'%');
+}
 
 // vvv EVENTS USER vvv //
   this.initEvents=function(){

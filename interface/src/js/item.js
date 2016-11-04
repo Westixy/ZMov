@@ -11,7 +11,7 @@
 
 */
 
-function itemZMov(data){
+function ItemZMov(data){
   var that=this;
   this.css={
     item:{
@@ -43,28 +43,35 @@ function itemZMov(data){
     fname:"",
     date:"",
     acteurs:[],
+    genreids:[],
     more:"",
     id:"",
     imgSrcBig:"",
-    imgSrcSmall:""
+    imgSrcSmall:"",
+    path:''
   }
 
-  this.init=function(data){
+  this.tested=false;
+  this.finded=false;
+
+  this.setData=function(data){
     that.data.title=data.title;
-    that.data.fname=data.fname;
+    that.data.fname=data.fname||'';
     that.data.date=data.date;
     that.data.acteurs=data.acteurs||[];
+    that.data.genreids=data.genreids||[];
     that.data.more=data.more;
     that.data.id=data.id;
     that.data.desc=data.desc;
     that.data.imgSrcBig=data.imgSrcBig;
     that.data.imgSrcSmall=data.imgSrcSmall;
+    that.data.path=data.path||'';
   }
 
   this.includeToList=function(){
     var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
     iB+='<div class="'+n(that.css.item.thumbnails)+'">';
-    iB+='    <img src="'+that.data.imgSrcSmall+'" alt="thumbnails small img '+that.data.title+'" />';
+    iB+='    <img src="'+that.data.imgSrcSmall+'" alt="loading '+that.data.title+'" />';
     iB+='  </div>';
     iB+='  <div class="'+n(that.css.item.miniTxt)+'">';
     iB+='    <div class="'+n(that.css.item.title)+'">';
@@ -84,13 +91,13 @@ function itemZMov(data){
   this.updateCard=function(){
     $(that.css.full.img).attr("src",that.data.imgSrcBig);
     $(that.css.full.title).text(that.data.title);
-    $(that.css.full.desc).html(that.data.desc);
+    $(that.css.full.desc).html(that.data.more);
     var m="";
     that.data.acteurs.forEach(function(act){
       m+=act+'<br>';
     });
     $(that.css.full.acteurs).html(m);
-    $(that.css.full.more).html(that.data.more);
+    $(that.css.full.more).html(that.data.none);
   };
 
   this.match = function(text){
@@ -99,7 +106,7 @@ function itemZMov(data){
     return false;
   }
 
-  this.init(data);
+  if(typeof data != 'undefined')this.setData(data);
 
   /*this.init(
     {

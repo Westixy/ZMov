@@ -1,44 +1,71 @@
-function ajaxSender(data,url,op){
+function AjaxSender(op){
   var that=this;
 
-  this.data=data; // ["fname1.avi",'fname2.avi',...]
-  this.url=url||'http://172.17.218.31/function_transform/search.php';
+  this.data=[]; // ["fname1.avi",'fname2.avi',...]
 
   /*
   op = {
+    url:string
     ondone:function(string reponse),
     onfail:function(ajaxStatus),
     onend:function()
   }
   */
-  this.onDone=op.ondone||function(){};
-  this.onFail=op.onfail||function(){};
-  this.onEnd=op.onend||function(){};
+  var opt=op||{
+    url:'',
+    onsendall:function(){},
+    ondone:function(){},
+    onfail:function(){},
+    onresult:function(){},
+    onend:function(){}
+  };
+
+  this.url=opt.url;
+  this.onSendAll=opt.onsendall;
+  this.onDone=opt.ondone;
+  this.onFail=opt.onfail;
+  this.onResult=opt.onresult;
+  this.onEnd=opt.onend;
 
   this.dts='';
 
+  this.ended=true;
+
   this.current=0;
+  this.finded=0;
+  this.nbrended=0;
 
   this.send=function(){
+    this.ended=false;
     this.rq=$.ajax({
       url:that.url,
       method:'POST',
       data:{entry:that.dts}
     });
-    this.rq.done(function(m){
-      var response = m;
+    this.rq.done(function(response){
+      that.finded++;
       that.onDone(response);
-      if(that.last) that.onEnd();
+      that.onRes();
     });
     this.rq.fail(function(jqxhr, status){
-      this.onFail(status)
-      if(that.last) that.onEnd();
+      that.onFail(jqxhr,status);
+      that.onRes();
     });
   }
 
+  this.onRes=function(){
+    this.nbrended++;
+    this.onResult();
+    if(that.finded==that.tot()){
+      this.ended=true;
+      this.onEnd();
+    }
+  }
+
   this.next=function(){
+    if(this.last==true)return false;
     var rep=true;
-    if(this.current>=this.data.length-1){rep=false;}
+    if(this.current>=this.data.length-1){that.last=true;rep=false;}
     this.dts=this.data[this.current];
     this.current++;
     this.send();
@@ -46,11 +73,22 @@ function ajaxSender(data,url,op){
   }
 
   this.sendAll=function(){
+    this.onSendAll();
     while(this.next()){}
   }
 
-  this.updateData=function(data){
-    this.data=data;
-    this.current=0;
+  this.setData=function(data){
+    if(this.ended==true){
+      this.data=data;
+      this.current=0;
+      this.finded=0;
+      this.last=false;
+      return true;
+    }
+    return false;
+  }
+
+  this.tot=function(){
+    return this.data.length;
   }
 }
