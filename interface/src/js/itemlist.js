@@ -16,14 +16,25 @@ function ItemListZMov(){
   this.cnt="#cnt-movieList";
   this.item=".cnt-movieItem";
   this.list=[];
+  this.lsforIndexOf[];
   this.showed=[];
 
   this.addItem=function(data){
     var mitem=new itemZMov(data);
     that.list.push(mitem);
+    that.lsIndexOf.push(data.fname);
     data.id=that.list.lastIndexOf(mitem);
     mitem.data.id=data.id;
+  }
 
+  this.indexOf=function(fname){
+    return this.lsforIndexOf.indexOf(fname);
+  }
+  this.getFromFname=function(fname){
+    return this.get(this.indexOf(fname));
+  }
+  this.get=function(id){
+    return this.list[id);
   }
 
   this.addItemToList=function(data){

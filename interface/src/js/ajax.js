@@ -8,19 +8,16 @@ function ajaxSender(data,url,op){
   op = {
     ondone:function(string reponse),
     onfail:function(ajaxStatus),
-    onend:function(),
-    nbrBySend:int
+    onend:function()
   }
   */
   this.onDone=op.ondone||function(){};
   this.onFail=op.onfail||function(){};
   this.onEnd=op.onend||function(){};
-  this.qty=op.nbrBySend||1;
 
-  this.dts=[];
+  this.dts='';
 
   this.current=0;
-  this.last=false;
 
   this.send=function(){
     this.rq=$.ajax({
@@ -40,27 +37,20 @@ function ajaxSender(data,url,op){
   }
 
   this.next=function(){
-    this.dts=[];
     var rep=true;
-    if(this.current+this.qty>this.data.length){
-      // si c'est le dernier next
-      this.whileTo(this.data.length);
-      rep=false;
-    }else{
-      this.whileTo(this.current+this.qty)
-    }
+    if(this.current>=this.data.length-1){rep=false;}
+    this.dts=this.data[this.current];
+    this.current++;
     this.send();
     return rep;
   }
-  this.whileTo=function(end){
-    while(this.current<end){
-      this.dts.push(this.data[this.current])
-      this.current++;
-    }
+
+  this.sendAll=function(){
+    while(this.next()){}
   }
+
   this.updateData=function(data){
     this.data=data;
     this.current=0;
-    this.last=false;
   }
 }

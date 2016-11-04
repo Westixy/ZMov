@@ -2,7 +2,6 @@
 	require('info.php'); // relie la page de la foncion API
 	
 	function nameTransform(){
-		
 		// récupère le fichier json avec la liste des films
 		$tmp = file_get_contents("list.json");
 		$tmp = json_decode($tmp, true);
