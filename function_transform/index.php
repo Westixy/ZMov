@@ -1,14 +1,8 @@
 <?php
-	error_reporting(E_ALL);
-	ini_set('display_errors',1);
+	require('info.php'); // relie la page de la foncion API
 	
-	require('info.php');  
-	if(isset($_POST['entree']) && $_POST['entree'] != ''){
-		api_search($_POST['entree']);
-	}
- 
 	function nameTransform(){
-		// récupère le fichier json
+		// récupère le fichier json avec la liste des films
 		$tmp = file_get_contents("list.json");
 		$tmp = json_decode($tmp, true);
 		
@@ -17,29 +11,37 @@
 			getforgivenWords($_GET['mot']);
 		}
 		
-		$display = array();
 		
 		// parcours chaque film
 		for($i = 0; $i < count($tmp); $i++){
 			$tmp[$i]['name'] = str_replace(".", " ", $tmp[$i]['name']); // remplace les points par des espaces
 			$tmp[$i]['name'] = str_replace("-", " ", $tmp[$i]['name']); // remplace les tirets par des espaces
 			$tmp[$i]['name'] = str_replace("_", " ", $tmp[$i]['name']); // remplace les tirets par des espaces
+			$tmp[$i]['name'] = str_replace("[", "", $tmp[$i]['name']);
+			$tmp[$i]['name'] = str_replace("]", "", $tmp[$i]['name']);
 
-			$display[$i]='';
-
+			$film[$i]='';
+			$display = array();
+			
 			$tmp1[$i] = explode(" ", $tmp[$i]['name']); // split les mots séparés par des espaces dans un tableau
 			
 			for($d = 0; $d < count($tmp1[$i]); $d++){
 				
+				// Si le mot ne fais pas partis des mot interdits
 				if(!findWord($tmp1[$i][$d]) && substr($tmp1[$i][$d], 0, -2) != '20'){
 					if(isset($_GET['mode']) && $_GET['mode'] == 'delete'){
-						$display[$i] .= '<a href="index.php?mode=delete&mot='.$tmp1[$i][$d].'">'.$tmp1[$i][$d]." </a>";
+						$film[$i] .= '<a href="index.php?mode=delete&mot='.$tmp1[$i][$d].'">'.$tmp1[$i][$d]." </a>";
 					}else{
-						$display[$i] .= $tmp1[$i][$d]. ' ';
+						$film[$i] .= $tmp1[$i][$d]. ' '; // Ajoute le nom du film dans la variable
 					}
 				}
 			}
-			echo $display[$i] . '<br />';
+			echo $film[$i] . '<br />';
+			if(isset($_POST['entree']) && $_POST['entree'] != ''){
+				if(preg_match(strtoupper("/".$_POST['entree']."/"), strtoupper($film[$i]))){
+					api_search($film[$i]);
+				}
+			}
 		}
 	}
 	
