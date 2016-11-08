@@ -10,7 +10,10 @@ var folder = [];
 var allFiles = [];
 var SDBarWorker = null;
 var ConfigPath = "data/config.json";
-var urlBase = "http://maw.dev";
+
+
+var urlBase = "http://maw.dev/interface";
+var defaultExt = ["mp4", "avi", "mkv", "dvx", "mov", "mpg", "mpa", "asf", "wma", "vob", "wmv"];
 
 
 // -------------------------------------------------
@@ -255,7 +258,7 @@ function insertToNav() {
 function getFolderContent(path, extArray) {
     var that = this;
     this.path = path;
-    this.exts = extArray || ["mp4", "avi", "mkv", "dvx", "mov", "mpg", "mpa", "asf", "wma", "vob", "wmv"];
+    this.exts = extArray || defaultExt;
     this.dirIndex = 0;
     this.content = {
         dirs: [],

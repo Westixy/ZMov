@@ -20,6 +20,12 @@ function mainZMov(){
 
   this.ajx=new AjaxSender();
 
+  this.css={
+    body:"#bdy2",
+    flst:"#loader-mvlst",
+    info:"#loader-info"
+  }
+
   var d={
     title:"My title",
     fname:"ma_fname.waw",
@@ -44,9 +50,9 @@ function mainZMov(){
   }
 
   this.initLoaders=function(){
-    that.l.b=new Loader("#bdy2");
-    that.l.flst=new Loader("#loader-mvlst");
-    that.l.info=new Loader("#loader-info");
+    that.l.b=new Loader(that.css.body);
+    that.l.flst=new Loader(that.css.flst);
+    that.l.info=new Loader(that.css.info);
   }
   this.initAjax=function(){
     this.ajx.url="../function_transform/index1.php";
@@ -69,64 +75,69 @@ function mainZMov(){
         var id = that.il.add(izm);
       }
     }
-    that.ajx.setData(tmplist);
-    that.ajx.sendAll();
+    if(tmplist!=[]){
+      that.ajx.setData(tmplist);
+      that.ajx.sendAll();
+    }
   }
 
 
-// vvv AJAX EVENTS vvv //
-this.onAjaxSendAll=function(){
-  that.ratio={ok:0,fail:0};
-  that.l.flst.show();
-}
-
-this.onAjaxDone=function(datas){
-  var d = JSON.parse(datas)
-  var it = that.il.getFromFname(d.fname);
-  //console.log(it);
-  //return;
-  if(d.response == 'ok'){
-    that.ratio.ok++;
-    it.tested=true;
-    it.finded=true;
-    var dt = it.data;
-    dt.title=d.title;
-    dt.date=d.release_date;
-    dt.acteurs=[]; // TODO : ACTEURS !!!!! pas dans la BDD
-    dt.genreids=d.genre_ids; // TODO : on a que les ids des genres
-    dt.more=d.overview;
-    dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+d.poster_path;
-    dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+d.poster_path;
-
-  }else{
-    that.ratio.fail++;
-    it.tested=true;
-    it.finded=false;
-    var dt=it.data;
-    dt.title='NoTitle';
-    dt.date='NoDate';
-    dt.acteurs=[];
-    dt.genreids=[];
-    dt.more='NoMore';
-    dt.imgSrcBig='src/img/noimgbig.jpg';
-    dt.imgSrcSmall='src/img/noimgsmall.jpg';
+  // vvv AJAX EVENTS vvv //
+  this.onAjaxSendAll=function(){
+    that.ratio={ok:0,fail:0};
+    that.l.flst.show();
   }
-  it.includeToList();
-  console.log(d);
-}
-this.onAjaxFail=function(err,status){
-  console.log("-X- AJAX_ERROR --- "+status+" -> ");
-  console.log(err);
-}
-this.onAjaxResult=function(){
-  console.log(that.ajx.nbrended+'/'+that.ajx.tot());
-}
-this.onAjaxEnd=function(){
-    that.l.flst.hide();
-    console.log('ratio : '+ (that.ratio.ok*100/(that.ratio.ok+that.ratio.fail)) +'%');
-}
 
-// vvv EVENTS USER vvv //
+  this.onAjaxDone=function(datas){
+    var d = JSON.parse(datas)
+    var it = that.il.getFromFname(d.fname);
+    //console.log(it);
+    //return;
+    if(typeof it!='undefined'){
+      if(d.response == 'ok'){
+        that.ratio.ok++;
+        it.tested=true;
+        it.finded=true;
+        var dt = it.data;
+        dt.title=d.title;
+        dt.date=d.release_date;
+        dt.acteurs=[]; // TODO : ACTEURS !!!!! pas dans la BDD
+        dt.genreids=d.genre_ids; // TODO : on a que les ids des genres
+        dt.more=d.overview;
+        dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+d.poster_path;
+        dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+d.poster_path;
+
+      }else{
+        that.ratio.fail++;
+        it.tested=true;
+        it.finded=false;
+        var dt=it.data;
+        dt.title='NoTitle';
+        dt.date='NoDate';
+        dt.acteurs=[];
+        dt.genreids=[];
+        dt.more='NoMore';
+        dt.imgSrcBig='src/img/noimgbig.jpg';
+        dt.imgSrcSmall='src/img/noimgsmall.jpg';
+      }
+      it.lastUpdate=Date.now();
+      it.includeToList();
+    }
+    console.log(d);
+  }
+  this.onAjaxFail=function(err,status){
+    console.log("-X- AJAX_ERROR --- "+status+" -> ");
+    console.log(err);
+  }
+  this.onAjaxResult=function(){
+    console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+  }
+  this.onAjaxEnd=function(){
+      that.l.flst.hide();
+      console.log('ratio : '+ (that.ratio.ok*100/(that.ratio.ok+that.ratio.fail)) +'%');
+  }
+
+  // vvv EVENTS USER vvv //
   this.initEvents=function(){
     $('#hiddenData').bind("DOMSubtreeModified",that.onDataChange);
     $(window).on("resize",that.onWinResize);
@@ -137,6 +148,7 @@ this.onAjaxEnd=function(){
 
   this.onDataChange=function(){
     console.log("content changed");
+    that.sendRequestFromChanged();
   }
 
   this.onWinResize=function(){
@@ -145,17 +157,17 @@ this.onAjaxEnd=function(){
 
   this.onSearchChange=function(){
     console.log("onSearchChange");
-    that.l.flst.show();
-    var x = setTimeout(function(){that.l.flst.hide();},1000);
+    //that.l.flst.show();
+    //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
 
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
     var id = $(elem).attr('data-itemid');
     console.log("onItemClick -> "+id);
-    that.l.info.show();
+    //that.l.info.show();
     that.il.list[id].updateCard();
-    var x = setTimeout(function(){that.l.info.hide();},1000);
+    //var x = setTimeout(function(){that.l.info.hide();},1000);
   }
 
   this.onSettingsClick=function(){

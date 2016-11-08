@@ -53,6 +53,8 @@ function ItemZMov(data){
 
   this.tested=false;
   this.finded=false;
+  this.lastUpdate=0;
+  this.dontUpdate=false;
 
   this.setData=function(data){
     that.data.title=data.title;
@@ -88,6 +90,13 @@ function ItemZMov(data){
     $(that.css.item.parent).append(iB);
   };
 
+  this.removeFromList=function(){
+    var me = $(that.css.item.parent+" [data-itemid=\""+that.data.id+"\"]");
+    if (typeof me!='undefined'){
+      me.remove();
+    }
+  }
+
   this.updateCard=function(){
     $(that.css.full.img).attr("src",that.data.imgSrcBig);
     $(that.css.full.title).text(that.data.title);
@@ -104,6 +113,11 @@ function ItemZMov(data){
     //TODO : match avec this.data return true or false
     var element = text.split(";");
     return false;
+  }
+
+  this.setTitle=function(title){
+    this.dontUpdate=true;
+    this.data.title=title;
   }
 
   if(typeof data != 'undefined')this.setData(data);
