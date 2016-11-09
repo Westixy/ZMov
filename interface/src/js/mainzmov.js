@@ -112,11 +112,11 @@ function mainZMov(){
         it.tested=true;
         it.finded=false;
         var dt=it.data;
-        dt.title='NoTitle';
+        dt.title=d.ftrad||'NoTitle';
         dt.date='NoDate';
         dt.acteurs=[];
         dt.genreids=[];
-        dt.more='NoMore';
+        dt.more='NoDescription';
         dt.imgSrcBig='src/img/noimgbig.jpg';
         dt.imgSrcSmall='src/img/noimgsmall.jpg';
       }

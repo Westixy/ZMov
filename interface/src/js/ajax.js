@@ -29,6 +29,10 @@ function AjaxSender(op){
 
   this.dts='';
 
+  this.timewait=280;
+  // temps d'attente entre 2 requetes
+  // max 40 requetes par 10s
+
   this.ended=true;
 
   this.current=0;
@@ -74,7 +78,12 @@ function AjaxSender(op){
 
   this.sendAll=function(){
     this.onSendAll();
-    while(this.next()){}
+    //while(this.next()){}
+    var inter = setInterval(function(){
+      if(!that.next()){
+        clearInterval(inter);
+      }
+    }, that.timewait);
   }
 
   this.setData=function(data){

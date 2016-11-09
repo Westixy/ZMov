@@ -26,19 +26,24 @@ echo nameTransform();
 
 			$tmp1[$i] = explode(" ", $_POST[$i]); // split les mots spéarés par des espaces dans un tableau
 
+			$erase = false;
+
 			for($d = 0; $d < count($tmp1[$i]); $d++){
 				// si le mot ne fais pas partis des mots interdits
-				if(!findWord($tmp1[$i][$d]) && substr($tmp1[$i][$d], 0, -2) != '20'){
+				if(!findWord($tmp1[$i][$d]) && substr($tmp1[$i][$d], 0, -2) != '20'&& substr($tmp1[$i][$d], 0, -2) != '19'){
 					if(isset($_GET['mode']) && $_GET['mode'] == 'delete'){
 						$film[$i] .= '<a href="index.php?mode=delete&mot='.$tmp1[$i][$d].'">'.$tmp1[$i][$d]." </a>";
 					}else{
 						$film[$i] .= $tmp1[$i][$d]. ' '; // Ajoute le nom du film dans la variable
+						$erase = true;
 					}
+				}elseif($erase == true){
+					break;
 				}
 			}
 			$zmp=api_search($film[$i]);
 			$zmp['fname']=$_POST['entry'];
-			$zmp['ftrad']=$_POST['entry'];
+			$zmp['ftrad']=$film[$i];
 			if(isset($zmp['title']))$zmp['response']='ok';
 			else $zmp['response']='fail';
 			return json_encode($zmp);

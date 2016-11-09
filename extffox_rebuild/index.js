@@ -24,7 +24,7 @@ tabs.on('ready', tabsOnReady);
 
 
 function tabsOnReady(tab){
-
+ // TODO
 }
 
 
@@ -34,33 +34,56 @@ function tabsOnReady(tab){
 ====================
 */
 
-
 function insertToNav() {
-    for (let tab of tabs) {
-        if (startWith(urlBase, tab.url)) {
-            var wkr = tab.attach({
-                contentScriptFile: self.data.url("web.js")
-            });
-            wkr.port.emit("loadjson", allFiles);
-        }
+  for (let tab of tabs) {
+    if (startWith(urlBase, tab.url)) {
+      var wkr = tab.attach({
+        contentScriptFile: self.data.url("web.js")
+      });
+      wkr.port.emit("loadjson", allFiles);
     }
+  }
 }
 
 function webActualise(folderlist){
   if(folderlist!=[]){
-
+    folder=folderlist;
+    readAllFolders(insertToNav);
   }
 }
 
 function listenForAnUpdateFromNav() {
     for (let tab of tabs) {
+        var wks=null;
         if (startWith(urlBase, tab.url)) {
-          webWorker = tab.attach({
+          wks = tab.attach({
               contentScriptFile: self.data.url("web.js")
           });
-          webWorker.port.on("HeyBro_ActualiseMe",webActualise)
+          if(wks!=null) wks.port.on("HeyBro_ActualiseMe",webActualise);
         }
     }
+}
+
+function readAllFolders(callback) {
+    var folderOk = 0;
+    folder.forEach(function(entry) {
+        readAFolder(entry, function() {
+            folderOk++;
+            if (folderOk >= folder.length) {
+                callback();
+            }
+        });
+    });
+}
+
+function readAFolder(folderPath, callback) {
+    var gfc = new getFolderContent(folderPath);
+
+    gfc.onEnd = function() {
+        allFiles = allFiles.concat(gfc.content.files);
+        callback();
+    };
+    gfc.readdir();
 }
 
 function fileExist(path, callback) {
