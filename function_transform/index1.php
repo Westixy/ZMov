@@ -37,7 +37,7 @@ echo nameTransform();
 						$film[$i] .= $tmp1[$i][$d]. ' '; // Ajoute le nom du film dans la variable
 						$erase = true;
 					}
-				}elseif($erase == true){
+				}else{
 					break;
 				}
 			}
