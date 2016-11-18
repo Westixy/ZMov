@@ -20,23 +20,14 @@ function mainZMov(){
 
   this.ajx=new AjaxSender();
 
+  this.stgs=new ZMovSettings();
+
   this.css={
     body:"#bdy2",
     flst:"#loader-mvlst",
-    info:"#loader-info"
+    info:"#loader-info",
+    settings:"#settings",
   }
-
-  var d={
-    title:"My title",
-    fname:"ma_fname.waw",
-    date:"10.10.2016",
-    acteurs:["John", "CENA", "Cartman"],
-    more:"<small>noMore</small><strong> Héhéhé</strong>",
-    id:"0",
-    desc:"MariaDb on fire",
-    imgSrcBig:"http://images.fan-de-cinema.com/affiches/large/65/67886.jpg",
-    imgSrcSmall:"http://s3images.coroflot.com/user_files/individual_files/projects/491612_1284695_cover_ps27yjaxigno7jzp2dhx.jpg"
-  };
 
   this.ratio={
     ok:0,
@@ -143,7 +134,7 @@ function mainZMov(){
     $(window).on("resize",that.onWinResize);
     $('#in-search').on("change",that.onSearchChange);
     $('#cnt-movieList').on('click','.cnt-movieItem',that.onItemClick);
-    $('#btnSettings').on('click',that.onSettingsClick)
+    $('#btnSettings').on('click',that.onSettingsClick);
   }
 
   this.onDataChange=function(){
@@ -171,7 +162,7 @@ function mainZMov(){
   }
 
   this.onSettingsClick=function(){
-    console.log("onSettingsClick");
+    $(that.css.settings).removeClass('hidden');
   }
 
   // vvv EVENTS ZMov vvv //

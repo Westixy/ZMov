@@ -7,11 +7,11 @@ var { setTimeout } = require("sdk/timers");
 
 var urlBase = "http://maw.dev/interface";
 var defaultExt = ["mp4", "avi", "mkv", "dvx", "mov", "mpg", "mpa", "asf", "wma", "vob", "wmv"];
+var ConfigPath = "data/config.json";
 
 var mytab = [];
 var folder = [];
 var allFiles = [];
-var ConfigPath = "data/config.json";
 
 
 

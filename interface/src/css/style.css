@@ -145,7 +145,7 @@ header {
 .preRawText {
     font-family: sans-serif;
 }
-#hiddenData{
+.hidden{
   display: none;
 }
 
@@ -168,4 +168,107 @@ footer{
   color:#fff;
   opacity: 0.5;
   padding: 3px 0px;
+}
+
+#settings{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+.voile {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:rgba(0,0,0,.85)
+}
+.frame{
+    position: absolute;
+    top:30px;
+    left:30px;
+    right:30px;
+    bottom:30px;
+    background-color:rgb(208, 208, 208);
+    box-sizing:border-box;
+    padding:0px 20px 20px;
+    border:1px solid #777;
+    border-radius: 10px;
+    color:#333;
+    overfolw-x:hidden;
+    overflow-y:auto;
+}
+#settings h1,#settings h2,#settings h3{
+    border-bottom:1px solid #fff;
+}
+#btn-settings-close:hover {
+    background-color: #c71313;
+}
+#btn-settings-close {
+    position: absolute;
+    padding: 10px 14px;
+    background-color: #e23939;
+    top: 0px;
+    right: 0px;
+    color: #fff;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+    transition-duration: 300ms;
+}
+#settings h6 {
+    margin-top: -15px;
+    margin-bottom: 10px;
+}
+.folder-item {
+    padding: 4px 10px;
+    background-color: #ccc;
+}
+
+.folder-item:nth-child(2n+1) {
+    background-color: #ddd;
+}
+
+.folder-item:hover {
+    filter: brightness(120%);
+}
+
+span.delete-folder {
+    float: right;
+    color: #d33;
+    background-color: transparent;
+    padding: 2px 5px;
+    font-size: 13px;
+    border-radius: 50%;
+    transition-duration: 300ms;
+    cursor: pointer;
+}
+
+span.delete-folder:hover {
+    background-color: #d33;
+    color: #fff;
+}
+.input {
+    margin: 10px 0px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #999;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#settings .btn {
+    background-color: #408fde;
+    display: inline-block;
+    padding: 7px;
+    color: #fff;
+    border-radius: 5px;
+    float: right;
+    cursor: pointer;
+    transition: 300ms;
+}
+
+#settings .btn:hover {
+    background-color: #1c69b7;
 }
