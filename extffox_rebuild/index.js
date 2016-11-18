@@ -34,13 +34,14 @@ function tabsOnReady(tab){
 ====================
 */
 
-function insertToNav() {
+function attachToNav() {
   for (let tab of tabs) {
     if (startWith(urlBase, tab.url)) {
       var wkr = tab.attach({
-        contentScriptFile: self.data.url("web.js")
+        contentScriptFile: [self.data.url("comm.js"),self.data.url("web.js")]
       });
-      wkr.port.emit("loadjson", allFiles);
+      wkr.port.emit("flist_ok", allFiles);
+      wkr.port.on('flist_get',function(){/* TODO */});
     }
   }
 }
@@ -50,18 +51,6 @@ function webActualise(folderlist){
     folder=folderlist;
     readAllFolders(insertToNav);
   }
-}
-
-function listenForAnUpdateFromNav() {
-    for (let tab of tabs) {
-        var wks=null;
-        if (startWith(urlBase, tab.url)) {
-          wks = tab.attach({
-              contentScriptFile: self.data.url("web.js")
-          });
-          if(wks!=null) wks.port.on("HeyBro_ActualiseMe",webActualise);
-        }
-    }
 }
 
 function readAllFolders(callback) {

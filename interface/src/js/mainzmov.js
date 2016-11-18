@@ -22,6 +22,8 @@ function mainZMov(){
 
   this.stgs=new ZMovSettings();
 
+  this.c=new CommEmmiter('web','#FromWeb','#FromExt');
+
   this.css={
     body:"#bdy2",
     flst:"#loader-mvlst",
@@ -34,10 +36,13 @@ function mainZMov(){
     fail:0
   }
 
+
+  // INITERS //
   this.init=function(){
     this.initAjax();
     this.initLoaders();
     this.initEvents();
+    this.initComm();
   }
 
   this.initLoaders=function(){
@@ -53,9 +58,17 @@ function mainZMov(){
     this.ajx.onResult=this.onAjaxResult;
     this.ajx.onEnd=this.onAjaxEnd;
   }
+  this.initComm=function(){
+    this.c.init();
+    // TODO set the listeners for the communicator
+    this.c.on('flist_ok',onFlistOk);
+  }
 
-  this.sendRequestFromChanged=function(){
-    var n = JSON.parse($('#hiddenData').html());
+
+  // vvv COMM EVENTS vvv //
+  this.onFlistOk=function(n){
+    console.log("content changed");
+    return;
     var tmplist = [];
     for (var i=0 ; i<n.length ; i++){
       if(that.il.indexOfx(n[i].name)==-1){
@@ -71,7 +84,6 @@ function mainZMov(){
       that.ajx.sendAll();
     }
   }
-
 
   // vvv AJAX EVENTS vvv //
   this.onAjaxSendAll=function(){
@@ -130,16 +142,10 @@ function mainZMov(){
 
   // vvv EVENTS USER vvv //
   this.initEvents=function(){
-    $('#hiddenData').bind("DOMSubtreeModified",that.onDataChange);
     $(window).on("resize",that.onWinResize);
     $('#in-search').on("change",that.onSearchChange);
     $('#cnt-movieList').on('click','.cnt-movieItem',that.onItemClick);
     $('#btnSettings').on('click',that.onSettingsClick);
-  }
-
-  this.onDataChange=function(){
-    console.log("content changed");
-    that.sendRequestFromChanged();
   }
 
   this.onWinResize=function(){
@@ -174,6 +180,11 @@ function mainZMov(){
 
   this.on=function(){}
   this.onx=function(){}
+
+  // Alias
+  this.exmit=function(action,vars){
+    that.c.emit('ext',action,vars);
+  }
 }
 
 
