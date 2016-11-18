@@ -7,7 +7,8 @@ function ZMovSettings(){
     delfolder:".delete-folder",
     btnAdd:"#btn-addfolder",
     inpfolder:"#inpaddfolder",
-    btnExt:"#btn-confExt"
+    btnExt:"#btn-confExt",
+    inpext:"#inpextentions",
   }
 
   this.data={
@@ -27,14 +28,21 @@ function ZMovSettings(){
   }
   this.onBtnAddFolder=function(ev){
     console.log($(that.css.inpfolder).val());
-  }
-  this.onDelFolder=function(ev){
-    var item = $(ev.currentTarget).siblings('.fdata');
-    console.log(item.text());
-  }
-  this.onBtnExt=function(ev){
 
   }
+  this.onDelFolder=function(ev){
+    var cnt = $(ev.currentTarget).parent(".folder-item");
+    var item = $(ev.currentTarget).siblings('.fdata');
+    console.log(item.text());
+    // TODO the remove function
+  }
+  this.onBtnExt=function(ev){
+    console.log($(that.css.inpext).val());
+  }
+
+  this.addFolder=function(path){
+  }
+
 
   this.init();
 }
