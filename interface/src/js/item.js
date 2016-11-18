@@ -111,6 +111,10 @@ function ItemZMov(data){
 
   this.match = function(text){
     //TODO : match avec this.data return true or false
+    // si titre, acteurs et date son remplis cela doit matcher avec les 3
+    // si titre, acteurs sont remplis il doit matcher avec les 2
+    // etc...
+    //text : input brute
     var titre = that.data.titre;
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date; // "2013-03-21"
