@@ -93,15 +93,36 @@
       name[0] = [names, ''];
     }
 
-    /*// date treatment *********************************************************************************
-    var searchDate = dates.split("|");
+    // date treatment *********************************************************************************
+    var date; // array
+    if(dates.indexOf("|") != -1){ // if OR treatment has been request
+      var searchDate = dates.split("|");
+      date = new Array();
 
-    var date = '';
-    for(var i = 0; i < searchDate.length; i++){
-      date = searchDate[i].split("&");
-    }*/
+      for(var i = 0; i < searchDate.length; i++){
+
+        date[date.length] = new Array();
+
+        if(searchDate[i].indexOf("&") != -1){ // if AND treatment has been request
+
+          tmp = searchDate[i].split("&");
+          for(var d = 0; d < tmp.length; d++){
+            date[i].push(tmp[d]);
+          }
+        }else{
+          date[i].push(searchDate[i]);
+        }
+      }
+    }else if(date.indexOf("&") != -1){
+      date = new Array();
+      date[0] = date.split("&");
+    }else{
+      date = new Array();
+      date[0] = [date, ''];
+    }
+
 
     // test of function
-    document.getElementById("result").innerHTML += '<br/>'+ name[0][0];
+    document.getElementById("result").innerHTML += '<br/>'+ date[0][0];
   }
 </script>
