@@ -1,8 +1,10 @@
 <input type="text" id="input" value=""/>
 <button onclick="break_down();">Entrer</button>
+<div id="result"></div>
 <script>
 
   var input = '';
+
   function break_down(){
     input = document.getElementById("input").value;
 
@@ -30,33 +32,97 @@
       }
     }
 
-    // actors treatment *****************************************************************************
-    var searchActor = actors.split("|");
 
-    var actor = '';
-    for(var i = 0; i < searchActor.length; i++){
-      actor = searchActor[i].split("&");
+    // actors treatment *********************************************************************************
+    var actor; // array
+    if(actors.indexOf("|") != -1){ // if OR treatment has been request
+      var searchActor = actors.split("|");
+
+      actor = new Array();
+
+      for(var i = 0; i < searchActor.length; i++){
+
+        actor[actor.length] = new Array();
+
+        if(searchActor[i].indexOf("&") != -1){ // if AND treatment has been request
+
+          tmp = searchActor[i].split("&");
+          for(var d = 0; d < tmp.length; d++){
+            actor[i].push(tmp[d]);
+          }
+
+        }else{
+          actor[i].push(searchActor[i]);
+        }
+      }
+    }else if(actors.indexOf("&") != -1){ // if AND treatment only has been request
+      actor = new Array;
+      actor[0] = actors.split("&");
+    }else{
+      actor = new Array;
+      actor[0] = [actors,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+      //TODO : treatment without parameters
+
     }
-
     // movie name treatment *****************************************************************************
-    var searchName = names.split("|");
 
-    var name = '';
-    for(var i = 0; i < searchName.length; i++){
-      name = searchName[i].split("&");
+    var name; // array
+    if(names.indexOf("|") != -1){ // if OR treatment has been request
+      var searchName = names.split("|");
+      name = new Array();
+
+      for(var i = 0; i < searchName.length; i++){
+
+        name[name.length] = new Array();
+
+        if(searchName[i].indexOf("&") != -1){ // if AND treatment has been request
+
+          tmp = searchName[i].split("&");
+          for(var d = 0; d < tmp.length; d++){
+            name[i].push(tmp[d]);
+          }
+        }else{
+          name[i].push(searchName[i]);
+        }
+      }
+    }else if(names.indexOf("&") != -1){
+      name = new Array();
+      name[0] = names.split("&");
+    }else{
+      name = new Array();
+      name[0] = [names, ''];
     }
 
-    // date treatment *****************************************************************************
-    var searchDate = dates.split("|");
+    // date treatment *********************************************************************************
+    var date; // array
+    if(dates.indexOf("|") != -1){ // if OR treatment has been request
+      var searchDate = dates.split("|");
+      date = new Array();
 
-    var date = '';
-    for(var i = 0; i < searchDate.length; i++){
-      date = searchDate[i].split("&");
+      for(var i = 0; i < searchDate.length; i++){
+
+        date[date.length] = new Array();
+
+        if(searchDate[i].indexOf("&") != -1){ // if AND treatment has been request
+
+          tmp = searchDate[i].split("&");
+          for(var d = 0; d < tmp.length; d++){
+            date[i].push(tmp[d]);
+          }
+        }else{
+          date[i].push(searchDate[i]);
+        }
+      }
+    }else if(date.indexOf("&") != -1){
+      date = new Array();
+      date[0] = date.split("&");
+    }else{
+      date = new Array();
+      date[0] = [date, ''];
     }
+
 
     // test of function
-
-
-
+    document.getElementById("result").innerHTML += '<br/>'+ date[0][0];
   }
 </script>
