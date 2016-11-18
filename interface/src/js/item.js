@@ -111,8 +111,13 @@ function ItemZMov(data){
 
   this.match = function(text){
     //TODO : match avec this.data return true or false
-    var element = text.split(";");
-    return false;
+    var titre = that.data.titre;
+    var acteurs = that.data.acteurs; // thats an ARRAY !
+    var date = that.data.date; // "2013-03-21"
+
+
+
+
   }
 
   this.setTitle=function(title){
