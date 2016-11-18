@@ -8,6 +8,7 @@
     <script type="text/javascript" src="src/js/loader.js"></script>
     <link rel="stylesheet" href="src/css/loader.css" media="screen" title="no title">
     <script type="text/javascript" src="src/js/ajax.js"></script>
+    <script type="text/javascript" src="src/js/comm.js"></script>
     <script type="text/javascript" src="src/js/item.js"></script>
     <script type="text/javascript" src="src/js/itemlist.js"></script>
     <script type="text/javascript" src="src/js/settings.js"></script>
@@ -16,10 +17,8 @@
   <body>
     <div class="hidden forExt" id="hiddenData">
     [{"isDir":false,"isSymLink":false,"name":"13.2010.LiMiTED.FRENCH.DVDRip.XviD-AYMO.avi","winCreationDate":"2016-08-26T09:38:00.771Z","winLastWriteDate":"2015-12-24T12:00:31.000Z","winLastAccessDate":"2016-08-26T09:38:00.771Z","path":"K:\\SI-T1a\\Cours\\MAW11\\data\\FILM_a_trier\\13.2010.LiMiTED.FRENCH.DVDRip.XviD-AYMO.avi"},{"isDir":false,"isSymLink":false,"name":"A.Resurrection.2013.TRUEFRENCH.DVDRip.XviD-UTT.avi","winCreationDate":"2016-08-26T09:38:00.787Z","winLastWriteDate":"2015-12-24T12:00:31.000Z","winLastAccessDate":"2016-08-26T09:38:00.787Z","path":"K:\\SI-T1a\\Cours\\MAW11\\data\\FILM_a_trier\\A.Resurrection.2013.TRUEFRENCH.DVDRip.XviD-UTT.avi"}]</div>
-    <div class="hidden forExt" id="actualize"></div>
-    <div class="hidden forExt" id="actualizeRep"></div>
-    <div class="hidden forExt" id="set"></div>
-    <div class="hidden forExt" id="setRep"></div>
+    <div class="hidden forExt" id="FromExt">void</div>
+    <div class="hidden forExt" id="FromWeb">void</div>
     <header>
       <div id="cnt-search">
         <input id="in-search" type="text" placeholder="Search"/>
