@@ -1,0 +1,62 @@
+<input type="text" id="input" value=""/>
+<button onclick="break_down();">Entrer</button>
+<script>
+
+  var input = '';
+  function break_down(){
+    input = document.getElementById("input").value;
+
+    // string split for parameters like a: n: d: ****************************************************
+    var parameters = input.split(';');
+
+    // specific variable
+    var actors = '';
+    var names = '';
+    var dates = '';
+
+    // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
+    for(var i = 0; i < parameters.length; i++){
+
+      parameters[i] = parameters[i].split(":"); // split the parameter char and the value
+
+      // all parameters are reparted on a specific variable
+      switch(parameters[i][0]){
+        case "a" :actors = parameters[i][1];
+          break;
+        case "n" : names = parameters[i][1];
+          break;
+        case "d" : dates = parameters[i][1];
+          break;
+      }
+    }
+
+    // actors treatment *****************************************************************************
+    var searchActor = actors.split("|");
+
+    var actor = '';
+    for(var i = 0; i < searchActor.length; i++){
+      actor = searchActor[i].split("&");
+    }
+
+    // movie name treatment *****************************************************************************
+    var searchName = names.split("|");
+
+    var name = '';
+    for(var i = 0; i < searchName.length; i++){
+      name = searchName[i].split("&");
+    }
+
+    // date treatment *****************************************************************************
+    var searchDate = dates.split("|");
+
+    var date = '';
+    for(var i = 0; i < searchDate.length; i++){
+      date = searchDate[i].split("&");
+    }
+
+    // test of function
+
+
+
+  }
+</script>
