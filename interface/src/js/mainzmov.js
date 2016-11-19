@@ -22,7 +22,7 @@ function mainZMov(){
 
   this.stgs=new ZMovSettings();
 
-  this.c=new CommEmmiter('web','#FromWeb','#FromExt');
+  this.c=new CommEmmiter('web','#FromExt','#FromWeb');
 
   this.css={
     body:"#bdy2",
@@ -59,9 +59,12 @@ function mainZMov(){
     this.ajx.onEnd=this.onAjaxEnd;
   }
   this.initComm=function(){
-    this.c.init();
+    that.c.init();
     // TODO set the listeners for the communicator
-    this.c.on('flist_ok',onFlistOk);
+    // TODO finir toute les communications avec l'extention ffx.
+    // TODO Arreter de bosser tous les week-end x))
+    that.c.on('DEBUG',console.log);
+    that.c.on('flist_ok',that.onFlistOk);
   }
 
 
