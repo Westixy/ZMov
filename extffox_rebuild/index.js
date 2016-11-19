@@ -38,7 +38,9 @@ function Extention(){
 
   // vv Workers EVENTS vvv //
   this.setWorkerEvents=function(wkr){
-    wkr.port.on('flist_get',function(){/* TODO */});
+    wkr.port.on('fopen',Extention.fopen);
+    wkr.port.on('flist_set',that.fm.set);
+    wkr.port.on('flist_get',that.actualiseAndEmit);
   }
 
   /*
@@ -55,7 +57,7 @@ function Extention(){
   }
 
   this.actualiseAndEmit=function(){
-    fm.readAll(function(){that.wemit('flist_ok',that.files)});
+    that.fm.readAll(function(){that.wemit('flist_ok',that.files)});
   }
 
   // Alias
@@ -68,6 +70,10 @@ function Extention(){
 }
 Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
+}
+Extention.fopen=function(path){
+  require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
+  new FileUtils.File(path).launch();
 }
 
 function FolderManager(){
@@ -125,22 +131,22 @@ FolderManager.foldEquals=function(fold1,fold2){
   return false;
 }
 FolderManager.fileExist=function(path, callback) {
-    let prom = OS.File.exists(path);
-    prom.then(callback);
+  let prom = OS.File.exists(path);
+  prom.then(callback);
 }
 FolderManager.readFile=function(path, callback) {
-    if(callback==null) callback=function(){};
-    let promise = OS.File.read(path, { encoding: "utf-8" });
-    promise.then(callback);
+  if(callback==null) callback=function(){};
+  let promise = OS.File.read(path, { encoding: "utf-8" });
+  promise.then(callback);
 }
 FolderManager.writeFile=function(content, path, callback) {
-    path = path || "fileWritted.json";
-    if(callback==null) callback=function(){};
-    let encoder = new TextEncoder();
-    let array = encoder.encode(content);
-    let prom = OS.File.writeAtomic(path, array,
-        { tmpPath: path + ".tmp" });
-    prom.then(callback);
+  path = path || "fileWritted.json";
+  if(callback==null) callback=function(){};
+  let encoder = new TextEncoder();
+  let array = encoder.encode(content);
+  let prom = OS.File.writeAtomic(path, array,
+    { tmpPath: path + ".tmp" });
+  prom.then(callback);
 }
 
 
@@ -148,64 +154,63 @@ FolderManager.writeFile=function(content, path, callback) {
 // FOLDER READER
 
 function getFolderContent(path, extArray) {
-    var that = this;
-    this.path = path;
-    this.exts = extArray || defaultExt;
-    this.dirIndex = 0;
-    this.content = {
-        dirs: [],
-        files: []
-    }
-    this.onEnd = function() {};
-    this.content.dirs.push(this.path);
+  var that = this;
+  this.path = path;
+  this.exts = extArray || defaultExt;
+  this.dirIndex = 0;
+  this.content = {
+    dirs: [],
+    files: []
+  }
+  this.onEnd = function() {};
+  this.content.dirs.push(this.path);
 
-    this.readdir = function() {
-        let iterator = new OS.File.DirectoryIterator(this.content.dirs[this.dirIndex]);
-        let promise = iterator.forEach(
-            function onEntry(entry) {
-                if (entry.isDir) {
-                    that.content.dirs.push(entry.path);
-                } else {
-                    let splt = entry.path.split(".");
-                    var ext = (splt.length > 1) ? splt[splt.length - 1] : "NO_EXT";
-                    that.exts.forEach(function(ex) {
-                        if (ext.toLowerCase() == ex)
-                            that.content.files.push(entry);
-                    });
-
-                }
-            }
-        );
-        promise.then(
-            function() {
-                iterator.close();
-                that.moreDirs();
-                return that.content;
-            },
-            function(reason) {
-                iterator.close();
-                throw reason;
-            }
-        );
-    }
-    this.moreDirs = function() {
-        this.dirIndex++;
-
-        if (this.content.dirs.length > this.dirIndex) {
-            this.readdir();
-        } else {
-            this.endRead();
+  this.readdir = function() {
+    let iterator = new OS.File.DirectoryIterator(this.content.dirs[this.dirIndex]);
+    let promise = iterator.forEach(
+      function onEntry(entry) {
+        if (entry.isDir) {
+          that.content.dirs.push(entry.path);
+        }else{
+          let splt = entry.path.split(".");
+          var ext = (splt.length > 1) ? splt[splt.length - 1] : "NO_EXT";
+          that.exts.forEach(function(ex) {
+            if (ext.toLowerCase() == ex)
+              that.content.files.push(entry);
+          });
         }
+      }
+    );
+    promise.then(
+      function() {
+        iterator.close();
+        that.moreDirs();
+        return that.content;
+      },
+      function(reason) {
+        iterator.close();
+        throw reason;
+      }
+    );
+  }
+  this.moreDirs = function() {
+    this.dirIndex++;
+
+    if (this.content.dirs.length > this.dirIndex) {
+      this.readdir();
+    } else {
+      this.endRead();
     }
-    this.endRead = function() {
-        console.log("========= END READ : " + this.path);
-        console.log("   dirs.length : " + this.content.dirs.length);
-        console.log("   dirIndex    : " + this.dirIndex);
-        console.log("   ~~~   ");
-        console.log("   file.length : " + this.content.files.length);
-        console.log('==============================================');
-        this.onEnd();
-    }
+  }
+  this.endRead = function() {
+    console.log("========= END READ : " + this.path);
+    console.log("   dirs.length : " + this.content.dirs.length);
+    console.log("   dirIndex    : " + this.dirIndex);
+    console.log("   ~~~   ");
+    console.log("   file.length : " + this.content.files.length);
+    console.log('==============================================');
+    this.onEnd();
+  }
 }
 
 var ex = new Extention();

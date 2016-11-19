@@ -60,12 +60,13 @@ function mainZMov(){
   }
   this.initComm=function(){
     that.c.init();
-    // TODO set the listeners for the communicator
-    // TODO finir toute les communications avec l'extention ffx.
-    // TODO Arreter de bosser tous les week-end x))
     that.c.on('DEBUG',console.log);
     that.c.on('flist_ok',that.onFlistOk);
   }
+  // TODO AJOUTER LES EMITS
+  // flist_get
+  // flist_set
+  // fopen
 
 
   // vvv COMM EVENTS vvv //
