@@ -39,10 +39,10 @@ function mainZMov(){
 
   // INITERS //
   this.init=function(){
-    this.initAjax();
-    this.initLoaders();
-    this.initEvents();
-    this.initComm();
+    that.initAjax();
+    that.initLoaders();
+    that.initEvents();
+    that.initComm();
   }
 
   this.initLoaders=function(){
@@ -51,17 +51,29 @@ function mainZMov(){
     that.l.info=new Loader(that.css.info);
   }
   this.initAjax=function(){
-    this.ajx.url="../function_transform/index1.php";
-    this.ajx.onSendAll=this.onAjaxSendAll;
-    this.ajx.onDone=this.onAjaxDone;
-    this.ajx.onFail=this.onAjaxFail;
-    this.ajx.onResult=this.onAjaxResult;
-    this.ajx.onEnd=this.onAjaxEnd;
+    that.ajx.url="../function_transform/index1.php";
+    that.ajx.onSendAll=this.onAjaxSendAll;
+    that.ajx.onDone=this.onAjaxDone;
+    that.ajx.onFail=this.onAjaxFail;
+    that.ajx.onResult=this.onAjaxResult;
+    that.ajx.onEnd=this.onAjaxEnd;
+  }
+  this.initSettings=function(){
+    var tmp =function(){};
+    // TODO faire les fonctions suivante (remplacer tmp)
+    that.stgs.onClose=tmp;
+    that.stgs.onAddFolder=tmp;
+    that.stgs.onRemoveFolder=tmp;
+    that.stgs.onExtChage=tmp;
   }
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
+    that.c.on('sync_ok',console.log); // TODO si l'extention est présente,débloque l'app
     that.c.on('flist_ok',that.onFlistOk);
+
+    // teste si l'extention est présente
+    setTimeout(function(){that.exmit('sync_get');},250);
   }
   // TODO AJOUTER LES EMITS
   // flist_get
@@ -71,7 +83,7 @@ function mainZMov(){
 
   // vvv COMM EVENTS vvv //
   this.onFlistOk=function(n){
-    console.log("content changed");
+    console.log("flist_ok");
     return;
     var tmplist = [];
     for (var i=0 ; i<n.length ; i++){
