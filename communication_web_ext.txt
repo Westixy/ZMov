@@ -1,0 +1,8 @@
+Communication
+ext <-> web
+
+flist_ok {}-> donnee de tous les répertoires toutes les images
+flist_set <-[] tableau des répertoires a setter
+flist_get <-. demande d'actualiser la liste (-> flist_ok)
+
+fopen <-'' ouvre le fichier local avec le pat fourni en parametre
