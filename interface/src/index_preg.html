@@ -24,7 +24,7 @@
 
         // all parameters are reparted on a specific variable
         switch(parameters[i][0]){
-          case "a" :actors = parameters[i][1];
+          case "a" : actors = parameters[i][1];
             break;
           case "n" : names = parameters[i][1];
             break;
@@ -33,94 +33,10 @@
         }
       }
 
-
-      // actors treatment *********************************************************************************
-      var actor; // array
-      if(actors.indexOf("|") != -1){ // if OR treatment has been request
-        var searchActor = actors.split("|");
-
-        actor = new Array();
-
-        for(var i = 0; i < searchActor.length; i++){
-
-          actor[actor.length] = new Array();
-
-          if(searchActor[i].indexOf("&") != -1){ // if AND treatment has been request
-
-            tmp = searchActor[i].split("&");
-            for(var d = 0; d < tmp.length; d++){
-              actor[i].push(tmp[d]);
-            }
-
-          }else{
-            actor[i].push(searchActor[i]);
-          }
-        }
-      }else if(actors.indexOf("&") != -1){ // if AND treatment only has been request
-        actor = new Array;
-        actor[0] = actors.split("&");
-      }else{
-        actor = new Array;
-        actor[0] = [actors,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
-
-      }
-      // movie name treatment *****************************************************************************
-
-      var name; // array
-      if(names.indexOf("|") != -1){ // if OR treatment has been request
-        var searchName = names.split("|");
-        name = new Array();
-
-        for(var i = 0; i < searchName.length; i++){
-
-          name[name.length] = new Array();
-
-          if(searchName[i].indexOf("&") != -1){ // if AND treatment has been request
-
-            tmp = searchName[i].split("&");
-            for(var d = 0; d < tmp.length; d++){
-              name[i].push(tmp[d]);
-            }
-          }else{
-            name[i].push(searchName[i]);
-          }
-        }
-      }else if(names.indexOf("&") != -1){ // if AND treatment only has been request
-        name = new Array();
-        name[0] = names.split("&");
-      }else{
-        name = new Array();
-        name[0] = [names, '']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
-      }
-
-      // date treatment *********************************************************************************
-      var date; // array
-      if(dates.indexOf("|") != -1){ // if OR treatment has been request
-        var searchDate = dates.split("|");
-        date = new Array();
-
-        for(var i = 0; i < searchDate.length; i++){
-
-          date[date.length] = new Array();
-
-          if(searchDate[i].indexOf("&") != -1){ // if AND treatment has been request
-
-            tmp = searchDate[i].split("&");
-            for(var d = 0; d < tmp.length; d++){
-              date[i].push(tmp[d]);
-            }
-          }else{
-            date[i].push(searchDate[i]);
-          }
-        }
-      }else if(dates.indexOf("&") != -1){ // if AND treatment only has been request
-        date = new Array();
-        date[0] = dates.split("&");
-      }else{
-        date = new Array();
-        date[0] = [dates, '']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
-      }
-
+      // data treatments
+      var actor = stockDataSearched(actors); // array
+      var name = stockDataSearched(names); // array
+      var date = stockDataSearched(dates); // array
 
       // test of function
       console.log(actor);
@@ -135,6 +51,39 @@
     }
   }
 
+  function stockDataSearched(tables){
+    var table; // array
+
+    if(tables.indexOf("|") != -1){ // if OR treatment has been request
+      var searchTable = tables.split("|");
+
+      table = new Array();
+
+      for(var i = 0; i < searchTable.length; i++){
+
+        table[table.length] = new Array();
+
+        if(searchTable[i].indexOf("&") != -1){ // if AND treatment has been request
+
+          tmp = searchTable[i].split("&");
+          for(var d = 0; d < tmp.length; d++){
+            table[i].push(tmp[d]);
+          }
+
+        }else{
+          table[i].push(searchTable[i]);
+        }
+      }
+    }else if(tables.indexOf("&") != -1){ // if AND treatment only has been request
+      table = new Array;
+      table[0] = tables.split("&");
+    }else{
+      table = new Array;
+      table[0] = [tables,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+    }
+    return table;
+  }
+  // display results from search
   function display(element, index, array){
     document.getElementById("result").innerHTML += index + " " + element + "<br/>";
   }
