@@ -8,121 +8,136 @@
   function break_down(){
     input = document.getElementById("input").value;
 
-    // string split for parameters like a: n: d: ****************************************************
-    var parameters = input.split(';');
+    if(input.indexOf(":") != -1){ // if the input contains ":" (search with parameters)
+      // string split for parameters like a: n: d: ****************************************************
+      var parameters = input.split(';');
 
-    // specific variable
-    var actors = '';
-    var names = '';
-    var dates = '';
+      // specific variable
+      var actors = '';
+      var names = '';
+      var dates = '';
 
-    // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
-    for(var i = 0; i < parameters.length; i++){
+      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
+      for(var i = 0; i < parameters.length; i++){
 
-      parameters[i] = parameters[i].split(":"); // split the parameter char and the value
+        parameters[i] = parameters[i].split(":"); // split the parameter char and the value
 
-      // all parameters are reparted on a specific variable
-      switch(parameters[i][0]){
-        case "a" :actors = parameters[i][1];
-          break;
-        case "n" : names = parameters[i][1];
-          break;
-        case "d" : dates = parameters[i][1];
-          break;
-      }
-    }
-
-
-    // actors treatment *********************************************************************************
-    var actor; // array
-    if(actors.indexOf("|") != -1){ // if OR treatment has been request
-      var searchActor = actors.split("|");
-
-      actor = new Array();
-
-      for(var i = 0; i < searchActor.length; i++){
-
-        actor[actor.length] = new Array();
-
-        if(searchActor[i].indexOf("&") != -1){ // if AND treatment has been request
-
-          tmp = searchActor[i].split("&");
-          for(var d = 0; d < tmp.length; d++){
-            actor[i].push(tmp[d]);
-          }
-
-        }else{
-          actor[i].push(searchActor[i]);
+        // all parameters are reparted on a specific variable
+        switch(parameters[i][0]){
+          case "a" :actors = parameters[i][1];
+            break;
+          case "n" : names = parameters[i][1];
+            break;
+          case "d" : dates = parameters[i][1];
+            break;
         }
       }
-    }else if(actors.indexOf("&") != -1){ // if AND treatment only has been request
-      actor = new Array;
-      actor[0] = actors.split("&");
-    }else{
-      actor = new Array;
-      actor[0] = [actors,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
-      //TODO : treatment without parameters
 
-    }
-    // movie name treatment *****************************************************************************
 
-    var name; // array
-    if(names.indexOf("|") != -1){ // if OR treatment has been request
-      var searchName = names.split("|");
-      name = new Array();
+      // actors treatment *********************************************************************************
+      var actor; // array
+      if(actors.indexOf("|") != -1){ // if OR treatment has been request
+        var searchActor = actors.split("|");
 
-      for(var i = 0; i < searchName.length; i++){
+        actor = new Array();
 
-        name[name.length] = new Array();
+        for(var i = 0; i < searchActor.length; i++){
 
-        if(searchName[i].indexOf("&") != -1){ // if AND treatment has been request
+          actor[actor.length] = new Array();
 
-          tmp = searchName[i].split("&");
-          for(var d = 0; d < tmp.length; d++){
-            name[i].push(tmp[d]);
+          if(searchActor[i].indexOf("&") != -1){ // if AND treatment has been request
+
+            tmp = searchActor[i].split("&");
+            for(var d = 0; d < tmp.length; d++){
+              actor[i].push(tmp[d]);
+            }
+
+          }else{
+            actor[i].push(searchActor[i]);
           }
-        }else{
-          name[i].push(searchName[i]);
         }
+      }else if(actors.indexOf("&") != -1){ // if AND treatment only has been request
+        actor = new Array;
+        actor[0] = actors.split("&");
+      }else{
+        actor = new Array;
+        actor[0] = [actors,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+
       }
-    }else if(names.indexOf("&") != -1){
-      name = new Array();
-      name[0] = names.split("&");
-    }else{
-      name = new Array();
-      name[0] = [names, ''];
-    }
+      // movie name treatment *****************************************************************************
 
-    // date treatment *********************************************************************************
-    var date; // array
-    if(dates.indexOf("|") != -1){ // if OR treatment has been request
-      var searchDate = dates.split("|");
-      date = new Array();
+      var name; // array
+      if(names.indexOf("|") != -1){ // if OR treatment has been request
+        var searchName = names.split("|");
+        name = new Array();
 
-      for(var i = 0; i < searchDate.length; i++){
+        for(var i = 0; i < searchName.length; i++){
 
-        date[date.length] = new Array();
+          name[name.length] = new Array();
 
-        if(searchDate[i].indexOf("&") != -1){ // if AND treatment has been request
+          if(searchName[i].indexOf("&") != -1){ // if AND treatment has been request
 
-          tmp = searchDate[i].split("&");
-          for(var d = 0; d < tmp.length; d++){
-            date[i].push(tmp[d]);
+            tmp = searchName[i].split("&");
+            for(var d = 0; d < tmp.length; d++){
+              name[i].push(tmp[d]);
+            }
+          }else{
+            name[i].push(searchName[i]);
           }
-        }else{
-          date[i].push(searchDate[i]);
         }
+      }else if(names.indexOf("&") != -1){ // if AND treatment only has been request
+        name = new Array();
+        name[0] = names.split("&");
+      }else{
+        name = new Array();
+        name[0] = [names, '']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
       }
-    }else if(date.indexOf("&") != -1){
-      date = new Array();
-      date[0] = date.split("&");
+
+      // date treatment *********************************************************************************
+      var date; // array
+      if(dates.indexOf("|") != -1){ // if OR treatment has been request
+        var searchDate = dates.split("|");
+        date = new Array();
+
+        for(var i = 0; i < searchDate.length; i++){
+
+          date[date.length] = new Array();
+
+          if(searchDate[i].indexOf("&") != -1){ // if AND treatment has been request
+
+            tmp = searchDate[i].split("&");
+            for(var d = 0; d < tmp.length; d++){
+              date[i].push(tmp[d]);
+            }
+          }else{
+            date[i].push(searchDate[i]);
+          }
+        }
+      }else if(dates.indexOf("&") != -1){ // if AND treatment only has been request
+        date = new Array();
+        date[0] = dates.split("&");
+      }else{
+        date = new Array();
+        date[0] = [dates, '']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+      }
+
+
+      // test of function
+      console.log(actor);
+      document.getElementById("result").innerHTML += "<br/><u>acteurs :</u><br/>";
+      actor.forEach(display);
+      document.getElementById("result").innerHTML += "<br/><u>Noms de films :</u><br/>";
+      name.forEach(display);
+      document.getElementById("result").innerHTML += "<br/><u>dates :</u><br/>";
+      date.forEach(display);
     }else{
-      date = new Array();
-      date[0] = [date, ''];
+      // TODO : treatment without parameters
     }
-
-
-    // test of function
-    document.getElementById("result").innerHTML += '<br/>'+ date[0][0];
   }
+
+  function display(element, index, array){
+    document.getElementById("result").innerHTML += index + " " + element + "<br/>";
+  }
+
+
 </script>
