@@ -26,14 +26,17 @@ function Extention(){
   */
   this.initEvents=function(){
     tabs.on('ready', that.tabsOnReady);
+    tabs.on('open', that.tabsOnReady);
   }
 
   // vvv TABS EVENTS vvv //
   this.tabsOnReady=function(tab){
+    console.log(tab);
     console.log("tit: "+tab.title);
     console.log("w.tit: "+ tab.window.title);
-    if(tab.window.title.indexOf("ZMov app")>=0)
+    if(tab.window.title.indexOf("ZMov app")>=0){
       that.webAttach(tab);
+    }
   }
 
   // vv Workers EVENTS vvv //
@@ -41,6 +44,7 @@ function Extention(){
     wkr.port.on('fopen',Extention.fopen);
     wkr.port.on('flist_set',that.fm.set);
     wkr.port.on('flist_get',that.actualiseAndEmit);
+    wkr.port.on('ext_set',function(ext){defaultExt=ext;});
   }
 
   /*
@@ -214,5 +218,6 @@ function getFolderContent(path, extArray) {
 }
 
 var ex = new Extention();
-
+console.log(ex);
+console.log(tabs);
 ex.initEvents();

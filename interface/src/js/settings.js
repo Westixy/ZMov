@@ -78,6 +78,7 @@ function ZMovSettings(){
       let fold2L = fold2.substring(fold2.length - 1, fold2.length);
       if (fold2L == "/" || fold2L == "\\") fold2 = fold2.substring(0, fold2.length - 1);
       if (fold1 == fold2) return true;
+      return false;
   }
   this.folderInList=function(path){
     for(var i =0; i<that.data.flist ; i++)

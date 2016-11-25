@@ -59,12 +59,10 @@ function mainZMov(){
     that.ajx.onEnd=this.onAjaxEnd;
   }
   this.initSettings=function(){
-    var tmp =function(){};
-    // TODO faire les fonctions suivante (remplacer tmp)
-    that.stgs.onClose=tmp;
-    that.stgs.onAddFolder=tmp;
-    that.stgs.onRemoveFolder=tmp;
-    that.stgs.onExtChage=tmp;
+    that.stgs.onClose=function(){};
+    that.stgs.onAddFolder=function(n){that.exmit('flist_set',that.stgs.data.flist);};
+    that.stgs.onRemoveFolder=function(n){that.exmit('flist_set',that.stgs.data.flist);};
+    that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
   }
   this.initComm=function(){
     that.c.init();
@@ -77,8 +75,14 @@ function mainZMov(){
   }
   // TODO AJOUTER LES EMITS
   // flist_get
-  // flist_set
   // fopen
+
+  this.flist_get=function(){
+    that.exmit('flist_get');
+  }
+  this.fopen=function(path){
+    that.exmit('fopen',path)
+  }
 
 
   // vvv COMM EVENTS vvv //

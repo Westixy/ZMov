@@ -16,6 +16,9 @@ c.on('flist_get',function(){
 c.on('flist_set',function(arg){
   self.port.emit('flist_set',arg)
 });
+c.on('ext_set',function(arg){
+  self.port.emit('ext_set',arg)
+});
 c.on('fopen',function(path){
   self.port.emit('fopen',path);
 });
