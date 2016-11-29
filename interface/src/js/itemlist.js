@@ -30,6 +30,12 @@ function ItemListZMov(){
     var mitem=new ItemZMov(data);
     that.add(mitem);
   }
+  this.addItemFromDump=function(data){
+    var mitem=new ItemZMov();
+    mitem.data=data;
+    that.add(mitem);
+    return mitem;
+  }
 
   this.indexOfx=function(fname){
     return this.lsforIndexOf.indexOf(fname);

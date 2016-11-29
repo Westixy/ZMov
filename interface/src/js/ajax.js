@@ -40,8 +40,8 @@ function AjaxSender(op){
   this.nbrended=0;
 
   this.send=function(){
-    this.ended=false;
-    this.rq=$.ajax({
+    that.ended=false;
+    that.rq=$.ajax({
       url:that.url,
       method:'POST',
       data:{entry:that.dts}
@@ -58,26 +58,29 @@ function AjaxSender(op){
   }
 
   this.onRes=function(){
-    this.nbrended++;
-    this.onResult();
+    that.nbrended++;
+    that.onResult();
     if(that.finded==that.tot()){
-      this.ended=true;
-      this.onEnd();
+      that.ended=true;
+      that.onEnd();
     }
   }
 
   this.next=function(){
-    if(this.last==true)return false;
+    if(that.last==true)return false;
     var rep=true;
-    if(this.current>=this.data.length-1){that.last=true;rep=false;}
-    this.dts=this.data[this.current];
-    this.current++;
-    this.send();
+    if(that.current>=that.data.length-1){that.last=true;rep=false;}
+    that.dts=that.data[that.current];
+    that.current++;
+    that.send();
     return rep;
   }
 
   this.sendAll=function(){
-    this.onSendAll();
+    that.onSendAll();
+    that.current=0;
+    that.finded=0;
+    that.nbrended=0;
     //while(this.next()){}
     var inter = setInterval(function(){
       if(!that.next()){
@@ -87,17 +90,17 @@ function AjaxSender(op){
   }
 
   this.setData=function(data){
-    if(this.ended==true){
-      this.data=data;
-      this.current=0;
-      this.finded=0;
-      this.last=false;
+    if(that.ended==true){
+      that.data=data;
+      that.current=0;
+      that.finded=0;
+      that.last=false;
       return true;
     }
     return false;
   }
 
   this.tot=function(){
-    return this.data.length;
+    return that.data.length;
   }
 }

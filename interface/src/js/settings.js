@@ -13,39 +13,63 @@ function ZMovSettings(){
 
   this.data={
     flist:[],
-    ext:[]
+    ext:['_default_']
   }
 
   this.init=function(){
     $(this.css.close).on('click',that.onBtnClose);
-    $(this.css.flist).on('click', that.css.delfolder ,that.onDelFolder);
+    $(this.css.flist).on('click', that.css.delfolder ,that.onBtnDelFolder);
     $(this.css.btnAdd).on('click',that.onBtnAddFolder);
     $(this.css.btnExt).on('click',that.onBtnExt);
   }
 
   this.onBtnClose=function(ev){
     $(that.css.cnt).addClass('hidden');
+    that.onClose();
   }
   this.onBtnAddFolder=function(ev){
-    console.log($(that.css.inpfolder).val());
-
+    var val = $(that.css.inpfolder).val().trim();
+    if(that.data.flist.indexOf(val)<0 && !that.folderInList(val)){
+      that.data.flist.push(val);
+      $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+val+'</span><span class="delete-folder">X</span></div>');
+      console.log('onAddFolder');
+      that.onAddFolder(val,that.data.flist);
+    }
   }
-  this.onDelFolder=function(ev){
+  this.onBtnDelFolder=function(ev){
     var cnt = $(ev.currentTarget).parent(".folder-item");
     var item = $(ev.currentTarget).siblings('.fdata');
-    console.log(item.text());
-    // TODO the remove function
+    var val = item.text().trim();
+    var idx = that.data.flist.indexOf(val);
+    if(idx>=0 && that.folderInList(val)){
+      that.data.flist.splice(idx,1);
+      console.log('onDelFolder');
+      that.onDelFolder(val,that.data.flist);
+    }
+    cnt.remove();
   }
   this.onBtnExt=function(ev){
-    console.log($(that.css.inpext).val());
-  }
+    var val = $(that.css.inpext).val().trim();
+    var exts=[];
 
-  this.addFolder=function(path){
-    if(that.folderInList(path)){
-      console.log('folder "'+path+'" already in list.');
-      return;
+    if(val==''){
+      exts=['_default_'];
+    }else{
+      var freaki=[];
+      freaki=val.split(';');
+
+      for(var i=0;i<freaki.length;i++){
+        var tmp = freaki[i].trim();
+        if(tmp!=''){
+          exts.push(tmp);
+        }
+      }
     }
-    
+    if(that.data.ext!=exts){
+      that.data.ext=exts;
+      console.log('onExtChage');
+      that.onExtChange(exts);
+    }
   }
 
   this.foldEquals=function(fold1, fold2) {
@@ -54,6 +78,7 @@ function ZMovSettings(){
       let fold2L = fold2.substring(fold2.length - 1, fold2.length);
       if (fold2L == "/" || fold2L == "\\") fold2 = fold2.substring(0, fold2.length - 1);
       if (fold1 == fold2) return true;
+      return false;
   }
   this.folderInList=function(path){
     for(var i =0; i<that.data.flist ; i++)
@@ -62,6 +87,10 @@ function ZMovSettings(){
     return false;
   }
 
+  this.onClose=function(){};
+  this.onAddFolder=function(path){};
+  this.onDelFolder=function(path){};
+  this.onExtChange=function(exts){};
 
   this.init();
 }
