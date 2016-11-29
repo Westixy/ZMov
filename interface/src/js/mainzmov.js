@@ -44,6 +44,7 @@ function mainZMov(){
     that.initEvents();
     that.initComm();
     that.initSettings();
+    that.undump();
   }
 
   this.initLoaders=function(){
@@ -64,8 +65,12 @@ function mainZMov(){
     that.stgs.onAddFolder=function(n,l){
       console.log(l);
       that.exmit('flist_set',l);
+      that.exmit('flist_get');
     };
-    that.stgs.onRemoveFolder=function(n,l){that.exmit('flist_set',l);};
+    that.stgs.onRemoveFolder=function(n,l){
+      that.exmit('flist_set',l);
+      that.exmit('flist_get');
+    };
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
   }
   this.initComm=function(){
@@ -77,13 +82,6 @@ function mainZMov(){
     // teste si l'extention est présente
     setTimeout(function(){that.exmit('sync_get');},250);
   }
-  // TODO AJOUTER LES EMITS
-  // flist_get
-
-  this.flist_get=function(){
-    that.exmit('flist_get');
-  }
-
 
   // vvv COMM EVENTS vvv //
   this.onFlistOk=function(n){
@@ -207,6 +205,20 @@ function mainZMov(){
   // Alias
   this.exmit=function(action,vars){
     that.c.emit('ext',action,vars);
+  }
+
+
+  this.dump=function(){
+    localStorage.setItem('zmovmain',JSON.stringify(that));
+  }
+  this.undump=function(){
+    if(localStorage.zmovmain){
+      var lsz=JSON.parse(localStorage.zmovmain);
+      that.stgs.data=lsz.stgs.data;
+      for(var i=0;i<lsz.il.list.length;i++){
+        that.il.addItemFromDump(lsz.il.list[i].data).includeToList();
+      }
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
-var version='0.0.2-ra'+(process.argv[2]||'00');
+var version='1.0.0-b'+(process.argv[2]||'00');
 
 var id = "zmov-ext-x"/*+version*/+"@westixy";
 

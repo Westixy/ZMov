@@ -79,8 +79,11 @@ Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
 Extention.fopen=function(path){
+  //path='"'+path+'"';
   // for windows
-  exec(path,function(error, stdout, stderr) {});
+  debug(path);
+  OS.File.open(path);
+  //exec(path,function(error, stdout, stderr) {});
   // for unix
   //require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
   // new FileUtils.File(path).launch();
