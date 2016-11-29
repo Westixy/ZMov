@@ -272,3 +272,14 @@ span.delete-folder:hover {
 #settings .btn:hover {
     background-color: #1c69b7;
 }
+#a-path {
+  display: inline-block;
+  background-color:#ace;
+  transition-duration:300ms;
+  padding:6px 10px;
+  border-radius:5px;
+  cursor:pointer;
+}
+#a-path:hover {
+  background-color:#abc;
+}

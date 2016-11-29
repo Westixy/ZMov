@@ -33,7 +33,7 @@ function ZMovSettings(){
       that.data.flist.push(val);
       $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+val+'</span><span class="delete-folder">X</span></div>');
       console.log('onAddFolder');
-      that.onAddFolder(val);
+      that.onAddFolder(val,that.data.flist);
     }
   }
   this.onBtnDelFolder=function(ev){
@@ -44,7 +44,7 @@ function ZMovSettings(){
     if(idx>=0 && that.folderInList(val)){
       that.data.flist.splice(idx,1);
       console.log('onDelFolder');
-      that.onDelFolder(val);
+      that.onDelFolder(val,that.data.flist);
     }
     cnt.remove();
   }

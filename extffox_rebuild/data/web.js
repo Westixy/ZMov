@@ -8,6 +8,9 @@ var cemit=function(action,args){c.emit('web',action,args);}
 self.port.on('flist_ok', function(mjson) {
   cemit('flist_ok',mjson);
 });
+self.port.on('DEBUG', function(arg){
+  cemit('DEBUG',arg);
+});
 
 // from web
 c.on('flist_get',function(){

@@ -34,6 +34,7 @@ function ItemZMov(data){
       cntMore:".cnt-moreinfo",
       desc:"#txt-desc",
       acteurs:"#txt-acteurs",
+      openit:"#a-path",
       more:"#cnt-pinfo"
     }
   };
@@ -107,6 +108,7 @@ function ItemZMov(data){
     });
     $(that.css.full.acteurs).html(m);
     $(that.css.full.more).html(that.data.none);
+    $(that.css.full.openit).attr('data-path',that.data.path)
   };
 
   this.match = function(text){

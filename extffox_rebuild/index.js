@@ -1,6 +1,6 @@
 const { Cu } = require("chrome");
 const { TextDecoder, TextEncoder, OS } = Cu.import("resource://gre/modules/osfile.jsm", {});
-var tabs = require("sdk/tabs");
+//var tabs = require("sdk/tabs");
 var self = require("sdk/self");
 var ui = require("sdk/ui");
 var { setTimeout } = require("sdk/timers");
@@ -8,6 +8,8 @@ var { setTimeout } = require("sdk/timers");
 var urlBase = "http://maw.dev/interface";
 var defaultExt = ["mp4", "avi", "mkv", "dvx", "mov", "mpg", "mpa", "asf", "wma", "vob", "wmv"];
 var ConfigPath = "data/config.json";
+var debug=console.log;
+var exec = require("sdk/system/child_process").exec;
 
 
 // TODO DEBUG THIS SHIT
@@ -25,15 +27,15 @@ function Extention(){
   ====================
   */
   this.initEvents=function(){
-    tabs.on('ready', that.tabsOnReady);
-    tabs.on('open', that.tabsOnReady);
+    var tabs = require("sdk/tabs");
+
+    tabs.on('load',that.tabsOnReady);
+    //tabs.on('ready',function(tab){console.log('ready '+tab.title);})    });
+    //tabs.on('ready', that.tabsOnReady);
   }
 
   // vvv TABS EVENTS vvv //
   this.tabsOnReady=function(tab){
-    console.log(tab);
-    console.log("tit: "+tab.title);
-    console.log("w.tit: "+ tab.window.title);
     if(tab.window.title.indexOf("ZMov app")>=0){
       that.webAttach(tab);
     }
@@ -41,6 +43,7 @@ function Extention(){
 
   // vv Workers EVENTS vvv //
   this.setWorkerEvents=function(wkr){
+    debug=function(some){wkr.port.emit('DEBUG',some)};
     wkr.port.on('fopen',Extention.fopen);
     wkr.port.on('flist_set',that.fm.set);
     wkr.port.on('flist_get',that.actualiseAndEmit);
@@ -61,7 +64,7 @@ function Extention(){
   }
 
   this.actualiseAndEmit=function(){
-    that.fm.readAll(function(){that.wemit('flist_ok',that.files)});
+    that.fm.readAll(function(){that.wemit('flist_ok',that.fm.files)});
   }
 
   // Alias
@@ -76,8 +79,11 @@ Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
 Extention.fopen=function(path){
-  require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
-  new FileUtils.File(path).launch();
+  // for windows
+  exec(path,function(error, stdout, stderr) {});
+  // for unix
+  //require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
+  // new FileUtils.File(path).launch();
 }
 
 function FolderManager(){
@@ -218,6 +224,4 @@ function getFolderContent(path, extArray) {
 }
 
 var ex = new Extention();
-console.log(ex);
-console.log(tabs);
 ex.initEvents();

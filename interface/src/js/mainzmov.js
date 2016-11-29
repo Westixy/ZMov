@@ -43,6 +43,7 @@ function mainZMov(){
     that.initLoaders();
     that.initEvents();
     that.initComm();
+    that.initSettings();
   }
 
   this.initLoaders=function(){
@@ -60,8 +61,11 @@ function mainZMov(){
   }
   this.initSettings=function(){
     that.stgs.onClose=function(){};
-    that.stgs.onAddFolder=function(n){that.exmit('flist_set',that.stgs.data.flist);};
-    that.stgs.onRemoveFolder=function(n){that.exmit('flist_set',that.stgs.data.flist);};
+    that.stgs.onAddFolder=function(n,l){
+      console.log(l);
+      that.exmit('flist_set',l);
+    };
+    that.stgs.onRemoveFolder=function(n,l){that.exmit('flist_set',l);};
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
   }
   this.initComm=function(){
@@ -75,20 +79,16 @@ function mainZMov(){
   }
   // TODO AJOUTER LES EMITS
   // flist_get
-  // fopen
 
   this.flist_get=function(){
     that.exmit('flist_get');
-  }
-  this.fopen=function(path){
-    that.exmit('fopen',path)
   }
 
 
   // vvv COMM EVENTS vvv //
   this.onFlistOk=function(n){
     console.log("flist_ok");
-    return;
+    //return;
     var tmplist = [];
     for (var i=0 ; i<n.length ; i++){
       if(that.il.indexOfx(n[i].name)==-1){
@@ -166,6 +166,9 @@ function mainZMov(){
     $('#in-search').on("change",that.onSearchChange);
     $('#cnt-movieList').on('click','.cnt-movieItem',that.onItemClick);
     $('#btnSettings').on('click',that.onSettingsClick);
+    $('#a-path').on('click',function(ev){
+      that.exmit('fopen',$(this).attr('data-path'))
+    });
   }
 
   this.onWinResize=function(){
