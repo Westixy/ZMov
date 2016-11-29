@@ -2,11 +2,17 @@
 <button onclick="break_down();">Entrer</button>
 <div id="result"></div>
 <script>
-
   var input = '';
 
   function break_down(){
+
+    var prem = ["John", "Edit", "Mary"];
+    var deux = 'Bonjour Mon Cheval';
+    var troi = '19940621';
+
     input = document.getElementById("input").value;
+
+    var output = false;
 
     if(input.indexOf(":") != -1){ // if the input contains ":" (search with parameters)
       // string split for parameters like a: n: d: ****************************************************
@@ -72,6 +78,19 @@
       var name = stockDataSearched(names); // array
       var date = stockDataSearched(dates); // array
 
+
+      for(var i = 0; i < actor.length; i++){
+        for(var c = 0; i < actor[i].length; c++){
+          if(actor[i][c] != ""){
+            //console.log(actor[i][c]);
+          }
+          for(var d = 0; d < prem.length; d++){
+
+          }
+        }
+      }
+
+
       // test of function
       console.log(actor);
       document.getElementById("result").innerHTML += "<br/><u>acteurs :</u><br/>";
@@ -80,6 +99,15 @@
       name.forEach(display);
       document.getElementById("result").innerHTML += "<br/><u>dates :</u><br/>";
       date.forEach(display);
+
+
+      if(output == true){
+        alert("c'est bon !");
+      }else{
+        alert("Arg Merde :/");
+      }
+
+
     }else{
       // TODO : treatment without parameters
     }
