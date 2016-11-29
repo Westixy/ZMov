@@ -1,11 +1,14 @@
 <input type="text" id="input" value=""/>
-<button onclick="break_down();">Entrer</button>
+<button onclick="break_down()">Entrer</button>
 <div id="result"></div>
 <script>
-
   var input = '';
 
   function break_down(){
+    var prem = ["John", "Edit", "Mary"];
+    var deux = 'Bonjour Mon Cheval';
+    var troi = '19940621';
+
     input = document.getElementById("input").value;
 
     if(input.indexOf(":") != -1){ // if the input contains ":" (search with parameters)
@@ -72,14 +75,45 @@
       var name = stockDataSearched(names); // array
       var date = stockDataSearched(dates); // array
 
+      var output = false;
+
+      for(var i = 0; i < actor.length; i++){ // for each OR clause
+        for(var c = 0; c < actor[i].length; c++){ // for each actor name
+          if(actor[i][c] != ""){ // if the actor cell isn't empty
+            for(var d = 0; d < prem.length; d++){ // for each actor name in the array
+              if(actor[i][c] == prem[d]){ // if actor searched match to actor stocked
+                output = true;
+                break;
+              }else{
+                output = false;
+              }
+            }
+            if(output == false){
+              break;
+            }
+          }
+        }
+        if(output != false){
+          break;
+        }
+      }
+
+      if(output == false){
+        console.log("pas de correspondance");
+      }else{
+        console.log("OUI !");
+      }
+
       // test of function
       console.log(actor);
+
       document.getElementById("result").innerHTML += "<br/><u>acteurs :</u><br/>";
       actor.forEach(display);
       document.getElementById("result").innerHTML += "<br/><u>Noms de films :</u><br/>";
       name.forEach(display);
       document.getElementById("result").innerHTML += "<br/><u>dates :</u><br/>";
       date.forEach(display);
+
     }else{
       // TODO : treatment without parameters
     }
