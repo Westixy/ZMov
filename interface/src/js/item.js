@@ -120,6 +120,8 @@ function ItemZMov(data){
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date; // "2013-03-21"
 
+    var output = false;
+
     if(input.indexOf(":") != -1){ // if the input contains ":" (search with parameters)
       // string split for parameters like a: n: d: ****************************************************
       var parameters = text.split(';');
@@ -186,12 +188,33 @@ function ItemZMov(data){
       var name = stockDataSearched(names); // array
       var dateB = stockDataSearched(dates); // array
 
+
+      for(var i = 0; i < actor.length; i++){ // for each OR clause
+        for(var c = 0; c < actor[i].length; c++){ // for each actor name
+          if(actor[i][c] != ""){ // if the actor cell isn't empty
+            for(var d = 0; d < actors.length; d++){ // for each actor name in the array
+              if(actor[i][c] == actors[d]){ // if actor searched match to actor stocked
+                output = true;
+                break;
+              }else{
+                output = false;
+              }
+            }
+            if(output == false){
+              break;
+            }
+          }
+        }
+        if(output != false){
+          break;
+        }
+      }
+
       //TODO : check variables are not empty
     }else{
       // TODO : treatment without parameters
     }
 
-    console.log("hello");
 
 
   }
