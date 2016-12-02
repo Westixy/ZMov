@@ -228,7 +228,6 @@ function ItemZMov(data){
             if(name[i][c] != ""){ // if the movie name cell isn't empty
               console.log(titre);
                 if(name[i][c].toLowerCase() == titre.toLowerCase()){
->>>>>>> Stashed changes
                   outputName = true;
                 }else{
                   outputName = false;
