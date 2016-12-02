@@ -85,7 +85,7 @@
           for(var c = 0; c < actor[i].length; c++){ // for each actor name
             if(actor[i][c] != ""){ // if the actor cell isn't empty
               for(var d = 0; d < prem.length; d++){ // for each actor name in the array
-                if(actor[i][c] == prem[d]){ // if actor searched match to actor stocked
+                if(actor[i][c].toLowerCase() == prem[d].toLowerCase()){ // if actor searched match to actor stocked
                   outputActor = true;
                   break;
                 }else{
@@ -107,10 +107,10 @@
 
       if(name[0][0] != ''){
         // loop for Names ==============================================================
-        for(var i = 0; i < name.length; i++){
-          for(var c = 0; c < name[i].length; c++){
-            if(name[i][c] != ""){
-                if(name[i][c] == deux){
+        for(var i = 0; i < name.length; i++){ // for each OR clause
+          for(var c = 0; c < name[i].length; c++){ // for each movie name
+            if(name[i][c] != ""){ // if the movie name cell isn't empty
+                if(name[i][c].toLowerCase() == deux.toLowerCase()){
                   outputName = true;
                 }else{
                   outputName = false;
@@ -159,6 +159,8 @@
             break;
           }
         }
+      }else{
+        outputDate = true;
       }
 
 
