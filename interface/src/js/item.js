@@ -117,9 +117,9 @@ function ItemZMov(data){
     // si titre, acteurs sont remplis il doit matcher avec les 2
     // etc...
     //text : input brute
-    var titre = that.data.titre;
+    var titre = that.data.title;
     var acteurs = that.data.acteurs; // thats an ARRAY !
-    var date = that.data.date; // "2013-03-21"
+    var date = that.data.date.replace('-',''); // "2013-03-21"
 
     var output = false;
 
@@ -226,7 +226,12 @@ function ItemZMov(data){
         for(var i = 0; i < name.length; i++){ // for each OR clause
           for(var c = 0; c < name[i].length; c++){ // for each movie name
             if(name[i][c] != ""){ // if the movie name cell isn't empty
+<<<<<<< Updated upstream
                 if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1){
+=======
+              console.log(titre);
+                if(name[i][c].toLowerCase() == titre.toLowerCase()){
+>>>>>>> Stashed changes
                   outputName = true;
                 }else{
                   outputName = false;

@@ -32,5 +32,5 @@ c.on('sync_get',function(){
 });
 
 c.on('DEBUG', function(arg){
-  cemit('DEBUG',arg);
+  self.port.emit('DEBUG',arg);
 });

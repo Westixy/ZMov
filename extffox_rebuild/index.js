@@ -48,6 +48,9 @@ function Extention(){
     wkr.port.on('flist_set',that.fm.set);
     wkr.port.on('flist_get',that.actualiseAndEmit);
     wkr.port.on('ext_set',function(ext){defaultExt=ext;});
+    wkr.port.on('DEBUG',function(args){
+      wkr.port.emit('DEBUG',eval(args))
+    });
   }
 
   /*

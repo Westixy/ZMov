@@ -165,6 +165,7 @@ function mainZMov(){
   this.onAjaxEnd=function(){
       that.l.flst.hide();
       console.log('ratio : '+ (that.ratio.ok*100/(that.ratio.ok+that.ratio.fail)) +'%');
+      that.dump();
   }
 
   // vvv EVENTS USER vvv //
