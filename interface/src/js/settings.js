@@ -25,7 +25,7 @@ function ZMovSettings(){
     $(this.css.btnClearIl).on('click',that.onBtnCIl);
   }
 
-  this.doOnDump=function(){
+  this.doOnUndump=function(){
     for(var i=0; i<that.data.flist.length ; i++){
       $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+
         that.data.flist[i]+'</span><span class="delete-folder">X</span></div>');
@@ -54,9 +54,8 @@ function ZMovSettings(){
     var item = $(ev.currentTarget).siblings('.fdata');
     var val = item.text().trim();
     var idx = that.data.flist.indexOf(val);
-    if(idx>=0 && that.folderInList(val)){
+    if(idx>=0){
       that.data.flist.splice(idx,1);
-      console.log('onDelFolder');
       that.onDelFolder(val,that.data.flist);
     }
     cnt.remove();

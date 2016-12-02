@@ -71,10 +71,14 @@ function mainZMov(){
       console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
+      that.dump();
     };
-    that.stgs.onRemoveFolder=function(n,l){
+    that.stgs.onDelFolder=function(n,l){
+      console.log('onDelFolder');
+      console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
+      that.dump();
     };
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
   }
@@ -214,13 +218,18 @@ function mainZMov(){
 
 
   this.dump=function(){
-    localStorage.setItem('zmovmain',JSON.stringify(that));
+    if(!localStorage.zmovmain){
+      localStorage.setItem('zmovmain',JSON.stringify(that));
+    }
+    else {
+      localStorage.zmovmain=JSON.stringify(that);
+    }
   }
   this.undump=function(){
     if(localStorage.zmovmain){
       var lsz=JSON.parse(localStorage.zmovmain);
       that.stgs.data=lsz.stgs.data;
-      that.stgs.doOnDump();
+      that.stgs.doOnUndump();
       for(var i=0;i<lsz.il.list.length;i++){
         that.il.addItemFromDump(lsz.il.list[i].data).includeToList();
       }
