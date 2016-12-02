@@ -215,6 +215,7 @@ function mainZMov(){
     if(localStorage.zmovmain){
       var lsz=JSON.parse(localStorage.zmovmain);
       that.stgs.data=lsz.stgs.data;
+      that.stgs.doOnDump();
       for(var i=0;i<lsz.il.list.length;i++){
         that.il.addItemFromDump(lsz.il.list[i].data).includeToList();
       }

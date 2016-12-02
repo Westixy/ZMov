@@ -23,6 +23,13 @@ function ZMovSettings(){
     $(this.css.btnExt).on('click',that.onBtnExt);
   }
 
+  this.doOnDump=function(){
+    for(var i=0; i<that.data.flist.length ; i++){
+      $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+
+        that.data.flist[i]+'</span><span class="delete-folder">X</span></div>');
+    }
+  }
+
   this.onBtnClose=function(ev){
     $(that.css.cnt).addClass('hidden');
     that.onClose();
