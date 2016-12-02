@@ -75,30 +75,96 @@
       var name = stockDataSearched(names); // array
       var date = stockDataSearched(dates); // array
 
-      var output = false;
+      var outputActor = false;
+      var outputName = false;
+      var outputDate = false;
 
-      for(var i = 0; i < actor.length; i++){ // for each OR clause
-        for(var c = 0; c < actor[i].length; c++){ // for each actor name
-          if(actor[i][c] != ""){ // if the actor cell isn't empty
-            for(var d = 0; d < prem.length; d++){ // for each actor name in the array
-              if(actor[i][c] == prem[d]){ // if actor searched match to actor stocked
-                output = true;
+      if(actor[0][0] != ''){
+        // loop for artists =============================================================
+        for(var i = 0; i < actor.length; i++){ // for each OR clause
+          for(var c = 0; c < actor[i].length; c++){ // for each actor name
+            if(actor[i][c] != ""){ // if the actor cell isn't empty
+              for(var d = 0; d < prem.length; d++){ // for each actor name in the array
+                if(actor[i][c] == prem[d]){ // if actor searched match to actor stocked
+                  outputActor = true;
+                  break;
+                }else{
+                  outputActor = false;
+                }
+              }
+              if(outputActor == false){
                 break;
-              }else{
-                output = false;
               }
             }
-            if(output == false){
-              break;
-            }
+          }
+          if(outputActor != false){
+            break;
           }
         }
-        if(output != false){
-          break;
+      }else{
+        outputActor = true;
+      }
+
+      if(name[0][0] != ''){
+        // loop for Names ==============================================================
+        for(var i = 0; i < name.length; i++){
+          for(var c = 0; c < name[i].length; c++){
+            if(name[i][c] != ""){
+                if(name[i][c] == deux){
+                  outputName = true;
+                }else{
+                  outputName = false;
+                }
+              if(outputName == false){
+                break;
+              }
+            }
+          }
+          if(outputName != false){
+            break;
+          }
+        }
+      }else{
+        outputName = true;
+      }
+
+      if(date[0][0] != ''){
+        // loop for Dates ===============================================================
+        for(var i = 0; i < date.length; i++){
+          for(var c = 0; c < date[i].length; c++){
+            if(date[i][c] != ""){
+              if(date[i][c].charAt(0) == '<'){
+                if(troi < date[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(date[i][c].charAt(0) == '>'){
+                if(troi > date[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(date[i][c].charAt(0) == '='){
+                if(troi == date[i][c].substr(1, 8)){
+                  outputDate = true;
+                  break;
+                }
+              }
+            }
+          }
+          if(outputDate !=false){
+            break;
+          }
         }
       }
 
-      if(output == false){
+
+      //TODO : output for movie names and dates
+
+      if(outputActor == false || outputName == false || outputDate == false){
         console.log("pas de correspondance");
       }else{
         console.log("OUI !");

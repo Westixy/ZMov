@@ -124,6 +124,90 @@ function ItemZMov(data){
 
 
 
+      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
+
+      // for each parameters
+      for(var i = 0; i < parameters.length; i++){
+
+        parameters[i] = parameters[i].split(":"); // split the parameter char and the value
+
+        // all parameters are reparted on a specific variable
+        switch(parameters[i][0]){
+          case "a" : actors = parameters[i][1];
+            break;
+          case "n" : names = parameters[i][1];
+            break;
+          case "d" : dates = parameters[i][1];
+            break;
+        }
+      }
+
+      // treatment of data tables of parameters (internal function)
+      function stockDataSearched(tables){
+        var table; // array
+
+        if(tables.indexOf("|") != -1){ // if OR treatment has been request
+          var searchTable = tables.split("|");
+
+          table = new Array();
+
+          for(var i = 0; i < searchTable.length; i++){
+
+            table[table.length] = new Array();
+
+            if(searchTable[i].indexOf("&") != -1){ // if AND treatment has been request
+
+              tmp = searchTable[i].split("&");
+              for(var d = 0; d < tmp.length; d++){
+                table[i].push(tmp[d]);
+              }
+
+            }else{
+              table[i].push(searchTable[i]);
+            }
+          }
+        }else if(tables.indexOf("&") != -1){ // if AND treatment only has been request
+          table = new Array;
+          table[0] = tables.split("&");
+        }else{
+          table = new Array;
+          table[0] = [tables,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+        }
+        return table;
+      }
+
+      // data treatments
+      var actor = stockDataSearched(actors); // array
+      var name = stockDataSearched(names); // array
+      var dateB = stockDataSearched(dates); // array
+
+
+      for(var i = 0; i < actor.length; i++){ // for each OR clause
+        for(var c = 0; c < actor[i].length; c++){ // for each actor name
+          if(actor[i][c] != ""){ // if the actor cell isn't empty
+            for(var d = 0; d < actors.length; d++){ // for each actor name in the array
+              if(actor[i][c] == actors[d]){ // if actor searched match to actor stocked
+                output = true;
+                break;
+              }else{
+                output = false;
+              }
+            }
+            if(output == false){
+              break;
+            }
+          }
+        }
+        if(output != false){
+          break;
+        }
+      }
+    }else{
+      // TODO : treatment without parameters
+    }
+
+
+
   }
 
   this.setTitle=function(title){
