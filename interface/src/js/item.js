@@ -122,9 +122,19 @@ function ItemZMov(data){
     var date = that.data.date; // "2013-03-21"
 
     var output = false;
+
+    if(text.indexOf(":") != -1){
+
     var outputActor = false;
     var outputName = false;
     var outputDate = false;
+
+    var parameters = text.split(';');
+
+
+    var actors = '';
+    var names = '';
+    var dates = '';
 
 
       // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
