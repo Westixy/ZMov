@@ -8,6 +8,7 @@ function ZMovSettings(){
     btnAdd:"#btn-addfolder",
     inpfolder:"#inpaddfolder",
     btnExt:"#btn-confExt",
+    btnClearIl:"#btn-clearIl",
     inpext:"#inpextentions",
   }
 
@@ -21,6 +22,7 @@ function ZMovSettings(){
     $(this.css.flist).on('click', that.css.delfolder ,that.onBtnDelFolder);
     $(this.css.btnAdd).on('click',that.onBtnAddFolder);
     $(this.css.btnExt).on('click',that.onBtnExt);
+    $(this.css.btnClearIl).on('click',that.onBtnCIl);
   }
 
   this.doOnDump=function(){
@@ -33,6 +35,10 @@ function ZMovSettings(){
   this.onBtnClose=function(ev){
     $(that.css.cnt).addClass('hidden');
     that.onClose();
+  }
+  this.onBtnCIl=function(ev){
+    if(confirm('Voulez vous vraiment supprimer les films mis en cache ?'))
+      that.onCIl();
   }
   this.onBtnAddFolder=function(ev){
     var val = $(that.css.inpfolder).val().trim();
@@ -95,6 +101,7 @@ function ZMovSettings(){
   }
 
   this.onClose=function(){};
+  this.onCIl=function(){};
   this.onAddFolder=function(path){};
   this.onDelFolder=function(path){};
   this.onExtChange=function(exts){};

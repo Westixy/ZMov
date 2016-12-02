@@ -62,6 +62,11 @@ function mainZMov(){
   }
   this.initSettings=function(){
     that.stgs.onClose=function(){};
+    that.stgs.onCIl=function(){
+      $(that.il.cnt).html('');
+      that.il= new ItemListZMov();
+      that.dump();
+    };
     that.stgs.onAddFolder=function(n,l){
       console.log(l);
       that.exmit('flist_set',l);
