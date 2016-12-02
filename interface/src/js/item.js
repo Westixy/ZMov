@@ -201,7 +201,7 @@ function ItemZMov(data){
           for(var c = 0; c < actor[i].length; c++){ // for each actor name
             if(actor[i][c] != ""){ // if the actor cell isn't empty
               for(var d = 0; d < acteurs.length; d++){ // for each actor name in the array
-                if(actor[i][c].toLowerCase() == acteurs[d].toLowerCase()){ // if actor searched match to actor stocked
+                if(acteurs[d].toLowerCase().indexOf(actor[i][c].toLowerCase()) != -1){ // if actor searched match to actor stocked
                   outputActor = true;
                   break;
                 }else{
@@ -226,7 +226,7 @@ function ItemZMov(data){
         for(var i = 0; i < name.length; i++){ // for each OR clause
           for(var c = 0; c < name[i].length; c++){ // for each movie name
             if(name[i][c] != ""){ // if the movie name cell isn't empty
-                if(name[i][c].toLowerCase() == titre.toLowerCase()){
+                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1){
                   outputName = true;
                 }else{
                   outputName = false;
@@ -284,14 +284,17 @@ function ItemZMov(data){
       }else{
         output = false;
       }
-    }else{
+    }else{ // no parameters !
       for(var i = 0; i < acteurs.length; i++){
-        if(text == acteurs[i]){
+        if(acteurs[i].toLowerCase().indexOf(text.toLowerCase()) != -1){
           output = true;
           break;
         }else{
           output = false;
         }
+      }
+      if(titre.toLowerCase().indexOf(text.toLowerCase()) != -1){
+        output = true;
       }
     }
     return output;
