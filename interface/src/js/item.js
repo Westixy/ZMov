@@ -146,7 +146,7 @@ function ItemZMov(data){
       }
 
       // treatment of data tables of parameters (internal function)
-      function stockDataSearched(tables){
+      var stockDataSearched = function(tables){
         var table; // array
 
         if(tables.indexOf("|") != -1){ // if OR treatment has been request
@@ -284,7 +284,6 @@ function ItemZMov(data){
         }
       }
     }
-
     return output;
 
   }
