@@ -121,8 +121,171 @@ function ItemZMov(data){
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date; // "2013-03-21"
 
+    var output = false;
+    var outputActor = false;
+    var outputName = false;
+    var outputDate = false;
 
 
+      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
+
+      // for each parameters
+      for(var i = 0; i < parameters.length; i++){
+
+        parameters[i] = parameters[i].split(":"); // split the parameter char and the value
+
+        // all parameters are reparted on a specific variable
+        switch(parameters[i][0]){
+          case "a" : actors = parameters[i][1];
+            break;
+          case "n" : names = parameters[i][1];
+            break;
+          case "d" : dates = parameters[i][1];
+            break;
+        }
+      }
+
+      // treatment of data tables of parameters (internal function)
+      function stockDataSearched(tables){
+        var table; // array
+
+        if(tables.indexOf("|") != -1){ // if OR treatment has been request
+          var searchTable = tables.split("|");
+
+          table = new Array();
+
+          for(var i = 0; i < searchTable.length; i++){
+
+            table[table.length] = new Array();
+
+            if(searchTable[i].indexOf("&") != -1){ // if AND treatment has been request
+
+              tmp = searchTable[i].split("&");
+              for(var d = 0; d < tmp.length; d++){
+                table[i].push(tmp[d]);
+              }
+
+            }else{
+              table[i].push(searchTable[i]);
+            }
+          }
+        }else if(tables.indexOf("&") != -1){ // if AND treatment only has been request
+          table = new Array;
+          table[0] = tables.split("&");
+        }else{
+          table = new Array;
+          table[0] = [tables,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+        }
+        return table;
+      }
+
+      // data treatments
+      var actor = stockDataSearched(actors); // array
+      var name = stockDataSearched(names); // array
+      var dateB = stockDataSearched(dates); // array
+
+
+      if(actor[0][0] != ''){
+        // loop for artists ===========================================================
+        for(var i = 0; i < actor.length; i++){ // for each OR clause
+          for(var c = 0; c < actor[i].length; c++){ // for each actor name
+            if(actor[i][c] != ""){ // if the actor cell isn't empty
+              for(var d = 0; d < acteurs.length; d++){ // for each actor name in the array
+                if(actor[i][c].toLowerCase() == acteurs[d].toLowerCase()){ // if actor searched match to actor stocked
+                  outputActor = true;
+                  break;
+                }else{
+                  outputActor = false;
+                }
+              }
+              if(outputActor == false){
+                break;
+              }
+            }
+          }
+          if(outputActor != false){
+            break;
+          }
+        }
+      }else{
+        outputActor = true;
+      }
+
+      if(name[0][0] != ''){
+        // loop for movie names ====================================================
+        for(var i = 0; i < name.length; i++){ // for each OR clause
+          for(var c = 0; c < name[i].length; c++){ // for each movie name
+            if(name[i][c] != ""){ // if the movie name cell isn't empty
+                if(name[i][c].toLowerCase() == titre.toLowerCase()){
+                  outputName = true;
+                }else{
+                  outputName = false;
+                }
+              if(outputName == false){
+                break;
+              }
+            }
+          }
+          if(outputName != false){
+            break;
+          }
+        }
+      }else{
+        outputName = true;
+      }
+
+      if(dateB[0][0] != ''){
+        // loop for dates ==========================================================
+        for(var i = 0; i < dateB.length; i++){
+          for(var c = 0; c < dateB[i].length; c++){
+            if(dateB[i][c] != ""){
+              if(dateB[i][c].charAt(0) == '<'){
+                if(date < dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(dateB[i][c].charAt(0) == '>'){
+                if(date > dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(dateB[i][c].charAt(0) == '='){
+                if(date == dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                  break;
+                }
+              }
+            }
+          }
+          if(outputDate !=false){
+            break;
+          }
+        }
+      }else{
+        outputDate = true;
+      }
+
+      if(outputActor == true && outputName == true && outputDate == true){
+        output = true;
+      }else{
+        output = false;
+      }
+    }else{
+      for(var i = 0; i < acteurs.length; i++){
+        if(text == acteurs[i]){
+          output = true;
+          break;
+        }else{
+          output = false;
+        }
+      }
+    }
+
+    return output;
 
   }
 
