@@ -10,7 +10,7 @@
     var troi = '19940621';
 
     input = document.getElementById("input").value;
-
+    var output = false;
     if(input.indexOf(":") != -1){ // if the input contains ":" (search with parameters)
       // string split for parameters like a: n: d: ****************************************************
       var parameters = input.split(';');
@@ -181,7 +181,14 @@
       date.forEach(display);
 
     }else{
-      // TODO : treatment without parameters
+      for(var i = 0; i < prem.length; i++){
+        if(input == prem[i]){
+          output = true;
+          break;
+        }else{
+          output = false;
+        }
+      }
     }
   }
   // display results from search
