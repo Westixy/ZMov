@@ -69,6 +69,15 @@ function ItemListZMov(){
     });
   }
 
+  this.match=function(pattern){
+    that.resetShowedList()
+    for(var i=0; i<that.list.length ; i++){
+      if(that.list[i].match(pattern)){
+        that.itemToList(i);
+      }
+    }
+  }
+
   this.rmItem=function(id){
     that.rmItemFromList(id);
     that.list.splice(id,1);

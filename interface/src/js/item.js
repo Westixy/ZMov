@@ -226,8 +226,8 @@ function ItemZMov(data){
         for(var i = 0; i < name.length; i++){ // for each OR clause
           for(var c = 0; c < name[i].length; c++){ // for each movie name
             if(name[i][c] != ""){ // if the movie name cell isn't empty
-              console.log(titre);
-                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase())){
+              //console.log(titre);
+                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1 ){
                   outputName = true;
                 }else{
                   outputName = false;

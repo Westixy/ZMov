@@ -180,11 +180,12 @@ function mainZMov(){
   }
 
   this.onWinResize=function(){
-    console.log("WinResized");
+    //console.log("WinResized");
   }
 
-  this.onSearchChange=function(){
-    console.log("onSearchChange");
+  this.onSearchChange=function(val){
+    //console.log(val.target.value);
+    that.il.match(val.target.value);
     //that.l.flst.show();
     //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
@@ -192,7 +193,7 @@ function mainZMov(){
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
     var id = $(elem).attr('data-itemid');
-    console.log("onItemClick -> "+id);
+    //console.log("onItemClick -> "+id);
     //that.l.info.show();
     that.il.list[id].updateCard();
     //var x = setTimeout(function(){that.l.info.hide();},1000);
