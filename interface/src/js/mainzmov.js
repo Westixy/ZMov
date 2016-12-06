@@ -13,6 +13,7 @@
 
 function mainZMov(){
   var that=this;
+
   this.prop={};
   this.l={};
 
@@ -49,7 +50,7 @@ function mainZMov(){
 
   this.initLoaders=function(){
     that.l.b=new Loader(that.css.body);
-    that.l.flst=new Loader(that.css.flst);
+    that.l.flst=new Loader(that.css.flst,'Loading<br><span id="flst_pbt">0%</span>');
     that.l.info=new Loader(that.css.info);
   }
   this.initAjax=function(){
@@ -68,14 +69,14 @@ function mainZMov(){
       that.dump();
     };
     that.stgs.onAddFolder=function(n,l){
-      console.log(l);
+      //console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
       that.dump();
     };
     that.stgs.onDelFolder=function(n,l){
-      console.log('onDelFolder');
-      console.log(l);
+      //console.log('onDelFolder');
+      //console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
       that.dump();
@@ -85,17 +86,20 @@ function mainZMov(){
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
-    that.c.on('sync_ok',console.log); // TODO si l'extention est présente,débloque l'app
+    that.c.on('sync_ok',that.onSyncOk);
     that.c.on('flist_ok',that.onFlistOk);
 
     // teste si l'extention est présente
     setTimeout(function(){that.exmit('sync_get');},250);
+    setTimeout(function(){
+      if(mainZMov.ext_found==false)
+        $('#blocked>div.noext').html('<h1>No extention found</h1><h4>Please install ZMov-ext to use this app</h4>');
+    },1000);
+
   }
 
   // vvv COMM EVENTS vvv //
   this.onFlistOk=function(n){
-    console.log("flist_ok");
-    //return;
     var tmplist = [];
     for (var i=0 ; i<n.length ; i++){
       if(that.il.indexOfx(n[i].name)==-1){
@@ -111,11 +115,23 @@ function mainZMov(){
       that.ajx.sendAll();
     }
   }
+  this.onSyncOk=function(ver){
+    mainZMov.ext_found=true;
+     // control que la version minimal soit acceptée.
+    if(mainZMov.versionAccept(ver)){
+      // accept version
+      $('#blocked').remove();
+    }else {
+      // refuse version
+      $('#blocked>div.noext').html('<h1>Extension is obsolete</h1><h4>Please update the ZMov-ext at least to v'+mainZMov.ext_min_v+'<br><small>Your is v'+ver+'</small></h4>');
+    }
+  }
 
   // vvv AJAX EVENTS vvv //
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
+    $('#flst_pbt').text(0.0+'%');
   }
 
   this.onAjaxDone=function(datas){
@@ -153,7 +169,7 @@ function mainZMov(){
       it.lastUpdate=Date.now();
       it.includeToList();
     }
-    console.log(d);
+    //console.log(d);
   }
   this.onAjaxFail=function(err,status){
     console.log("-X- AJAX_ERROR --- "+status+" -> ");
@@ -161,6 +177,9 @@ function mainZMov(){
   }
   this.onAjaxResult=function(){
     console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+    var pc=(that.ajx.nbrended/that.ajx.tot()*100).toFixed(1);
+    $('#flst_pbt').text(pc+'%');
+
   }
   this.onAjaxEnd=function(){
       that.l.flst.hide();
@@ -180,11 +199,12 @@ function mainZMov(){
   }
 
   this.onWinResize=function(){
-    console.log("WinResized");
+    //console.log("WinResized");
   }
 
-  this.onSearchChange=function(){
-    console.log("onSearchChange");
+  this.onSearchChange=function(val){
+    //console.log(val.target.value);
+    that.il.match(val.target.value);
     //that.l.flst.show();
     //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
@@ -192,7 +212,7 @@ function mainZMov(){
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
     var id = $(elem).attr('data-itemid');
-    console.log("onItemClick -> "+id);
+    //console.log("onItemClick -> "+id);
     //that.l.info.show();
     that.il.list[id].updateCard();
     //var x = setTimeout(function(){that.l.info.hide();},1000);
@@ -237,7 +257,26 @@ function mainZMov(){
     }
   }
 }
-
+mainZMov.ext_min_v="1.0.1";
+mainZMov.ext_found=false;
+mainZMov.versionSpliter=function(version){
+  var v = version.split('.');
+  var ret = [0,0,0];
+  for(var i=0; i<v.length && i<3; i++){
+    ret[i]+=parseInt(v[i]);
+  }
+  return ret;
+}
+mainZMov.versionAccept=function(other){
+  var min=mainZMov.versionSpliter(mainZMov.ext_min_v);
+  var oth=mainZMov.versionSpliter(other);
+  for(var i=0; i<min.length ;i++){
+    if(oth[i]<min[i]){
+      return false;
+    }
+  }
+  return true;
+}
 
 function n(text){
   return text.substring(1, text.length);

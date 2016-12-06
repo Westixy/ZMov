@@ -11,6 +11,7 @@ var ConfigPath = "data/config.json";
 var debug=console.log;
 var exec = require("sdk/system/child_process").exec;
 
+var version="1.0.1";
 
 // TODO DEBUG THIS SHIT
 
@@ -48,8 +49,11 @@ function Extention(){
     wkr.port.on('flist_set',that.fm.set);
     wkr.port.on('flist_get',that.actualiseAndEmit);
     wkr.port.on('ext_set',function(ext){defaultExt=ext;});
+    wkr.port.on('sync_get',function(){
+      wkr.port.emit('sync_ok',version)
+    });
     wkr.port.on('DEBUG',function(args){
-      wkr.port.emit('DEBUG',eval(args))
+      debug(args);
     });
   }
 

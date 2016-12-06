@@ -8,6 +8,9 @@ var cemit=function(action,args){c.emit('web',action,args);}
 self.port.on('flist_ok', function(mjson) {
   cemit('flist_ok',mjson);
 });
+self.port.on('sync_ok', function(arg){
+  cemit('sync_ok',arg);
+});
 self.port.on('DEBUG', function(arg){
   cemit('DEBUG',arg);
 });
@@ -28,7 +31,7 @@ c.on('fopen',function(path){
 
 
 c.on('sync_get',function(){
-  cemit('sync_ok');
+  self.port.emit('sync_get');
 });
 
 c.on('DEBUG', function(arg){
