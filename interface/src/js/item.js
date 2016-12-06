@@ -111,12 +111,17 @@ function ItemZMov(data){
     $(that.css.full.openit).attr('data-path',that.data.path)
   };
 
+
+  /**
+   * this.match - The user will type his research to find a movie in the list
+   * this function will find the movie that correspond to the research
+   * this function also allow to use search operators and parameters
+   * exemple : a:John Cena|Edit Piaf;n:My&title;d:<20101231|>20160731|=20161014
+   *
+   * @param  {string} text input by the user
+   * @return {boolean} output return true or false
+   */
   this.match = function(text){
-    //TODO : match avec this.data return true or false
-    // si titre, acteurs et date son remplis cela doit matcher avec les 3
-    // si titre, acteurs sont remplis il doit matcher avec les 2
-    // etc...
-    //text : input brute
     var titre = that.data.title;
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date.replace('-',''); // "2013-03-21"
@@ -137,7 +142,7 @@ function ItemZMov(data){
     var dates = '';
 
 
-      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo"
+      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo", parameters[1] => "n:Bonjour"
 
       // for each parameters
       for(var i = 0; i < parameters.length; i++){
@@ -227,7 +232,7 @@ function ItemZMov(data){
           for(var c = 0; c < name[i].length; c++){ // for each movie name
             if(name[i][c] != ""){ // if the movie name cell isn't empty
               console.log(titre);
-                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase())){
+                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1){
                   outputName = true;
                 }else{
                   outputName = false;
