@@ -9,7 +9,20 @@ body {
     font-family: sans-serif;
     background-color: #bbb;
 }
-
+#blocked{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #323232;
+  z-index: 10000;
+}
+#blocked>div.noext{
+  text-align: center;
+  color: #999;
+  margin-top: calc(50vh - 40px);
+}
 header {
     display: flex;
     align-items: center;

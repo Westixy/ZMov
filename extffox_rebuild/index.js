@@ -11,7 +11,7 @@ var ConfigPath = "data/config.json";
 var debug=console.log;
 var exec = require("sdk/system/child_process").exec;
 
-var version="1.0.0";
+var version="1.0.1";
 
 // TODO DEBUG THIS SHIT
 

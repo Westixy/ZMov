@@ -14,8 +14,6 @@
 function mainZMov(){
   var that=this;
 
-  this.ext_min_v="1.0.0";
-
   this.prop={};
   this.l={};
 
@@ -93,6 +91,11 @@ function mainZMov(){
 
     // teste si l'extention est présente
     setTimeout(function(){that.exmit('sync_get');},250);
+    setTimeout(function(){
+      if(mainZMov.ext_found==false)
+        $('#blocked>div.noext').html('<h1>No extention found</h1><h4>Please install ZMov-ext to use this app</h4>');
+    },1000);
+
   }
 
   // vvv COMM EVENTS vvv //
@@ -115,14 +118,16 @@ function mainZMov(){
     }
   }
   this.onSyncOk=function(ver){
-
+    mainZMov.ext_found=true;
      // control que la version minimal soit acceptée.
     if(mainZMov.versionAccept(ver)){
       // accept version
       // TODO débloque l'app
+      $('#blocked').remove();
     }else {
       // refuse version
-      // TODO Demande de mettre a jour l'extention
+      // TODO Demande de mettre a jour l'extension
+      $('#blocked>div.noext').html('<h1>Extension is obsolete</h1><h4>Please update the ZMov-ext at least to v'+mainZMov.ext_min_v+'<br><small>Your is v'+ver+'</small></h4>');
     }
   }
 
@@ -252,7 +257,8 @@ function mainZMov(){
     }
   }
 }
-mainZMov.ext_min_v="1.0.0";
+mainZMov.ext_min_v="1.0.1";
+mainZMov.ext_found=false;
 mainZMov.versionSpliter=function(version){
   var v = version.split('.');
   var ret = [0,0,0];
