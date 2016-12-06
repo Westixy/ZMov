@@ -53,7 +53,7 @@ function Extention(){
       wkr.port.emit('sync_ok',version)
     });
     wkr.port.on('DEBUG',function(args){
-      wkr.port.emit('DEBUG',eval(args))
+      debug(args);
     });
   }
 
