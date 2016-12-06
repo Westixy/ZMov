@@ -13,6 +13,9 @@
 
 function mainZMov(){
   var that=this;
+
+  this.ext_min_v="1.0.0";
+
   this.prop={};
   this.l={};
 
@@ -85,7 +88,7 @@ function mainZMov(){
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
-    that.c.on('sync_ok',console.log); // TODO si l'extention est présente,débloque l'app
+    that.c.on('sync_ok',that.onSyncOk);
     that.c.on('flist_ok',that.onFlistOk);
 
     // teste si l'extention est présente
@@ -109,6 +112,17 @@ function mainZMov(){
     if(tmplist!=[]){
       that.ajx.setData(tmplist);
       that.ajx.sendAll();
+    }
+  }
+  this.onSyncOk=function(ver){
+
+     // control que la version minimal soit acceptée.
+    if(mainZMov.versionAccept(ver)){
+      // accept version
+      // TODO débloque l'app
+    }else {
+      // refuse version
+      // TODO Demande de mettre a jour l'extention
     }
   }
 
@@ -238,7 +252,25 @@ function mainZMov(){
     }
   }
 }
-
+mainZMov.ext_min_v="1.0.0";
+mainZMov.versionSpliter=function(version){
+  var v = version.split('.');
+  var ret = [0,0,0];
+  for(var i=0; i<v.length && i<3; i++){
+    ret[i]+=parseInt(v[i]);
+  }
+  return ret;
+}
+mainZMov.versionAccept=function(other){
+  var min=mainZMov.versionSpliter(mainZMov.ext_min_v);
+  var oth=mainZMov.versionSpliter(other);
+  for(var i=0; i<min.length ;i++){
+    if(oth[i]<min[i]){
+      return false;
+    }
+  }
+  return true;
+}
 
 function n(text){
   return text.substring(1, text.length);
