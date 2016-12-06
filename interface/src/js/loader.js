@@ -1,10 +1,10 @@
-function Loader(selector,text){
+function Loader(selector,text,anim){
   var that=this;
 
   this.iterate=0;
   this.state=0;
   this.text=text||'Loading';
-  this.loaderAnimation='<img src="src/img/load.svg" alt="loader">';
+  this.loaderAnimation=anim||'<img src="src/img/load.svg" alt="loader">';
 
   this.css={
     elem:selector||".cnt-loader",

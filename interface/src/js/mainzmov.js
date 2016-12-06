@@ -50,7 +50,7 @@ function mainZMov(){
 
   this.initLoaders=function(){
     that.l.b=new Loader(that.css.body);
-    that.l.flst=new Loader(that.css.flst);
+    that.l.flst=new Loader(that.css.flst,'Loading<br><span id="flst_pbt">0%</span>');
     that.l.info=new Loader(that.css.info);
   }
   this.initAjax=function(){
@@ -69,14 +69,14 @@ function mainZMov(){
       that.dump();
     };
     that.stgs.onAddFolder=function(n,l){
-      console.log(l);
+      //console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
       that.dump();
     };
     that.stgs.onDelFolder=function(n,l){
-      console.log('onDelFolder');
-      console.log(l);
+      //console.log('onDelFolder');
+      //console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
       that.dump();
@@ -100,8 +100,6 @@ function mainZMov(){
 
   // vvv COMM EVENTS vvv //
   this.onFlistOk=function(n){
-    console.log("flist_ok");
-    //return;
     var tmplist = [];
     for (var i=0 ; i<n.length ; i++){
       if(that.il.indexOfx(n[i].name)==-1){
@@ -122,11 +120,9 @@ function mainZMov(){
      // control que la version minimal soit acceptée.
     if(mainZMov.versionAccept(ver)){
       // accept version
-      // TODO débloque l'app
       $('#blocked').remove();
     }else {
       // refuse version
-      // TODO Demande de mettre a jour l'extension
       $('#blocked>div.noext').html('<h1>Extension is obsolete</h1><h4>Please update the ZMov-ext at least to v'+mainZMov.ext_min_v+'<br><small>Your is v'+ver+'</small></h4>');
     }
   }
@@ -135,6 +131,7 @@ function mainZMov(){
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
+    $('#flst_pbt').text(0.0+'%');
   }
 
   this.onAjaxDone=function(datas){
@@ -172,7 +169,7 @@ function mainZMov(){
       it.lastUpdate=Date.now();
       it.includeToList();
     }
-    console.log(d);
+    //console.log(d);
   }
   this.onAjaxFail=function(err,status){
     console.log("-X- AJAX_ERROR --- "+status+" -> ");
@@ -180,6 +177,9 @@ function mainZMov(){
   }
   this.onAjaxResult=function(){
     console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+    var pc=(that.ajx.nbrended/that.ajx.tot()*100).toFixed(1);
+    $('#flst_pbt').text(pc+'%');
+
   }
   this.onAjaxEnd=function(){
       that.l.flst.hide();
