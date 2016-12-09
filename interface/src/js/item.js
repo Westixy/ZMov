@@ -71,7 +71,7 @@ function ItemZMov(data){
     that.data.path=data.path||'';
   }
 
-  this.includeToList=function(){
+  this.includeToList=function(anim){
     var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
     iB+='<div class="'+n(that.css.item.thumbnails)+'">';
     iB+='    <img src="'+that.data.imgSrcSmall+'" alt="loading '+that.data.title+'" />';
@@ -89,9 +89,10 @@ function ItemZMov(data){
     iB+='  </div>';
     iB+='</div>';
     $(that.css.item.parent).append(iB);
-    var h = $(that.css.item.parent)[0].scrollHeight;
-    console.log(h);
-    $(that.css.item.parent).animate({ scrollTop: h }, 500);
+    if(anim){
+      var h = $(that.css.item.parent)[0].scrollHeight;
+      $(that.css.item.parent).animate({ scrollTop: h }, 500);
+    }
   };
 
   this.removeFromList=function(){

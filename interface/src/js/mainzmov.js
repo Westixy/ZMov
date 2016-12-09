@@ -90,11 +90,11 @@ function mainZMov(){
     that.c.on('flist_ok',that.onFlistOk);
 
     // teste si l'extention est présente
-    setTimeout(function(){that.exmit('sync_get');},250);
+    setTimeout(function(){that.exmit('sync_get');},1000);
     setTimeout(function(){
       if(mainZMov.ext_found==false)
         $('#blocked>div.noext').html('<h1>No extention found</h1><h4>Please install ZMov-ext to use this app</h4>');
-    },1000);
+    },6000);
 
   }
 
@@ -135,10 +135,16 @@ function mainZMov(){
   }
 
   this.onAjaxDone=function(datas){
-    var d = JSON.parse(datas)
+    var d={};
+    try {
+      d = JSON.parse(datas);
+    } catch (err) {
+      that.ajx.abortAll();
+      d.response='abort';
+    }
+
     var it = that.il.getFromFname(d.fname);
-    //console.log(it);
-    //return;
+
     if(typeof it!='undefined'){
       if(d.response == 'ok'){
         that.ratio.ok++;
@@ -167,7 +173,7 @@ function mainZMov(){
         dt.imgSrcSmall='src/img/noimgsmall.jpg';
       }
       it.lastUpdate=Date.now();
-      it.includeToList();
+      it.includeToList(true);
     }
     //console.log(d);
   }
@@ -252,7 +258,7 @@ function mainZMov(){
       that.stgs.data=lsz.stgs.data;
       that.stgs.doOnUndump();
       for(var i=0;i<lsz.il.list.length;i++){
-        that.il.addItemFromDump(lsz.il.list[i].data).includeToList();
+        that.il.addItemFromDump(lsz.il.list[i].data).includeToList(false);
       }
     }
   }

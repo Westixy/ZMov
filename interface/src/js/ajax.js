@@ -40,6 +40,8 @@ function AjaxSender(op){
   this.finded=0;
   this.nbrended=0;
 
+  this.abort=false;
+
   this.send=function(){
     that.ended=false;
     that.rq=$.ajax({
@@ -78,13 +80,15 @@ function AjaxSender(op){
   }
 
   this.sendAll=function(){
+    if(that.data.length<=0) return; // il n'y a rien a envoyer
     that.onSendAll();
     that.current=0;
     that.finded=0;
     that.nbrended=0;
+    that.abort=false;
     //while(this.next()){}
     var inter = setInterval(function(){
-      if(!that.next()){
+      if(that.abort || !that.next()){
         clearInterval(inter);
       }
     }, that.timewait);
@@ -99,6 +103,11 @@ function AjaxSender(op){
       return true;
     }
     return false;
+  }
+
+  this.abortAll=function(){
+    that.abort=true;
+    that.onEnd();
   }
 
   this.tot=function(){
