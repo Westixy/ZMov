@@ -176,7 +176,7 @@ function mainZMov(){
     console.log(err);
   }
   this.onAjaxResult=function(){
-    console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+    //console.log(that.ajx.nbrended+'/'+that.ajx.tot());
     var pc=(that.ajx.nbrended/that.ajx.tot()*100).toFixed(1);
     $('#flst_pbt').text(pc+'%');
 

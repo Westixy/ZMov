@@ -296,3 +296,11 @@ span.delete-folder:hover {
 #a-path:hover {
   background-color:#abc;
 }
+#settings #btn-clearIl {
+    clear: both;
+    margin-top: 15px;
+    background-color: #bc4424;
+}
+#settings #btn-clearIl:hover {
+    background-color: #a13a1f;
+}

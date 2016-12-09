@@ -89,6 +89,9 @@ function ItemZMov(data){
     iB+='  </div>';
     iB+='</div>';
     $(that.css.item.parent).append(iB);
+    var h = $(that.css.item.parent)[0].scrollHeight;
+    console.log(h);
+    $(that.css.item.parent).animate({ scrollTop: h }, 500);
   };
 
   this.removeFromList=function(){

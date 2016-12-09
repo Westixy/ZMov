@@ -29,9 +29,10 @@ function AjaxSender(op){
 
   this.dts='';
 
-  this.timewait=280;
+  this.timewait=1000;
   // temps d'attente entre 2 requetes
   // max 40 requetes par 10s
+  // 3 requetes par films sont generees en php
 
   this.ended=true;
 

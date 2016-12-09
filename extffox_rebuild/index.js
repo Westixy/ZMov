@@ -71,7 +71,9 @@ function Extention(){
   }
 
   this.actualiseAndEmit=function(){
-    that.fm.readAll(function(){that.wemit('flist_ok',that.fm.files)});
+    that.fm.readAll(function(){
+      that.wemit('flist_ok',that.fm.files);
+    });
   }
 
   // Alias
@@ -86,14 +88,11 @@ Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
 Extention.fopen=function(path){
-  //path='"'+path+'"';
-  // for windows
   debug(path);
-  OS.File.open(path);
-  //exec(path,function(error, stdout, stderr) {});
+  console.log("FOPEN => <"+path+">");
   // for unix
-  //require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
-  // new FileUtils.File(path).launch();
+  require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
+  new FileUtils.File(path).launch();
 }
 
 function FolderManager(){
@@ -223,12 +222,14 @@ function getFolderContent(path, extArray) {
     }
   }
   this.endRead = function() {
+/*
     console.log("========= END READ : " + this.path);
     console.log("   dirs.length : " + this.content.dirs.length);
     console.log("   dirIndex    : " + this.dirIndex);
     console.log("   ~~~   ");
     console.log("   file.length : " + this.content.files.length);
     console.log('==============================================');
+*/
     this.onEnd();
   }
 }
