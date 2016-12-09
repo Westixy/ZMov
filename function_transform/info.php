@@ -1,10 +1,11 @@
 <?php
-	$api_key = '9363ea2ad2a249607945e6df3f35ea9b';
+
 
 	if(isset($_GET['search']) && $_GET['search'] != ''){
 		api_search($_GET['search']);
 	}
 	function api_search($query){
+		$api_key = '9363ea2ad2a249607945e6df3f35ea9b';
 		// Query to get the specified movie
 		$ch = curl_init();
 
@@ -41,7 +42,7 @@
 		curl_close($cha);
 		$actorsResults = json_decode($response, true);
 		array_push($movieResults, $actorsResults['cast']);
-		array_push($movieResults, $actorsResults['crew']); 
+		array_push($movieResults, $actorsResults['crew']);
 
 
 		return $movieResults['results'][0];
