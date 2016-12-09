@@ -1,12 +1,15 @@
 <?php
+	$api_key = '9363ea2ad2a249607945e6df3f35ea9b';
+
 	if(isset($_GET['search']) && $_GET['search'] != ''){
 		api_search($_GET['search']);
 	}
 	function api_search($query){
+		// Query to get the specified movie
 		$ch = curl_init();
-		
+
 		$query = str_replace(" ","%20", $query);
-		curl_setopt($ch, CURLOPT_URL, "http://api.themoviedb.org/3/search/movie?api_key=9363ea2ad2a249607945e6df3f35ea9b&query=".$query."&language=fr");
+		curl_setopt($ch, CURLOPT_URL, "http://api.themoviedb.org/3/search/movie?api_key=$api_key&query=$query&language=fr");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
@@ -16,18 +19,32 @@
 
 		$response = curl_exec($ch);
 		curl_close($ch);
-		
+
 		$movieResults = json_decode($response, true);
 
-		return $movieResults['results'][0];
-		
-		/*
-		// affichage !
-		echo '<img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2'.$movieResults['results'][0]['poster_path'].'"/>';
+		// Query to get all the cast from the movie
+		$cha = curl_init();
 
-		
-		echo '<pre>';
-		print_r($movieResults);
-		echo '</pre>';
-		//var_dump($response);*/
+		curl_setopt($cha, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($cha, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt_array($cha, array(
+		  CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$movieResults['results'][0]['id']."/credits?api_key=$api_key",
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "GET",
+		  CURLOPT_POSTFIELDS => "{}",
+		));
+		$response = curl_exec($cha);
+		curl_close($cha);
+		$actorsResults = json_decode($response, true);
+		array_push($movieResults, $actorsResults['cast']);
+
+
+		return $movieResults['results'][0];
 	}
+
+
+// exemple to take actors : https://api.themoviedb.org/3/movie/346672/credits?api_key=9363ea2ad2a249607945e6df3f35ea9b
