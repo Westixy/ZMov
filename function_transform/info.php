@@ -41,6 +41,7 @@
 		curl_close($cha);
 		$actorsResults = json_decode($response, true);
 		array_push($movieResults, $actorsResults['cast']);
+		array_push($movieResults, $actorsResults['crew']); 
 
 
 		return $movieResults['results'][0];
