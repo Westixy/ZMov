@@ -131,7 +131,7 @@ function mainZMov(){
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
-    $('#flst_pbt').text(0.0+'%');
+    $('#flst_pbt').text('0.0%');
   }
 
   this.onAjaxDone=function(datas){
@@ -141,7 +141,11 @@ function mainZMov(){
     } catch (err) {
       that.ajx.abortAll();
       d.response='abort';
-    }
+      that.l.flst.h();
+      console.error("-X- AJAX_ERROR --> JSON_PARSE -> ");
+      console.log(datas);
+      console.log(err);
+      }
 
     var it = that.il.getFromFname(d.fname);
 
@@ -178,8 +182,10 @@ function mainZMov(){
     //console.log(d);
   }
   this.onAjaxFail=function(err,status){
-    console.log("-X- AJAX_ERROR --- "+status+" -> ");
+    console.error("-X- AJAX_ERROR --- "+status+" -> ");
     console.log(err);
+    that.ajx.abortAll();
+    that.l.flst.h();
   }
   this.onAjaxResult=function(){
     //console.log(that.ajx.nbrended+'/'+that.ajx.tot());
@@ -201,6 +207,9 @@ function mainZMov(){
     $('#btnSettings').on('click',that.onSettingsClick);
     $('#a-path').on('click',function(ev){
       that.exmit('fopen',$(this).attr('data-path'))
+    });
+    $('#sorter').on('change',function(){
+      that.sort(this.value);
     });
   }
 
@@ -260,6 +269,42 @@ function mainZMov(){
       for(var i=0;i<lsz.il.list.length;i++){
         that.il.addItemFromDump(lsz.il.list[i].data).includeToList(false);
       }
+    }
+  }
+  this.sort=function(how){
+    let type={
+      id:function(a,b){
+        a=parseInt($(a).attr('data-itemid'));
+        b=parseInt($(b).attr('data-itemid'));
+        return a-b;
+      },
+      title:function(a,b){
+        a=$($(a).children()[1]).children()[0].innerHTML.trim();
+        b=$($(b).children()[1]).children()[0].innerHTML.trim();
+        return a.localeCompare(b);
+      },
+      title_rev:function(a,b){
+        a=$($(a).children()[1]).children()[0].innerHTML.trim();
+        b=$($(b).children()[1]).children()[0].innerHTML.trim();
+        return b.localeCompare(a);
+      },
+      date:function(a,b){
+        a=$($(a).children()[1]).children()[2].innerHTML.trim();
+        b=$($(b).children()[1]).children()[2].innerHTML.trim();
+        return a.localeCompare(b);
+      },
+      date_rev:function(a,b){
+        a=$($(a).children()[1]).children()[2].innerHTML.trim();
+        b=$($(b).children()[1]).children()[2].innerHTML.trim();
+        return b.localeCompare(a);
+      }
+    };
+
+    let table = $('#cnt-movieList').children();
+    let table_sort = table.sort(type[how||'id']);
+    for(var i=0; i<table_sort.length ; i++){
+      let item = $(table_sort[i]);
+      item.css('order',i);
     }
   }
 }

@@ -83,6 +83,8 @@ header {
     width: 30vw;
     height: calc(100vh - 60px);
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #cnt-movieInfo {
@@ -91,7 +93,7 @@ header {
     overflow: auto;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 .cnt-movieItem {
@@ -150,7 +152,7 @@ header {
     padding: 5px;
     box-sizing: border-box;
     width: 98%;
-    height: 98%;
+    min-height: 98%;
 }
 .cnt-textInfo {
     padding-left: 15px;
@@ -168,6 +170,8 @@ input:focus{
 
 .cnt-miText > div {
     word-break: break-all;
+    max-height: 33%;
+    overflow: auto;
 }
 
 footer{
@@ -304,3 +308,4 @@ span.delete-folder:hover {
 #settings #btn-clearIl:hover {
     background-color: #a13a1f;
 }
+#sorter{margin-left:20px;}

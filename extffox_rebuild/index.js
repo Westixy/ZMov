@@ -71,7 +71,7 @@ function Extention(){
   }
 
   this.actualiseAndEmit=function(){
-    debug(fm);
+    that.fm.files=[];
     that.fm.readAll(function(){
       that.wemit('flist_ok',that.fm.files);
     });
