@@ -91,9 +91,6 @@ function CommEmmiter(id,recive,send){
     let text=decodeURIComponent(ev.target.innerHTML);
     var d = JSON.parse(text);
     if(d.id!=that.id) return;
-    console.log('++++++++++++');
-    console.log(d.action);
-    console.log(d.vars);
     if(typeof that.actions[d.action]=="undefined") return;
     for(var i=0 ; i<that.actions[d.action].length ; i++){
       that.actions[d.action][i](d.vars);

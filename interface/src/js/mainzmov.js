@@ -251,9 +251,6 @@ function mainZMov(){
 
   // Alias
   this.exmit=function(action,vars){
-    console.log('--------------');
-    console.log(action);
-    console.log(vars);
     that.c.emit('ext',action,vars);
   }
 
