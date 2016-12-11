@@ -131,6 +131,7 @@ function mainZMov(){
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
+    $('#sorter').val('id');
     $('#flst_pbt').text('0.0%');
   }
 
@@ -220,6 +221,7 @@ function mainZMov(){
   this.onSearchChange=function(val){
     //console.log(val.target.value);
     that.il.match(val.target.value);
+    $('#sorter').val('id');
     //that.l.flst.show();
     //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
@@ -249,6 +251,9 @@ function mainZMov(){
 
   // Alias
   this.exmit=function(action,vars){
+    console.log('--------------');
+    console.log(action);
+    console.log(vars);
     that.c.emit('ext',action,vars);
   }
 

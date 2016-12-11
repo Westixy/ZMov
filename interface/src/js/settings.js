@@ -45,7 +45,7 @@ function ZMovSettings(){
     if(that.data.flist.indexOf(val)<0 && !that.folderInList(val)){
       that.data.flist.push(val);
       $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+val+'</span><span class="delete-folder">X</span></div>');
-      console.log('onAddFolder');
+      //console.log('onAddFolder');
       that.onAddFolder(val,that.data.flist);
     }
   }

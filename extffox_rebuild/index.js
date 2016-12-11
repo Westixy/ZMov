@@ -89,9 +89,7 @@ Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
 Extention.fopen=function(path){
-  debug(path);
-  console.log("FOPEN => <"+path+">");
-  // for unix
+  debug("FOPEN => <"+path+">");
   require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
   new FileUtils.File(path).launch();
 }
@@ -127,11 +125,13 @@ function FolderManager(){
       gfc.onEnd = function() {
           that.files = that.files.concat(gfc.content.files);
           callback();
+
       };
       gfc.readdir();
   }
   this.readAll=function(callback) {
     var folderOk = 0;
+
     that.foreach(function(entry){
       that.readOne(entry,function(){
         folderOk++;
