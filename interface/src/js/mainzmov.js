@@ -82,12 +82,17 @@ function mainZMov(){
       that.dump();
     };
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
+    that.stgs.onFcbClick=function(){
+      console.log(233454);
+      that.exmit('folder_choose');
+    };
   }
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
     that.c.on('sync_ok',that.onSyncOk);
     that.c.on('flist_ok',that.onFlistOk);
+    that.c.on('folder_ok',function(value){that.stgs.setFcbInputValue(value);});
 
     // teste si l'extention est présente
     setTimeout(function(){that.exmit('sync_get');},1000);
@@ -107,6 +112,15 @@ function mainZMov(){
         var izm = new ItemZMov();
         izm.data.fname=n[i].name;
         izm.data.path=n[i].path;
+        var dt=izm.data;
+        dt.title='NoTitle';
+        dt.date='NoDate';
+        dt.acteurs=[];
+        dt.directors=[];
+        dt.genreids=[];
+        dt.more='NoDescription';
+        dt.imgSrcBig='src/img/noimgbig.jpg';
+        dt.imgSrcSmall='src/img/noimgsmall.jpg';
         var id = that.il.add(izm);
       }
     }
@@ -139,6 +153,36 @@ function mainZMov(){
     var d={};
     try {
       d = JSON.parse(datas);
+      console.log(d);
+
+      var it = that.il.getFromFname(d.fname);
+
+      if(typeof it!='undefined'){
+        if(d.response == 'ok'){
+          var dr=d.results[0];
+          that.ratio.ok++;
+          it.tested=true;
+          it.finded=true;
+          var dt = it.data;
+          dt.title=dr.title;
+          dt.date=dr.release_date;
+          dt.directors=d.directors;
+          dt.acteurs=d.actors;
+          dt.genreids=dr.genre_ids;
+          dt.more=dr.overview;
+          dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+dr.poster_path;
+          dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+dr.poster_path;
+
+        }else{
+          that.ratio.fail++;
+          it.tested=true;
+          it.finded=false;
+          var dt=it.data;
+          dt.title=d.ftrad||'NoTitle';
+        }
+        it.lastUpdate=Date.now();
+        it.includeToList(true);
+      }
     } catch (err) {
       that.ajx.abortAll();
       d.response='abort';
@@ -146,41 +190,7 @@ function mainZMov(){
       console.error("-X- AJAX_ERROR --> JSON_PARSE -> ");
       console.log(datas);
       console.log(err);
-      }
-
-    var it = that.il.getFromFname(d.fname);
-
-    if(typeof it!='undefined'){
-      if(d.response == 'ok'){
-        that.ratio.ok++;
-        it.tested=true;
-        it.finded=true;
-        var dt = it.data;
-        dt.title=d.title;
-        dt.date=d.release_date;
-        dt.acteurs=[]; // TODO : ACTEURS !!!!! pas dans la BDD
-        dt.genreids=d.genre_ids; // TODO : on a que les ids des genres
-        dt.more=d.overview;
-        dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+d.poster_path;
-        dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+d.poster_path;
-
-      }else{
-        that.ratio.fail++;
-        it.tested=true;
-        it.finded=false;
-        var dt=it.data;
-        dt.title=d.ftrad||'NoTitle';
-        dt.date='NoDate';
-        dt.acteurs=[];
-        dt.genreids=[];
-        dt.more='NoDescription';
-        dt.imgSrcBig='src/img/noimgbig.jpg';
-        dt.imgSrcSmall='src/img/noimgsmall.jpg';
-      }
-      it.lastUpdate=Date.now();
-      it.includeToList(true);
     }
-    //console.log(d);
   }
   this.onAjaxFail=function(err,status){
     console.error("-X- AJAX_ERROR --- "+status+" -> ");

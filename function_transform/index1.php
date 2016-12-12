@@ -44,7 +44,7 @@ echo nameTransform();
 			$zmp=api_search($film[$i]);
 			$zmp['fname']=$_POST['entry'];
 			$zmp['ftrad']=$film[$i];
-			if(isset($zmp['title']))$zmp['response']='ok';
+			if(isset($zmp['results'][0]['title']))$zmp['response']='ok';
 			else $zmp['response']='fail';
 			return json_encode($zmp);
 		}

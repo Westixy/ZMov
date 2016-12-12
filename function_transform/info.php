@@ -40,12 +40,16 @@
 		));
 		$response = curl_exec($cha);
 		curl_close($cha);
-		$actorsResults = json_decode($response, true);
-		array_push($movieResults, $actorsResults['cast']);
-		array_push($movieResults, $actorsResults['crew']);
+		$actorsResults = json_decode($response, true)['results'][0];
+		$movieResults['actors'] = $actorsResults['cast'];
+		$movieResults['directors'] = [];
+		$movieResults['directors'][] = $actorsResults['crew'][0];
+		if (empty($actorsResults['crew'][1]) && $actorsResults['crew'][1]['department']=='Directing') {
+			$movieResults['directors'][] = $actorsResults['crew'][1];
+		}
 
 
-		return $movieResults['results'][0];
+		return $movieResults;
 	}
 
 
