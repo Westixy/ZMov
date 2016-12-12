@@ -11,7 +11,7 @@ var ConfigPath = "data/config.json";
 var debug=console.log;
 var exec = require("sdk/system/child_process").exec;
 
-var version="1.0.1";
+var version="1.0.4";
 
 // TODO DEBUG THIS SHIT
 
@@ -37,9 +37,11 @@ function Extention(){
 
   // vvv TABS EVENTS vvv //
   this.tabsOnReady=function(tab){
-    if(tab.window.title.indexOf("ZMov app")>=0){
-      that.webAttach(tab);
-    }
+    setTimeout(function () {
+      if(tab.window.title.indexOf("ZMov app")>=0){
+        that.webAttach(tab);
+      }
+    }, 500);
   }
 
   // vv Workers EVENTS vvv //
@@ -131,7 +133,7 @@ function FolderManager(){
   }
   this.readAll=function(callback) {
     var folderOk = 0;
-
+    that.files=[];
     that.foreach(function(entry){
       that.readOne(entry,function(){
         folderOk++;
@@ -194,10 +196,8 @@ function getFolderContent(path, extArray) {
         }else{
           let splt = entry.path.split(".");
           var ext = (splt.length > 1) ? splt[splt.length - 1] : "NO_EXT";
-          that.exts.forEach(function(ex) {
-            if (ext.toLowerCase() == ex)
-              that.content.files.push(entry);
-          });
+          if (that.exts.indexOf(ext.toLowerCase())>-1)
+            that.content.files.push(entry);
         }
       }
     );
