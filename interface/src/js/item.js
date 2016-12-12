@@ -34,7 +34,11 @@ function ItemZMov(data){
       cntMore:".cnt-moreinfo",
       desc:"#txt-desc",
       acteurs:"#txt-acteurs",
+      directors:"#txt-producteurs",
       openit:"#a-path",
+      path:"#cnt-path em",
+      fname:"#cnt-fname em",
+      date:"#cnt-date em",
       more:"#cnt-pinfo"
     }
   };
@@ -44,6 +48,7 @@ function ItemZMov(data){
     fname:"",
     date:"",
     acteurs:[],
+    directors:[],
     genreids:[],
     more:"",
     id:"",
@@ -62,6 +67,7 @@ function ItemZMov(data){
     that.data.fname=data.fname||'';
     that.data.date=data.date;
     that.data.acteurs=data.acteurs||[];
+    that.data.directors=data.directors||[];
     that.data.genreids=data.genreids||[];
     that.data.more=data.more;
     that.data.id=data.id;
@@ -111,7 +117,14 @@ function ItemZMov(data){
       m+=act+'<br>';
     });
     $(that.css.full.acteurs).html(m);
-    $(that.css.full.more).html(that.data.none);
+    m="";
+    that.data.directors.forEach(function(act){
+      m+=act+'<br>';
+    });
+    $(that.css.full.directors).html(m);
+    $(that.css.full.date).html(that.data.date);
+    $(that.css.full.fname).html(that.data.fname);
+    $(that.css.full.path).html(that.data.path);
     $(that.css.full.openit).attr('data-path',that.data.path)
   };
 

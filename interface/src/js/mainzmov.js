@@ -153,7 +153,7 @@ function mainZMov(){
     var d={};
     try {
       d = JSON.parse(datas);
-      console.log(d);
+      //console.log(d);
 
       var it = that.il.getFromFname(d.fname);
 
@@ -166,8 +166,8 @@ function mainZMov(){
           var dt = it.data;
           dt.title=dr.title;
           dt.date=dr.release_date;
-          dt.directors=d.directors;
-          dt.acteurs=d.actors;
+          dt.directors=d.directors||[];
+          dt.acteurs=d.actors||[];
           dt.genreids=dr.genre_ids;
           dt.more=dr.overview;
           dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+dr.poster_path;

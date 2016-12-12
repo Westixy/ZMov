@@ -56,6 +56,7 @@ function Extention(){
     });
     wkr.port.on('DEBUG',function(args){
       debug(args);
+      debug(that);
     });
   }
 
@@ -82,7 +83,13 @@ function Extention(){
   // Alias
   this.wemit=function(action,vars){
     for(var i=0; i<that.web.length ; i++){
-      that.web[i].port.emit(action,vars);
+      try {
+        that.web[i].port.emit(action,vars);
+      } catch (err) {
+        console.log(err);
+        that.web.splice(i,1);
+        continue;
+      }
     }
   }
 
@@ -134,10 +141,14 @@ function FolderManager(){
   this.readAll=function(callback) {
     var folderOk = 0;
     that.files=[];
+    debug('debug -> readAllStart');
+
     that.foreach(function(entry){
       that.readOne(entry,function(){
+        debug('debug -> readOne -> '+entry);
         folderOk++;
         if (folderOk >= that.folders.length) {
+          debug('debug -> readAllEnd');
           callback();
         }
       });

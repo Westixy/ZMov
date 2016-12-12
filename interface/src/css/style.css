@@ -291,14 +291,16 @@ span.delete-folder:hover {
 }
 #a-path {
   display: inline-block;
-  background-color:#ace;
+  background-color:#167ee6;
   transition-duration:300ms;
   padding:6px 10px;
   border-radius:5px;
   cursor:pointer;
+  color: #eee;
+  margin-bottom: 15px;
 }
 #a-path:hover {
-  background-color:#abc;
+  background-color:#0d4984;
 }
 #settings #btn-clearIl {
     clear: both;
