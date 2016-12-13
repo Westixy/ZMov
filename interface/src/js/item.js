@@ -70,6 +70,14 @@ function ItemZMov(data){
   this.lastUpdate=0;
   this.dontUpdate=false;
 
+
+
+  /**
+   * setData - description
+   *
+   * @param  {type} data description
+   * @return {type}      description
+   */
   this.setData=function(data){
     that.data.title=data.title;
     that.data.fname=data.fname||'';
@@ -86,6 +94,12 @@ function ItemZMov(data){
   }
 
 
+  /**
+   * includeToList - description
+   *
+   * @param  {type} anim description
+   * @return {type}      description
+   */
   this.includeToList=function(anim){
     var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
     iB+='<div class="'+n(that.css.item.thumbnails)+'">';
@@ -110,6 +124,12 @@ function ItemZMov(data){
     }
   };
 
+
+  /**
+   * removeFromList - description
+   *
+   * @return {type}  description
+   */
   this.removeFromList=function(){
     var me = $(that.css.item.parent+" [data-itemid=\""+that.data.id+"\"]");
     if (typeof me!='undefined'){
@@ -117,6 +137,12 @@ function ItemZMov(data){
     }
   }
 
+
+  /**
+   * updateCard - description
+   *
+   * @return {type}  description
+   */
   this.updateCard=function(){
     $(that.css.full.img).attr("src",that.data.imgSrcBig);
     $(that.css.full.title).text(that.data.title);
@@ -151,7 +177,7 @@ function ItemZMov(data){
     var titre = that.data.title;
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date.replace('-',''); // "2013-03-21"
-
+    
     var output = false;
 
     if(text.indexOf(":") != -1){
@@ -187,7 +213,7 @@ function ItemZMov(data){
       }
 
       // treatment of data tables of parameters (internal function)
-      
+
       var stockDataSearched = function(tables){
         var table; // array
 

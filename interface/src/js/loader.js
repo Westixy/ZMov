@@ -1,3 +1,12 @@
+
+/**
+ * Loader - description
+ *
+ * @param  {type} selector description
+ * @param  {type} text     description
+ * @param  {type} anim     description
+ * @return {type}          description
+ */
 function Loader(selector,text,anim){
   var that=this;
 
