@@ -1,4 +1,32 @@
-/*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: item.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: item.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
 
 8888888 888
   888   888
@@ -87,22 +115,22 @@ function ItemZMov(data){
 
 
   this.includeToList=function(anim){
-    var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
-    iB+='<div class="'+n(that.css.item.thumbnails)+'">';
-    iB+='    <img src="'+that.data.imgSrcSmall+'" alt="loading '+that.data.title+'" />';
-    iB+='  </div>';
-    iB+='  <div class="'+n(that.css.item.miniTxt)+'">';
-    iB+='    <div class="'+n(that.css.item.title)+'">';
+    var iB='&lt;div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
+    iB+='&lt;div class="'+n(that.css.item.thumbnails)+'">';
+    iB+='    &lt;img src="'+that.data.imgSrcSmall+'" alt="loading '+that.data.title+'" />';
+    iB+='  &lt;/div>';
+    iB+='  &lt;div class="'+n(that.css.item.miniTxt)+'">';
+    iB+='    &lt;div class="'+n(that.css.item.title)+'">';
     iB+='      '+that.data.title;
-    iB+='    </div>';
-    iB+='    <div class="'+n(that.css.item.name)+'">';
+    iB+='    &lt;/div>';
+    iB+='    &lt;div class="'+n(that.css.item.name)+'">';
     iB+='      '+that.data.fname;
-    iB+='    </div>';
-    iB+='    <div class="'+n(that.css.item.date)+'">';
+    iB+='    &lt;/div>';
+    iB+='    &lt;div class="'+n(that.css.item.date)+'">';
     iB+='      '+that.data.date;
-    iB+='    </div>';
-    iB+='  </div>';
-    iB+='</div>';
+    iB+='    &lt;/div>';
+    iB+='  &lt;/div>';
+    iB+='&lt;/div>';
     $(that.css.item.parent).append(iB);
     if(anim){
       var h = $(that.css.item.parent)[0].scrollHeight;
@@ -123,12 +151,12 @@ function ItemZMov(data){
     $(that.css.full.desc).html(that.data.more);
     var m="";
     that.data.acteurs.forEach(function(act){
-      m+=act+'<br>';
+      m+=act+'&lt;br>';
     });
     $(that.css.full.acteurs).html(m);
     m="";
     that.data.directors.forEach(function(act){
-      m+=act+'<br>';
+      m+=act+'&lt;br>';
     });
     $(that.css.full.directors).html(m);
     $(that.css.full.date).html(that.data.date);
@@ -142,7 +170,7 @@ function ItemZMov(data){
    * this.match - The user will type his research to find a movie in the list
    * this function will find the movie that correspond to the research
    * this function also allow to use search operators and parameters
-   * exemple : a:John Cena|Edit Piaf;n:My&title;d:<20101231|>20160731|=20161014
+   * exemple : a:John Cena|Edit Piaf;n:My&amp;title;d:&lt;20101231|>20160731|=20161014
    *
    * @param  {string} text input by the user
    * @return {boolean} output return true or false
@@ -171,7 +199,7 @@ function ItemZMov(data){
       // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo", parameters[1] => "n:Bonjour"
 
       // for each parameters
-      for(var i = 0; i < parameters.length; i++){
+      for(var i = 0; i &lt; parameters.length; i++){
 
         parameters[i] = parameters[i].split(":"); // split the parameter char and the value
 
@@ -186,8 +214,12 @@ function ItemZMov(data){
         }
       }
 
-      // treatment of data tables of parameters (internal function)
-      
+      /**
+       * stockDataSearched - treatment of data tables of parameters (internal function)
+       *
+       * @param  {type} tables description
+       * @return {type}        description
+       */
       var stockDataSearched = function(tables){
         var table; // array
 
@@ -196,14 +228,14 @@ function ItemZMov(data){
 
           table = new Array();
 
-          for(var i = 0; i < searchTable.length; i++){
+          for(var i = 0; i &lt; searchTable.length; i++){
 
             table[table.length] = new Array();
 
-            if(searchTable[i].indexOf("&") != -1){ // if AND treatment has been request
+            if(searchTable[i].indexOf("&amp;") != -1){ // if AND treatment has been request
 
-              tmp = searchTable[i].split("&");
-              for(var d = 0; d < tmp.length; d++){
+              tmp = searchTable[i].split("&amp;");
+              for(var d = 0; d &lt; tmp.length; d++){
                 table[i].push(tmp[d]);
               }
 
@@ -211,9 +243,9 @@ function ItemZMov(data){
               table[i].push(searchTable[i]);
             }
           }
-        }else if(tables.indexOf("&") != -1){ // if AND treatment only has been request
+        }else if(tables.indexOf("&amp;") != -1){ // if AND treatment only has been request
           table = new Array;
-          table[0] = tables.split("&");
+          table[0] = tables.split("&amp;");
         }else{
           table = new Array;
           table[0] = [tables,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
@@ -229,10 +261,10 @@ function ItemZMov(data){
 
       if(actor[0][0] != ''){
         // loop for artists ===========================================================
-        for(var i = 0; i < actor.length; i++){ // for each OR clause
-          for(var c = 0; c < actor[i].length; c++){ // for each actor name
+        for(var i = 0; i &lt; actor.length; i++){ // for each OR clause
+          for(var c = 0; c &lt; actor[i].length; c++){ // for each actor name
             if(actor[i][c] != ""){ // if the actor cell isn't empty
-              for(var d = 0; d < acteurs.length; d++){ // for each actor name in the array
+              for(var d = 0; d &lt; acteurs.length; d++){ // for each actor name in the array
                 if(acteurs[d].toLowerCase().indexOf(actor[i][c].toLowerCase()) != -1){ // if actor searched match to actor stocked
                   outputActor = true;
                   break;
@@ -255,8 +287,8 @@ function ItemZMov(data){
 
       if(name[0][0] != ''){
         // loop for movie names ====================================================
-        for(var i = 0; i < name.length; i++){ // for each OR clause
-          for(var c = 0; c < name[i].length; c++){ // for each movie name
+        for(var i = 0; i &lt; name.length; i++){ // for each OR clause
+          for(var c = 0; c &lt; name[i].length; c++){ // for each movie name
             if(name[i][c] != ""){ // if the movie name cell isn't empty
               //console.log(titre);
                 if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1 ){
@@ -279,11 +311,11 @@ function ItemZMov(data){
 
       if(dateB[0][0] != ''){
         // loop for dates ==========================================================
-        for(var i = 0; i < dateB.length; i++){
-          for(var c = 0; c < dateB[i].length; c++){
+        for(var i = 0; i &lt; dateB.length; i++){
+          for(var c = 0; c &lt; dateB[i].length; c++){
             if(dateB[i][c] != ""){
-              if(dateB[i][c].charAt(0) == '<'){
-                if(date < dateB[i][c].substr(1, 8)){
+              if(dateB[i][c].charAt(0) == '&lt;'){
+                if(date &lt; dateB[i][c].substr(1, 8)){
                   outputDate = true;
                 }else{
                   outputDate = false;
@@ -312,13 +344,13 @@ function ItemZMov(data){
         outputDate = true;
       }
 
-      if(outputActor == true && outputName == true && outputDate == true){
+      if(outputActor == true &amp;&amp; outputName == true &amp;&amp; outputDate == true){
         output = true;
       }else{
         output = false;
       }
     }else{ // no parameters !
-      for(var i = 0; i < acteurs.length; i++){
+      for(var i = 0; i &lt; acteurs.length; i++){
         if(acteurs[i].toLowerCase().indexOf(text.toLowerCase()) != -1){
           output = true;
           break;
@@ -347,7 +379,7 @@ function ItemZMov(data){
       fname:"ma_fname.waw",
       date:"10.10.2016",
       acteurs:["John", "CENA", "Cartman"],
-      more:"<small>noMore</small><strong> Héhéhé</strong>",
+      more:"&lt;small>noMore&lt;/small>&lt;strong> Héhéhé&lt;/strong>",
       id:"0",
       desc:"MariaDb on fire",
       imgSrcBig:"http://images.fan-de-cinema.com/affiches/large/65/67886.jpg",
@@ -356,3 +388,26 @@ function ItemZMov(data){
   );*/
 
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#ItemZMov">ItemZMov</a></li><li><a href="global.html#match">match</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Dec 13 2016 16:04:03 GMT+0100 (Europe de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
