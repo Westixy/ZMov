@@ -4,12 +4,12 @@ var signAddon = require('sign-addon').default;
 var endv=process.argv[2]||'0.0.2-ra02';
 
 var defined={
-  xpiPath: 'C:/Users/Esteban.SOTILLO/Documents/MAW/ZMov/extffox_rebuild/zmov-ext.xpi',
+  xpiPath: 'C:/Users/Esteban.SOTILLO/Documents/GitHub/ZMov/extffox_rebuild/zmov-ext.xpi',
   version: endv,
   apiKey: 'user:12674328:459',
   apiSecret: '69b79b43138de2ed09e9ffb2b8530b0d530344b4c0fd84de90ae049621d606e2',
   id: 'zmov-ext-x'/*+endv*/+'@westixy',
-  downloadDir: 'C:/Users/Esteban.SOTILLO/Documents/MAW/ZMov/signaddon/release',
+  downloadDir: 'C:/Users/Esteban.SOTILLO/Documents/GitHub/ZMov/signaddon/release',
 }
 
 console.log('sign-version : '+defined.version);

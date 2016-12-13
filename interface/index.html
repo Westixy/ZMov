@@ -26,6 +26,13 @@
       <div id="cnt-search">
         <input id="in-search" type="text" placeholder="Search"/>
         <img src="src/img/search.png"/>
+        <select id="sorter">
+          <option value="id">Trier...</option>
+          <option value="title">Par titre</option>
+          <option value="title_rev">Par titre inversé</option>
+          <option value="date">Par date</option>
+          <option value="date_rev">Par date inversée</option>
+        </select>
       </div>
       <div id="btnSettings">
         <img src="src/img/set.png"/>
@@ -57,12 +64,27 @@
                       </p>
                     </p>
                   </div>
-                  <!--<div class="cnt-moreinfo">
+                  <div class="cnt-producteurs">
+                    <h2>Producteurs</h2>
+                    <p>
+                      <p id="txt-producteurs" class="preRawText"><em>&lt;Producteurs&gt;</em>
+                      </p>
+                    </p>
+                  </div>
+                  <div class="cnt-moreinfo">
                     <h2>Plus d'info</h2>
-                    <div id="cnt-pinfo">
-                      <em>&lt;MoreInfo&gt;</em>
-                    </div>
-                  </div>-->
+                    <p>
+                      <div id="cnt-date">
+                        Date : <em>&lt;DATE&gt;</em>
+                      </div><br>
+                      <div id="cnt-fname">
+                        Filename : <em>&lt;FILENAME&gt;</em>
+                      </div><br>
+                      <div id="cnt-path">
+                        Path : <em>&lt;PATH&gt;</em>
+                      </div>
+                    </p>
+                  </div>
                   <div id="a-path" data-path="#" >Open it</div>
                 </div>
               </div>
@@ -88,7 +110,7 @@
               <h6>Don't fill to use default</h6>
               <input readonly class="input" type="text" id="inpextentions" placeholder="mp4;avi;mkv;dvx;mov;mpg;mpa;asf;wma;vob;wmv"/>
               <div class="btn" id="btn-confExt">Confirmer</div>
-              <div class="btn" id="btn-clearIl">Ajouter</div>
+              <div class="btn" id="btn-clearIl">Supprimer le cache</div>
             </div>
           </div>
         </div>

@@ -83,6 +83,8 @@ header {
     width: 30vw;
     height: calc(100vh - 60px);
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #cnt-movieInfo {
@@ -91,7 +93,7 @@ header {
     overflow: auto;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 .cnt-movieItem {
@@ -150,7 +152,7 @@ header {
     padding: 5px;
     box-sizing: border-box;
     width: 98%;
-    height: 98%;
+    min-height: 98%;
 }
 .cnt-textInfo {
     padding-left: 15px;
@@ -168,6 +170,8 @@ input:focus{
 
 .cnt-miText > div {
     word-break: break-all;
+    max-height: 33%;
+    overflow: auto;
 }
 
 footer{
@@ -287,12 +291,23 @@ span.delete-folder:hover {
 }
 #a-path {
   display: inline-block;
-  background-color:#ace;
+  background-color:#167ee6;
   transition-duration:300ms;
   padding:6px 10px;
   border-radius:5px;
   cursor:pointer;
+  color: #eee;
+  margin-bottom: 15px;
 }
 #a-path:hover {
-  background-color:#abc;
+  background-color:#0d4984;
 }
+#settings #btn-clearIl {
+    clear: both;
+    margin-top: 15px;
+    background-color: #bc4424;
+}
+#settings #btn-clearIl:hover {
+    background-color: #a13a1f;
+}
+#sorter{margin-left:20px;}

@@ -29,15 +29,18 @@ function AjaxSender(op){
 
   this.dts='';
 
-  this.timewait=280;
+  this.timewait=1000;
   // temps d'attente entre 2 requetes
   // max 40 requetes par 10s
+  // 3 requetes par films sont generees en php
 
   this.ended=true;
 
   this.current=0;
   this.finded=0;
   this.nbrended=0;
+
+  this.abort=false;
 
   this.send=function(){
     that.ended=false;
@@ -77,13 +80,15 @@ function AjaxSender(op){
   }
 
   this.sendAll=function(){
+    if(that.data.length<=0) return; // il n'y a rien a envoyer
     that.onSendAll();
     that.current=0;
     that.finded=0;
     that.nbrended=0;
+    that.abort=false;
     //while(this.next()){}
     var inter = setInterval(function(){
-      if(!that.next()){
+      if(that.abort || !that.next()){
         clearInterval(inter);
       }
     }, that.timewait);
@@ -98,6 +103,11 @@ function AjaxSender(op){
       return true;
     }
     return false;
+  }
+
+  this.abortAll=function(){
+    that.abort=true;
+    that.onEnd();
   }
 
   this.tot=function(){

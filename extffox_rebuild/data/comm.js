@@ -73,7 +73,7 @@ function CommEmmiter(id,recive,send){
     that.sample.id=who;
     that.sample.action=action;
     that.sample.vars=(typeof vars!="undefined")?vars:null;
-    that.s.innerHTML=JSON.stringify(that.sample);
+    that.s.innerHTML=encodeURIComponent(JSON.stringify(that.sample));
   }
   this.on=function(action,callback){
     if(typeof that.actions[action]=="undefined")that.actions[action]=[];
@@ -88,7 +88,8 @@ function CommEmmiter(id,recive,send){
   }
 
   this.onRep=function(ev){
-    var d = JSON.parse(ev.target.innerHTML);
+    let text=decodeURIComponent(ev.target.innerHTML);
+    var d = JSON.parse(text);
     if(d.id!=that.id) return;
     if(typeof that.actions[d.action]=="undefined") return;
     for(var i=0 ; i<that.actions[d.action].length ; i++){

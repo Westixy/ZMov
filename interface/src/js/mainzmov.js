@@ -82,19 +82,24 @@ function mainZMov(){
       that.dump();
     };
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
+    that.stgs.onFcbClick=function(){
+      console.log(233454);
+      that.exmit('folder_choose');
+    };
   }
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
     that.c.on('sync_ok',that.onSyncOk);
     that.c.on('flist_ok',that.onFlistOk);
+    that.c.on('folder_ok',function(value){that.stgs.setFcbInputValue(value);});
 
     // teste si l'extention est présente
-    setTimeout(function(){that.exmit('sync_get');},250);
+    setTimeout(function(){that.exmit('sync_get');},1000);
     setTimeout(function(){
       if(mainZMov.ext_found==false)
         $('#blocked>div.noext').html('<h1>No extention found</h1><h4>Please install ZMov-ext to use this app</h4>');
-    },1000);
+    },6000);
 
   }
 
@@ -107,6 +112,15 @@ function mainZMov(){
         var izm = new ItemZMov();
         izm.data.fname=n[i].name;
         izm.data.path=n[i].path;
+        var dt=izm.data;
+        dt.title='NoTitle';
+        dt.date='NoDate';
+        dt.acteurs=[];
+        dt.directors=[];
+        dt.genreids=[];
+        dt.more='NoDescription';
+        dt.imgSrcBig='src/img/noimgbig.jpg';
+        dt.imgSrcSmall='src/img/noimgsmall.jpg';
         var id = that.il.add(izm);
       }
     }
@@ -131,52 +145,61 @@ function mainZMov(){
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
-    $('#flst_pbt').text(0.0+'%');
+    $('#sorter').val('id');
+    $('#flst_pbt').text('0.0%');
   }
 
   this.onAjaxDone=function(datas){
-    var d = JSON.parse(datas)
-    var it = that.il.getFromFname(d.fname);
-    //console.log(it);
-    //return;
-    if(typeof it!='undefined'){
-      if(d.response == 'ok'){
-        that.ratio.ok++;
-        it.tested=true;
-        it.finded=true;
-        var dt = it.data;
-        dt.title=d.title;
-        dt.date=d.release_date;
-        dt.acteurs=[]; // TODO : ACTEURS !!!!! pas dans la BDD
-        dt.genreids=d.genre_ids; // TODO : on a que les ids des genres
-        dt.more=d.overview;
-        dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+d.poster_path;
-        dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+d.poster_path;
+    var d={};
+    try {
+      d = JSON.parse(datas);
+      //console.log(d);
 
-      }else{
-        that.ratio.fail++;
-        it.tested=true;
-        it.finded=false;
-        var dt=it.data;
-        dt.title=d.ftrad||'NoTitle';
-        dt.date='NoDate';
-        dt.acteurs=[];
-        dt.genreids=[];
-        dt.more='NoDescription';
-        dt.imgSrcBig='src/img/noimgbig.jpg';
-        dt.imgSrcSmall='src/img/noimgsmall.jpg';
+      var it = that.il.getFromFname(d.fname);
+
+      if(typeof it!='undefined'){
+        if(d.response == 'ok'){
+          var dr=d.results[0];
+          that.ratio.ok++;
+          it.tested=true;
+          it.finded=true;
+          var dt = it.data;
+          dt.title=dr.title;
+          dt.date=dr.release_date;
+          dt.directors=d.directors||[];
+          dt.acteurs=d.actors||[];
+          dt.genreids=dr.genre_ids;
+          dt.more=dr.overview;
+          dt.imgSrcBig='https://image.tmdb.org/t/p/w600_and_h900_bestv2'+dr.poster_path;
+          dt.imgSrcSmall='https://image.tmdb.org/t/p/w200_and_h300_bestv2'+dr.poster_path;
+
+        }else{
+          that.ratio.fail++;
+          it.tested=true;
+          it.finded=false;
+          var dt=it.data;
+          dt.title=d.ftrad||'NoTitle';
+        }
+        it.lastUpdate=Date.now();
+        it.includeToList(true);
       }
-      it.lastUpdate=Date.now();
-      it.includeToList();
+    } catch (err) {
+      that.ajx.abortAll();
+      d.response='abort';
+      that.l.flst.h();
+      console.error("-X- AJAX_ERROR --> JSON_PARSE -> ");
+      console.log(datas);
+      console.log(err);
     }
-    //console.log(d);
   }
   this.onAjaxFail=function(err,status){
-    console.log("-X- AJAX_ERROR --- "+status+" -> ");
+    console.error("-X- AJAX_ERROR --- "+status+" -> ");
     console.log(err);
+    that.ajx.abortAll();
+    that.l.flst.h();
   }
   this.onAjaxResult=function(){
-    console.log(that.ajx.nbrended+'/'+that.ajx.tot());
+    //console.log(that.ajx.nbrended+'/'+that.ajx.tot());
     var pc=(that.ajx.nbrended/that.ajx.tot()*100).toFixed(1);
     $('#flst_pbt').text(pc+'%');
 
@@ -196,6 +219,9 @@ function mainZMov(){
     $('#a-path').on('click',function(ev){
       that.exmit('fopen',$(this).attr('data-path'))
     });
+    $('#sorter').on('change',function(){
+      that.sort(this.value);
+    });
   }
 
   this.onWinResize=function(){
@@ -205,6 +231,7 @@ function mainZMov(){
   this.onSearchChange=function(val){
     //console.log(val.target.value);
     that.il.match(val.target.value);
+    $('#sorter').val('id');
     //that.l.flst.show();
     //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
@@ -252,8 +279,44 @@ function mainZMov(){
       that.stgs.data=lsz.stgs.data;
       that.stgs.doOnUndump();
       for(var i=0;i<lsz.il.list.length;i++){
-        that.il.addItemFromDump(lsz.il.list[i].data).includeToList();
+        that.il.addItemFromDump(lsz.il.list[i].data).includeToList(false);
       }
+    }
+  }
+  this.sort=function(how){
+    let type={
+      id:function(a,b){
+        a=parseInt($(a).attr('data-itemid'));
+        b=parseInt($(b).attr('data-itemid'));
+        return a-b;
+      },
+      title:function(a,b){
+        a=$($(a).children()[1]).children()[0].innerHTML.trim();
+        b=$($(b).children()[1]).children()[0].innerHTML.trim();
+        return a.localeCompare(b);
+      },
+      title_rev:function(a,b){
+        a=$($(a).children()[1]).children()[0].innerHTML.trim();
+        b=$($(b).children()[1]).children()[0].innerHTML.trim();
+        return b.localeCompare(a);
+      },
+      date:function(a,b){
+        a=$($(a).children()[1]).children()[2].innerHTML.trim();
+        b=$($(b).children()[1]).children()[2].innerHTML.trim();
+        return a.localeCompare(b);
+      },
+      date_rev:function(a,b){
+        a=$($(a).children()[1]).children()[2].innerHTML.trim();
+        b=$($(b).children()[1]).children()[2].innerHTML.trim();
+        return b.localeCompare(a);
+      }
+    };
+
+    let table = $('#cnt-movieList').children();
+    let table_sort = table.sort(type[how||'id']);
+    for(var i=0; i<table_sort.length ; i++){
+      let item = $(table_sort[i]);
+      item.css('order',i);
     }
   }
 }

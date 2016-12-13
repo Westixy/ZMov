@@ -11,7 +11,7 @@ var ConfigPath = "data/config.json";
 var debug=console.log;
 var exec = require("sdk/system/child_process").exec;
 
-var version="1.0.1";
+var version="1.0.4";
 
 // TODO DEBUG THIS SHIT
 
@@ -37,9 +37,11 @@ function Extention(){
 
   // vvv TABS EVENTS vvv //
   this.tabsOnReady=function(tab){
-    if(tab.window.title.indexOf("ZMov app")>=0){
-      that.webAttach(tab);
-    }
+    setTimeout(function () {
+      if(tab.window.title.indexOf("ZMov app")>=0){
+        that.webAttach(tab);
+      }
+    }, 500);
   }
 
   // vv Workers EVENTS vvv //
@@ -54,6 +56,7 @@ function Extention(){
     });
     wkr.port.on('DEBUG',function(args){
       debug(args);
+      debug(that);
     });
   }
 
@@ -71,13 +74,22 @@ function Extention(){
   }
 
   this.actualiseAndEmit=function(){
-    that.fm.readAll(function(){that.wemit('flist_ok',that.fm.files)});
+    that.fm.files=[];
+    that.fm.readAll(function(){
+      that.wemit('flist_ok',that.fm.files);
+    });
   }
 
   // Alias
   this.wemit=function(action,vars){
     for(var i=0; i<that.web.length ; i++){
-      that.web[i].port.emit(action,vars);
+      try {
+        that.web[i].port.emit(action,vars);
+      } catch (err) {
+        console.log(err);
+        that.web.splice(i,1);
+        continue;
+      }
     }
   }
 
@@ -86,14 +98,9 @@ Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
 Extention.fopen=function(path){
-  //path='"'+path+'"';
-  // for windows
-  debug(path);
-  OS.File.open(path);
-  //exec(path,function(error, stdout, stderr) {});
-  // for unix
-  //require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
-  // new FileUtils.File(path).launch();
+  debug("FOPEN => <"+path+">");
+  require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
+  new FileUtils.File(path).launch();
 }
 
 function FolderManager(){
@@ -127,15 +134,21 @@ function FolderManager(){
       gfc.onEnd = function() {
           that.files = that.files.concat(gfc.content.files);
           callback();
+
       };
       gfc.readdir();
   }
   this.readAll=function(callback) {
     var folderOk = 0;
+    that.files=[];
+    debug('debug -> readAllStart');
+
     that.foreach(function(entry){
       that.readOne(entry,function(){
+        debug('debug -> readOne -> '+entry);
         folderOk++;
         if (folderOk >= that.folders.length) {
+          debug('debug -> readAllEnd');
           callback();
         }
       });
@@ -194,10 +207,8 @@ function getFolderContent(path, extArray) {
         }else{
           let splt = entry.path.split(".");
           var ext = (splt.length > 1) ? splt[splt.length - 1] : "NO_EXT";
-          that.exts.forEach(function(ex) {
-            if (ext.toLowerCase() == ex)
-              that.content.files.push(entry);
-          });
+          if (that.exts.indexOf(ext.toLowerCase())>-1)
+            that.content.files.push(entry);
         }
       }
     );
@@ -223,12 +234,14 @@ function getFolderContent(path, extArray) {
     }
   }
   this.endRead = function() {
+/*
     console.log("========= END READ : " + this.path);
     console.log("   dirs.length : " + this.content.dirs.length);
     console.log("   dirIndex    : " + this.dirIndex);
     console.log("   ~~~   ");
     console.log("   file.length : " + this.content.files.length);
     console.log('==============================================');
+*/
     this.onEnd();
   }
 }
