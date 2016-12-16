@@ -13,13 +13,21 @@ var exec = require("sdk/system/child_process").exec;
 
 var version="1.0.4";
 
-// TODO DEBUG THIS SHIT
 
+/**
+ * Extention - classe principale de l'extention
+ */
 function Extention(){
   var that = this;
 
+  /**
+   * la classe de gesion des dossiers
+   */
   this.fm=new FolderManager();
 
+  /**
+   *  tableau stockant les différentes instance de l'application sur le navigateur
+   */
   this.web=[]; // workers for web
 
   /*
@@ -27,6 +35,10 @@ function Extention(){
          EVENTS
   ====================
   */
+
+  /**
+   * this.initEvents - initialisation des événements du navigateur
+   */
   this.initEvents=function(){
     var tabs = require("sdk/tabs");
 
@@ -36,6 +48,13 @@ function Extention(){
   }
 
   // vvv TABS EVENTS vvv //
+
+  /**
+   * this.tabsOnReady - événements lorsque une tablulation est chargée<br>
+   * vérifie si c'est une application zmov, si oui attache le script pour l'application
+   *
+   * @param  {sdk_tabs_tab} tab description
+   */
   this.tabsOnReady=function(tab){
     setTimeout(function () {
       if(tab.window.title.indexOf("ZMov app")>=0){
@@ -44,7 +63,13 @@ function Extention(){
     }, 500);
   }
 
-  // vv Workers EVENTS vvv //
+  // vvv Workers EVENTS vvv //
+
+  /**
+   * this.setWorkerEvents - initialisation des evenements pour la communication avec le page web
+   *
+   * @param  {worker} wkr lien de communication avec le fichier ./data/web.js
+   */
   this.setWorkerEvents=function(wkr){
     debug=function(some){wkr.port.emit('DEBUG',some)};
     wkr.port.on('fopen',Extention.fopen);
@@ -65,6 +90,12 @@ function Extention(){
           UTILS
   ====================
   */
+
+  /**
+   * this.webAttach - Attachement des scripts a l'onglet du navigateur'
+   *
+   * @param  {sdk_tabs_tab} tab l'onglet a associer
+   */
   this.webAttach=function(tab){
     var wkr = tab.attach({
       contentScriptFile: [self.data.url("comm.js"),self.data.url("web.js")]
@@ -73,6 +104,10 @@ function Extention(){
     that.setWorkerEvents(wkr);
   }
 
+
+  /**
+   * this.actualiseAndEmit - recherche les fichiers films dans les répertoires et les envoies à la page web
+   */
   this.actualiseAndEmit=function(){
     that.fm.files=[];
     that.fm.readAll(function(){
@@ -81,6 +116,15 @@ function Extention(){
   }
 
   // Alias
+  //
+  /**
+   * this.wemit - simplification de l'envoi d'action aux pages web.<br>
+   * si il y a plusieurs instances de page web , fait un broadcast sur toutes les instance (les supprimes si elles ne sont plus liées)
+   *
+   * @param  {string} action l'action a executer par l'application
+   * @param  {rainbow} vars  les données a transmettre a l'application
+   */
+
   this.wemit=function(action,vars){
     for(var i=0; i<that.web.length ; i++){
       try {
@@ -97,18 +141,38 @@ function Extention(){
 Extention.startWith=function(pattern,text){
   return (text.substring(0, pattern.length) == pattern);
 }
+
+/**
+ * Extention.fopen - execute un fichier local avec son application par défaut
+ *
+ * @param  {string} path le chemin absolus du fichier
+ */
 Extention.fopen=function(path){
   debug("FOPEN => <"+path+">");
   require('chrome').Cu.import('resource://gre/modules/FileUtils.jsm');
   new FileUtils.File(path).launch();
 }
 
+
+/**
+ * FolderManager - classe gérant l'obtention du contenu des repertoires
+ */
 function FolderManager(){
   var that=this;
 
   this.folders=[];
+
+  /**
+   * la liste des fichies récupérés  (chemin complet)
+   */
   this.files=[];
 
+
+  /**
+   * this.add - ajoute un répertoire a la liste des répertoires a fouiller
+   *
+   * @param  {string} path chemin du dossier   
+   */
   this.add=function(path){
     if(that.folders.indexOf(path)<0){
       that.folders.push(path);

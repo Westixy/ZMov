@@ -1,3 +1,5 @@
+// CE FICHIER NE SERT QUE DE PONT AUX DONNEES
+
 var c = new CommEmmiter('ext','#FromWeb','#FromExt');
 c.init();
 
