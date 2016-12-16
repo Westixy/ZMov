@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ajax.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ajax.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * AjaxSender - Object servant de gestion à l'envoi des requetes ajax pour l'item
+ *
+ * @param  {Object} options définition des options :&lt;br> url , onsendall, ondone, onfail, onresult, onend
+ */
+function AjaxSender(options){
+  var that=this;
+
+
+  /**
+   * Emplacement des données à envoyer (le nom des fichiers)
+   */
+  this.data=[]; // ["fname1.avi",'fname2.avi',...]
+
+
+
+  var opt=options||{
+    url:'',
+    onsendall:function(){},
+    ondone:function(){},
+    onfail:function(){},
+    onresult:function(){},
+    onend:function(){}
+  };
+
+  /**
+   *   l'url de la requete ajax
+   */
+  this.url=opt.url;
+
+  /**
+   * le callback lors de l'envoi de toutes les requetes
+   */
+  this.onSendAll=opt.onsendall;
+
+  /**
+   * le callback lorsque une requete a réussi
+   */
+  this.onDone=opt.ondone;
+
+  /**
+   * le callback lorsque la requete a eu une erreur
+   */
+  this.onFail=opt.onfail;
+
+  /**
+   * le callback lorsque une requete est terminee (réussi ou pas)
+   */
+  this.onResult=opt.onresult;
+
+  /**
+   * le callback lorseque toutes les requètes sont terminées
+   */
+  this.onEnd=opt.onend;
+
+
+  /**
+   *  emplacement pour les données a envoyer en ajax (objet {} )
+   *  &lt;strong>ne s'utilise que en debug&lt;/strong>
+   */
+  this.dts='';
+
+
+  /**
+   * temps d'attente entre 2 requetes
+   * max 40 requetes par 10s
+   * 3 requetes par films sont generees en php
+   */
+  this.timewait=1000;
+
+  /**
+   *  Etat si toutes les requete sont terminée, l'état passe a true
+   */
+  this.ended=true;
+
+  this.current=0;
+  this.finded=0;
+  this.nbrended=0;
+
+  this.abort=false;
+
+
+  /**
+   * this.send - envoi d'une requete
+   *  &lt;strong>ne s'utilise que en debug&lt;/strong>
+   */
+  this.send=function(){
+    that.ended=false;
+    that.rq=$.ajax({
+      url:that.url,
+      method:'POST',
+      data:{entry:that.dts}
+    });
+    this.rq.done(function(response){
+      that.finded++;
+      that.onDone(response);
+      that.onRes();
+    });
+    this.rq.fail(function(jqxhr, status){
+      that.onFail(jqxhr,status);
+      that.onRes();
+    });
+  }
+
+  this.onRes=function(){
+    that.nbrended++;
+    that.onResult();
+    if(that.finded==that.tot()){
+      that.ended=true;
+      that.onEnd();
+    }
+  }
+
+  this.next=function(){
+    if(that.last==true)return false;
+    var rep=true;
+    if(that.current>=that.data.length-1){that.last=true;rep=false;}
+    that.dts=that.data[that.current];
+    that.current++;
+    that.send();
+    return rep;
+  }
+
+  /**
+   * this.sendAll - Envoies toutes les requètes préparées
+   */
+  this.sendAll=function(){
+    if(that.data.length&lt;=0) return; // il n'y a rien a envoyer
+    that.onSendAll();
+    that.current=0;
+    that.finded=0;
+    that.nbrended=0;
+    that.abort=false;
+    //while(this.next()){}
+    var inter = setInterval(function(){
+      if(that.abort || !that.next()){
+        clearInterval(inter);
+      }
+    }, that.timewait);
+  }
+
+
+  /**
+   * this.setData - définition des données qui vont etre envoyee en ajax au fichier php
+   *
+   * @param  {array} data tableau de nom de fichiers ([john-cena.avi,...])
+   * @return {boolean} retourne true si l'objet n'est pas déjà en train d'envoyer une serie de requete et false si il est déja en train d'envoyer&lt;br> true -> les data ont changés&lt;br>false -> les data n'ont pas changés
+   */
+  this.setData=function(data){
+    if(that.ended==true){
+      that.data=data;
+      that.current=0;
+      that.finded=0;
+      that.last=false;
+      return true;
+    }
+    return false;
+  }
+
+
+  /**
+   * this.abortAll - annule l'envoi de toutes les requetes  et execute l'evenement onEnd
+   */
+  this.abortAll=function(){
+    that.abort=true;
+    that.onEnd();
+  }
+
+
+  /**
+   * this.tot - obtient le nombre de requetes que l'objet va envoyer lors d'un sendAll  
+   *
+   * @return {int}  le nombre total de requetes que l'objet va effectuer (data.length)
+   */
+  this.tot=function(){
+    return that.data.length;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#abortAll">abortAll</a></li><li><a href="global.html#AjaxSender">AjaxSender</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#dts">dts</a></li><li><a href="global.html#ended">ended</a></li><li><a href="global.html#onDone">onDone</a></li><li><a href="global.html#onEnd">onEnd</a></li><li><a href="global.html#onFail">onFail</a></li><li><a href="global.html#onResult">onResult</a></li><li><a href="global.html#onSendAll">onSendAll</a></li><li><a href="global.html#send">send</a></li><li><a href="global.html#sendAll">sendAll</a></li><li><a href="global.html#setData">setData</a></li><li><a href="global.html#timewait">timewait</a></li><li><a href="global.html#tot">tot</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 16 2016 09:10:42 GMT+0100 (Europe de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

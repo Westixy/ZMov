@@ -14,10 +14,9 @@
 
 
 /**
- * ItemZMov - description
+ * ItemZMov - objet de gestion des données et de l'interface des films
  *
- * @param  {type} data description
- * @return {type}      description
+ * @param  {objet} data [optionnel] les données a insérer dans this.data
  */
 function ItemZMov(data){
   var that=this;
@@ -51,6 +50,10 @@ function ItemZMov(data){
     }
   };
 
+
+  /**
+   * espace de stockage des données d'un film
+   */
   this.data={
     title:"",
     fname:"",
@@ -73,10 +76,9 @@ function ItemZMov(data){
 
 
   /**
-   * setData - description
+   * this.setData - Inerstion des données du film dans l'objet
    *
-   * @param  {type} data description
-   * @return {type}      description
+ * @param {objet} data les données a insérer dans this.data
    */
   this.setData=function(data){
     that.data.title=data.title;
@@ -95,10 +97,9 @@ function ItemZMov(data){
 
 
   /**
-   * includeToList - description
+   * this.includeToList - Insertion visuel dans la list des films
    *
-   * @param  {type} anim description
-   * @return {type}      description
+   * @param  {boolean} anim activation ou non d'une animation lors de l'ajout dans la liste
    */
   this.includeToList=function(anim){
     var iB='<div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
@@ -126,9 +127,7 @@ function ItemZMov(data){
 
 
   /**
-   * removeFromList - description
-   *
-   * @return {type}  description
+   * this.removeFromList - suppression de de l'item de la liste (visuel)
    */
   this.removeFromList=function(){
     var me = $(that.css.item.parent+" [data-itemid=\""+that.data.id+"\"]");
@@ -139,9 +138,8 @@ function ItemZMov(data){
 
 
   /**
-   * updateCard - description
-   *
-   * @return {type}  description
+   * this.updateCard - met à jour la carte du film (visuel)<br>
+   * la "carte" est l'emplacement graphique a droite de la liste des films
    */
   this.updateCard=function(){
     $(that.css.full.img).attr("src",that.data.imgSrcBig);
@@ -177,7 +175,7 @@ function ItemZMov(data){
     var titre = that.data.title;
     var acteurs = that.data.acteurs; // thats an ARRAY !
     var date = that.data.date.replace('-',''); // "2013-03-21"
-    
+
     var output = false;
 
     if(text.indexOf(":") != -1){
@@ -360,25 +358,16 @@ function ItemZMov(data){
 
   }
 
+  /**
+   * this.setTitle - permetde définir uniquement le titre du film et définit l'objet comme a ne pas rafraichir
+   *
+   * @param  {string} title le titre du film
+   */
   this.setTitle=function(title){
     this.dontUpdate=true;
     this.data.title=title;
   }
 
   if(typeof data != 'undefined')this.setData(data);
-
-  /*this.init(
-    {
-      title:"My title",
-      fname:"ma_fname.waw",
-      date:"10.10.2016",
-      acteurs:["John", "CENA", "Cartman"],
-      more:"<small>noMore</small><strong> Héhéhé</strong>",
-      id:"0",
-      desc:"MariaDb on fire",
-      imgSrcBig:"http://images.fan-de-cinema.com/affiches/large/65/67886.jpg",
-      imgSrcSmall:"http://s3images.coroflot.com/user_files/individual_files/projects/491612_1284695_cover_ps27yjaxigno7jzp2dhx.jpg"
-    }
-  );*/
 
 }

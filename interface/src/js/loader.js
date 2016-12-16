@@ -1,11 +1,10 @@
 
 /**
- * Loader - description
+ * Loader - Système d'affichage d'un chargement
  *
- * @param  {type} selector description
- * @param  {type} text     description
- * @param  {type} anim     description
- * @return {type}          description
+ * @param  {string} selector selecteur css de la div a cacher lors d'un show
+ * @param  {string} text     [optionnel] texte de remplacement à 'Loading'
+ * @param  {string} anim     [optionnel] html qui remplacerai l'animation de base
  */
 function Loader(selector,text,anim){
   var that=this;
@@ -29,6 +28,7 @@ function Loader(selector,text,anim){
 
   this.pointer=$(that.css.elem+' > .'+that.css.cont);
 
+  // fonction qui va afficher de maniere dur le loader (ne pas utiliser appart en debug)
   this.s=function(){
     var el = that.pointer;
     if(el.hasClass(that.css.hide))
@@ -38,6 +38,9 @@ function Loader(selector,text,anim){
     this.onShow();
   }
 
+  /**
+   * this.show - affiche le loader (si appelé plusieurs fois, ne s'affiche qu'une fois, mais nécessite de le 'hide' autant de fois qu'il a été 'show')
+   */
   this.show=function(){
     this.iterate++;
     if(this.iterate==1){
@@ -45,6 +48,7 @@ function Loader(selector,text,anim){
     }
   }
 
+  // fonction qui va cacher de maniere dur le loader (ne pas utiliser appart en debug)
   this.h=function(){
     var el = that.pointer;
     if(el.hasClass(that.css.show))
@@ -54,6 +58,9 @@ function Loader(selector,text,anim){
     this.onHide();
   }
 
+  /**
+   * this.hide - Cache le loader (si 'show' a été appelé plusieurs fois, il ne se cachera que quand le nombre de 'hide' correspondra au nombre de 'show')
+   */
   this.hide=function(){
     this.iterate--;
       if(this.iterate<=0){
@@ -61,12 +68,20 @@ function Loader(selector,text,anim){
       }
   }
 
-  // state : show=1 ; hide=0
+  /**
+   * this.setTo - fait un hide ou un show selon un int (show=1 ; hide=0)
+   *
+   * @param  {int} state (show=1 ; hide=0)
+   */
   this.setTo=function(state){
     if(state==1)that.show();
     if(state==0)that.hide();
   }
 
+
+  /**
+   * this.switch - [obsolete] essaie de changer l'etat (toggle) du loader en hide to show ou l'inverse
+   */
   this.switch=function(){
     if(that.state==0)that.setTo(1);
     else that.setTo(0);

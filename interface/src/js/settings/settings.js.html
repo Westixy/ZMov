@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: settings.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: settings.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * ZMovSettings - Objet de gestion des parametres de l'application ZMov
+ */
+function ZMovSettings(){
+  var that=this;
+  this.css={
+    cnt:"#settings",
+    close:"#btn-settings-close",
+    flist:".folder-list",
+    delfolder:".delete-folder",
+    btnAdd:"#btn-addfolder",
+    inpfolder:"#inpaddfolder",
+    btnExt:"#btn-confExt",
+    btnClearIl:"#btn-clearIl",
+    inpext:"#inpextentions",
+  }
+
+  /**
+   * données des settings de l'application ZMov
+   */
+  this.data={
+    flist:[],
+    ext:['_default_']
+  }
+
+  /**
+   * this.init - initialisation des événements de la denetre de settings&lt;br>
+   * executé automatiquement a l'instanciation de l'objet
+   */
+  this.init=function(){
+    $(this.css.close).on('click',that.onBtnClose);
+    $(this.css.flist).on('click', that.css.delfolder ,that.onBtnDelFolder);
+    $(this.css.btnAdd).on('click',that.onBtnAddFolder);
+    $(this.css.btnExt).on('click',that.onBtnExt);
+    $(this.css.btnClearIl).on('click',that.onBtnCIl);
+  }
+
+
+  /**
+   * this.onOnUndump - A executer apres un Undump (voir mainZMov.undump) et un ajout des données dans data
+   */
+  this.doOnUndump=function(){
+    for(var i=0; i&lt;that.data.flist.length ; i++){
+      $(that.css.flist).append('&lt;div class="folder-item">&lt;span class="fdata">'+
+        that.data.flist[i]+'&lt;/span>&lt;span class="delete-folder">X&lt;/span>&lt;/div>');
+    }
+  }
+
+  this.onBtnClose=function(ev){
+    $(that.css.cnt).addClass('hidden');
+    that.onClose();
+  }
+  this.onBtnCIl=function(ev){
+    if(confirm('Voulez vous vraiment supprimer les films mis en cache ?'))
+      that.onCIl();
+  }
+  this.onBtnAddFolder=function(ev){
+    var val = $(that.css.inpfolder).val().trim();
+    if(that.data.flist.indexOf(val)&lt;0 &amp;&amp; !that.folderInList(val)){
+      that.data.flist.push(val);
+      $(that.css.flist).append('&lt;div class="folder-item">&lt;span class="fdata">'+val+'&lt;/span>&lt;span class="delete-folder">X&lt;/span>&lt;/div>');
+      //console.log('onAddFolder');
+      that.onAddFolder(val,that.data.flist);
+    }
+  }
+  this.onBtnDelFolder=function(ev){
+    var cnt = $(ev.currentTarget).parent(".folder-item");
+    var item = $(ev.currentTarget).siblings('.fdata');
+    var val = item.text().trim();
+    var idx = that.data.flist.indexOf(val);
+    if(idx>=0){
+      that.data.flist.splice(idx,1);
+      that.onDelFolder(val,that.data.flist);
+    }
+    cnt.remove();
+  }
+  this.onBtnExt=function(ev){
+    var val = $(that.css.inpext).val().trim();
+    var exts=[];
+
+    if(val==''){
+      exts=['_default_'];
+    }else{
+      var freaki=[];
+      freaki=val.split(';');
+
+      for(var i=0;i&lt;freaki.length;i++){
+        var tmp = freaki[i].trim();
+        if(tmp!=''){
+          exts.push(tmp);
+        }
+      }
+    }
+    if(that.data.ext!=exts){
+      that.data.ext=exts;
+      console.log('onExtChage');
+      that.onExtChange(exts);
+    }
+  }
+
+  /**
+   * this.foldEquals - permet de savoir si deux répertoires sont égaux ou non
+   *
+   * @param  {string} fold1 path du répertoire 1
+   * @param  {string} fold2 patn du répertoire 2
+   * @return {boolean} true si les deux réperoires sont égaux
+   */
+  this.foldEquals=function(fold1, fold2) {
+      let fold1L = fold1.substring(fold1.length - 1, fold1.length);
+      if (fold1L == "/" || fold1L == "\\") fold1 = fold1.substring(0, fold1.length - 1);
+      let fold2L = fold2.substring(fold2.length - 1, fold2.length);
+      if (fold2L == "/" || fold2L == "\\") fold2 = fold2.substring(0, fold2.length - 1);
+      if (fold1 == fold2) return true;
+      return false;
+  }
+
+  /**
+   * this.folderInList - permet de savoir si un répertoire est déja dans la liste
+   *
+   * @param  {string} path path du répertoir a tester
+   * @return {boolean} true si il est déja dans la liste
+   */
+  this.folderInList=function(path){
+    for(var i =0; i&lt;that.data.flist ; i++)
+      if(that.foldEquals(that.data.flist[i],path))
+        return true;
+    return false;
+  }
+
+  this.onClose=function(){};
+  this.onCIl=function(){};
+  this.onAddFolder=function(path){};
+  this.onDelFolder=function(path){};
+  this.onExtChange=function(exts){};
+
+  this.init();
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#data">data</a></li><li><a href="global.html#doOnUndump">doOnUndump</a></li><li><a href="global.html#foldEquals">foldEquals</a></li><li><a href="global.html#folderInList">folderInList</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#ZMovSettings">ZMovSettings</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 16 2016 11:08:15 GMT+0100 (Europe de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

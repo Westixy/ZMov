@@ -1,8 +1,6 @@
 
 /**
- * ZMovSettings - description
- *
- * @return {type}  description
+ * ZMovSettings - Objet de gestion des parametres de l'application ZMov
  */
 function ZMovSettings(){
   var that=this;
@@ -18,11 +16,18 @@ function ZMovSettings(){
     inpext:"#inpextentions",
   }
 
+  /**
+   * données des settings de l'application ZMov
+   */
   this.data={
     flist:[],
     ext:['_default_']
   }
 
+  /**
+   * this.init - initialisation des événements de la denetre de settings<br>
+   * executé automatiquement a l'instanciation de l'objet
+   */
   this.init=function(){
     $(this.css.close).on('click',that.onBtnClose);
     $(this.css.flist).on('click', that.css.delfolder ,that.onBtnDelFolder);
@@ -31,6 +36,10 @@ function ZMovSettings(){
     $(this.css.btnClearIl).on('click',that.onBtnCIl);
   }
 
+
+  /**
+   * this.onOnUndump - A executer apres un Undump (voir mainZMov.undump) et un ajout des données dans data
+   */
   this.doOnUndump=function(){
     for(var i=0; i<that.data.flist.length ; i++){
       $(that.css.flist).append('<div class="folder-item"><span class="fdata">'+
@@ -90,6 +99,13 @@ function ZMovSettings(){
     }
   }
 
+  /**
+   * this.foldEquals - permet de savoir si deux répertoires sont égaux ou non
+   *
+   * @param  {string} fold1 path du répertoire 1
+   * @param  {string} fold2 patn du répertoire 2
+   * @return {boolean} true si les deux réperoires sont égaux
+   */
   this.foldEquals=function(fold1, fold2) {
       let fold1L = fold1.substring(fold1.length - 1, fold1.length);
       if (fold1L == "/" || fold1L == "\\") fold1 = fold1.substring(0, fold1.length - 1);
@@ -98,6 +114,13 @@ function ZMovSettings(){
       if (fold1 == fold2) return true;
       return false;
   }
+
+  /**
+   * this.folderInList - permet de savoir si un répertoire est déja dans la liste
+   *
+   * @param  {string} path path du répertoir a tester
+   * @return {boolean} true si il est déja dans la liste
+   */
   this.folderInList=function(path){
     for(var i =0; i<that.data.flist ; i++)
       if(that.foldEquals(that.data.flist[i],path))

@@ -1,24 +1,21 @@
 
 /**
- * AjaxSender - description
+ * AjaxSender - Object servant de gestion à l'envoi des requetes ajax pour l'item
  *
- * @param  {type} op description
- * @return {type}    description
+ * @param  {Object} options définition des options :<br> url , onsendall, ondone, onfail, onresult, onend
  */
-function AjaxSender(op){
+function AjaxSender(options){
   var that=this;
 
+
+  /**
+   * Emplacement des données à envoyer (le nom des fichiers)
+   */
   this.data=[]; // ["fname1.avi",'fname2.avi',...]
 
-  /*
-  op = {
-    url:string
-    ondone:function(string reponse),
-    onfail:function(ajaxStatus),
-    onend:function()
-  }
-  */
-  var opt=op||{
+
+
+  var opt=options||{
     url:'',
     onsendall:function(){},
     ondone:function(){},
@@ -27,20 +24,54 @@ function AjaxSender(op){
     onend:function(){}
   };
 
+  /**
+   *   l'url de la requete ajax
+   */
   this.url=opt.url;
+
+  /**
+   * le callback lors de l'envoi de toutes les requetes
+   */
   this.onSendAll=opt.onsendall;
+
+  /**
+   * le callback lorsque une requete a réussi
+   */
   this.onDone=opt.ondone;
+
+  /**
+   * le callback lorsque la requete a eu une erreur
+   */
   this.onFail=opt.onfail;
+
+  /**
+   * le callback lorsque une requete est terminee (réussi ou pas)
+   */
   this.onResult=opt.onresult;
+
+  /**
+   * le callback lorseque toutes les requètes sont terminées
+   */
   this.onEnd=opt.onend;
 
+
+  /**
+   *  emplacement pour les données a envoyer en ajax (objet {} )
+   *  <strong>ne s'utilise que en debug</strong>
+   */
   this.dts='';
 
-  this.timewait=1000;
-  // temps d'attente entre 2 requetes
-  // max 40 requetes par 10s
-  // 3 requetes par films sont generees en php
 
+  /**
+   * temps d'attente entre 2 requetes
+   * max 40 requetes par 10s
+   * 3 requetes par films sont generees en php
+   */
+  this.timewait=1000;
+
+  /**
+   *  Etat si toutes les requete sont terminée, l'état passe a true
+   */
   this.ended=true;
 
   this.current=0;
@@ -49,6 +80,11 @@ function AjaxSender(op){
 
   this.abort=false;
 
+
+  /**
+   * this.send - envoi d'une requete
+   *  <strong>ne s'utilise que en debug</strong>
+   */
   this.send=function(){
     that.ended=false;
     that.rq=$.ajax({
@@ -86,6 +122,9 @@ function AjaxSender(op){
     return rep;
   }
 
+  /**
+   * this.sendAll - Envoies toutes les requètes préparées
+   */
   this.sendAll=function(){
     if(that.data.length<=0) return; // il n'y a rien a envoyer
     that.onSendAll();
@@ -101,6 +140,13 @@ function AjaxSender(op){
     }, that.timewait);
   }
 
+
+  /**
+   * this.setData - définition des données qui vont etre envoyee en ajax au fichier php
+   *
+   * @param  {array} data tableau de nom de fichiers ([john-cena.avi,...])
+   * @return {boolean} retourne true si l'objet n'est pas déjà en train d'envoyer une serie de requete et false si il est déja en train d'envoyer<br> true -> les data ont changés<br>false -> les data n'ont pas changés
+   */
   this.setData=function(data){
     if(that.ended==true){
       that.data=data;
@@ -112,11 +158,21 @@ function AjaxSender(op){
     return false;
   }
 
+
+  /**
+   * this.abortAll - annule l'envoi de toutes les requetes  et execute l'evenement onEnd
+   */
   this.abortAll=function(){
     that.abort=true;
     that.onEnd();
   }
 
+
+  /**
+   * this.tot - obtient le nombre de requetes que l'objet va envoyer lors d'un sendAll  
+   *
+   * @return {int}  le nombre total de requetes que l'objet va effectuer (data.length)
+   */
   this.tot=function(){
     return that.data.length;
   }

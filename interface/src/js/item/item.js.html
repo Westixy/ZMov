@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: item.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: item.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+
+8888888 888
+  888   888
+  888   888
+  888   888888 .d88b.  88888b.d88b.
+  888   888   d8P  Y8b 888 "888 "88b
+  888   888   88888888 888  888  888
+  888   Y88b. Y8b.     888  888  888
+8888888  "Y888 "Y8888  888  888  888
+
+*/
+
+
+
+/**
+ * ItemZMov - objet de gestion des données et de l'interface des films
+ *
+ * @param  {objet} data [optionnel] les données a insérer dans this.data
+ */
+function ItemZMov(data){
+  var that=this;
+  this.css={
+    item:{
+      parent:"#cnt-movieList",
+      container:".cnt-movieItem",
+      thumbnails:".cnt-thumnails",
+      miniTxt:".cnt-miText",
+      title:".miTitle",
+      name:".miName",
+      date:".miDate"
+    },
+    full:{
+      container:"#cnt-movieCard",
+      img:"#cnt-movieCard > div > img",
+      cntInfo:".cnt-textInfo",
+      title:".movieTitle",
+      rawText:".preRawText",
+      cntDesc:".cnt-desc",
+      cntAct:".cnt-acteurs",
+      cntMore:".cnt-moreinfo",
+      desc:"#txt-desc",
+      acteurs:"#txt-acteurs",
+      directors:"#txt-producteurs",
+      openit:"#a-path",
+      path:"#cnt-path em",
+      fname:"#cnt-fname em",
+      date:"#cnt-date em",
+      more:"#cnt-pinfo"
+    }
+  };
+
+
+  /**
+   * espace de stockage des données d'un film
+   */
+  this.data={
+    title:"",
+    fname:"",
+    date:"",
+    acteurs:[],
+    directors:[],
+    genreids:[],
+    more:"",
+    id:"",
+    imgSrcBig:"",
+    imgSrcSmall:"",
+    path:''
+  }
+
+  this.tested=false;
+  this.finded=false;
+  this.lastUpdate=0;
+  this.dontUpdate=false;
+
+
+
+  /**
+   * this.setData - Inerstion des données du film dans l'objet
+   *
+ * @param {objet} data les données a insérer dans this.data
+   */
+  this.setData=function(data){
+    that.data.title=data.title;
+    that.data.fname=data.fname||'';
+    that.data.date=data.date;
+    that.data.acteurs=data.acteurs||[];
+    that.data.directors=data.directors||[];
+    that.data.genreids=data.genreids||[];
+    that.data.more=data.more;
+    that.data.id=data.id;
+    that.data.desc=data.desc;
+    that.data.imgSrcBig=data.imgSrcBig;
+    that.data.imgSrcSmall=data.imgSrcSmall;
+    that.data.path=data.path||'';
+  }
+
+
+  /**
+   * this.includeToList - Insertion visuel dans la list des films
+   *
+   * @param  {boolean} anim activation ou non d'une animation lors de l'ajout dans la liste
+   */
+  this.includeToList=function(anim){
+    var iB='&lt;div data-itemid="'+that.data.id+'" class="'+n(that.css.item.container)+'">';
+    iB+='&lt;div class="'+n(that.css.item.thumbnails)+'">';
+    iB+='    &lt;img src="'+that.data.imgSrcSmall+'" alt="loading '+that.data.title+'" />';
+    iB+='  &lt;/div>';
+    iB+='  &lt;div class="'+n(that.css.item.miniTxt)+'">';
+    iB+='    &lt;div class="'+n(that.css.item.title)+'">';
+    iB+='      '+that.data.title;
+    iB+='    &lt;/div>';
+    iB+='    &lt;div class="'+n(that.css.item.name)+'">';
+    iB+='      '+that.data.fname;
+    iB+='    &lt;/div>';
+    iB+='    &lt;div class="'+n(that.css.item.date)+'">';
+    iB+='      '+that.data.date;
+    iB+='    &lt;/div>';
+    iB+='  &lt;/div>';
+    iB+='&lt;/div>';
+    $(that.css.item.parent).append(iB);
+    if(anim){
+      var h = $(that.css.item.parent)[0].scrollHeight;
+      $(that.css.item.parent).animate({ scrollTop: h }, 500);
+    }
+  };
+
+
+  /**
+   * this.removeFromList - suppression de de l'item de la liste (visuel)
+   */
+  this.removeFromList=function(){
+    var me = $(that.css.item.parent+" [data-itemid=\""+that.data.id+"\"]");
+    if (typeof me!='undefined'){
+      me.remove();
+    }
+  }
+
+
+  /**
+   * this.updateCard - met à jour la carte du film (visuel)&lt;br>
+   * la "carte" est l'emplacement graphique a droite de la liste des films
+   */
+  this.updateCard=function(){
+    $(that.css.full.img).attr("src",that.data.imgSrcBig);
+    $(that.css.full.title).text(that.data.title);
+    $(that.css.full.desc).html(that.data.more);
+    var m="";
+    that.data.acteurs.forEach(function(act){
+      m+=act+'&lt;br>';
+    });
+    $(that.css.full.acteurs).html(m);
+    m="";
+    that.data.directors.forEach(function(act){
+      m+=act+'&lt;br>';
+    });
+    $(that.css.full.directors).html(m);
+    $(that.css.full.date).html(that.data.date);
+    $(that.css.full.fname).html(that.data.fname);
+    $(that.css.full.path).html(that.data.path);
+    $(that.css.full.openit).attr('data-path',that.data.path)
+  };
+
+
+  /**
+   * this.match - The user will type his research to find a movie in the list
+   * this function will find the movie that correspond to the research
+   * this function also allow to use search operators and parameters
+   * exemple : a:John Cena|Edit Piaf;n:My&amp;title;d:&lt;20101231|>20160731|=20161014
+   *
+   * @param  {string} text input by the user
+   * @return {boolean} output return true or false
+   */
+  this.match = function(text){
+    var titre = that.data.title;
+    var acteurs = that.data.acteurs; // thats an ARRAY !
+    var date = that.data.date.replace('-',''); // "2013-03-21"
+
+    var output = false;
+
+    if(text.indexOf(":") != -1){
+
+    var outputActor = false;
+    var outputName = false;
+    var outputDate = false;
+
+    var parameters = text.split(';');
+
+
+    var actors = '';
+    var names = '';
+    var dates = '';
+
+
+      // now 2 first characters of each cell are the parameters exemple parameters[0] => "a:John Sotillo", parameters[1] => "n:Bonjour"
+
+      // for each parameters
+      for(var i = 0; i &lt; parameters.length; i++){
+
+        parameters[i] = parameters[i].split(":"); // split the parameter char and the value
+
+        // all parameters are reparted on a specific variable
+        switch(parameters[i][0]){
+          case "a" : actors = parameters[i][1];
+            break;
+          case "n" : names = parameters[i][1];
+            break;
+          case "d" : dates = parameters[i][1];
+            break;
+        }
+      }
+
+      // treatment of data tables of parameters (internal function)
+
+      var stockDataSearched = function(tables){
+        var table; // array
+
+        if(tables.indexOf("|") != -1){ // if OR treatment has been request
+          var searchTable = tables.split("|");
+
+          table = new Array();
+
+          for(var i = 0; i &lt; searchTable.length; i++){
+
+            table[table.length] = new Array();
+
+            if(searchTable[i].indexOf("&amp;") != -1){ // if AND treatment has been request
+
+              tmp = searchTable[i].split("&amp;");
+              for(var d = 0; d &lt; tmp.length; d++){
+                table[i].push(tmp[d]);
+              }
+
+            }else{
+              table[i].push(searchTable[i]);
+            }
+          }
+        }else if(tables.indexOf("&amp;") != -1){ // if AND treatment only has been request
+          table = new Array;
+          table[0] = tables.split("&amp;");
+        }else{
+          table = new Array;
+          table[0] = [tables,'']; //here there is a simple string data in actors so we put an empty cell because actor have to be an array
+        }
+        return table;
+      }
+
+      // data treatments
+      var actor = stockDataSearched(actors); // array
+      var name = stockDataSearched(names); // array
+      var dateB = stockDataSearched(dates); // array
+
+
+      if(actor[0][0] != ''){
+        // loop for artists ===========================================================
+        for(var i = 0; i &lt; actor.length; i++){ // for each OR clause
+          for(var c = 0; c &lt; actor[i].length; c++){ // for each actor name
+            if(actor[i][c] != ""){ // if the actor cell isn't empty
+              for(var d = 0; d &lt; acteurs.length; d++){ // for each actor name in the array
+                if(acteurs[d].toLowerCase().indexOf(actor[i][c].toLowerCase()) != -1){ // if actor searched match to actor stocked
+                  outputActor = true;
+                  break;
+                }else{
+                  outputActor = false;
+                }
+              }
+              if(outputActor == false){
+                break;
+              }
+            }
+          }
+          if(outputActor != false){
+            break;
+          }
+        }
+      }else{
+        outputActor = true;
+      }
+
+      if(name[0][0] != ''){
+        // loop for movie names ====================================================
+        for(var i = 0; i &lt; name.length; i++){ // for each OR clause
+          for(var c = 0; c &lt; name[i].length; c++){ // for each movie name
+            if(name[i][c] != ""){ // if the movie name cell isn't empty
+              //console.log(titre);
+                if(titre.toLowerCase().indexOf(name[i][c].toLowerCase()) != -1 ){
+                  outputName = true;
+                }else{
+                  outputName = false;
+                }
+              if(outputName == false){
+                break;
+              }
+            }
+          }
+          if(outputName != false){
+            break;
+          }
+        }
+      }else{
+        outputName = true;
+      }
+
+      if(dateB[0][0] != ''){
+        // loop for dates ==========================================================
+        for(var i = 0; i &lt; dateB.length; i++){
+          for(var c = 0; c &lt; dateB[i].length; c++){
+            if(dateB[i][c] != ""){
+              if(dateB[i][c].charAt(0) == '&lt;'){
+                if(date &lt; dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(dateB[i][c].charAt(0) == '>'){
+                if(date > dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                }else{
+                  outputDate = false;
+                  break;
+                }
+              }else if(dateB[i][c].charAt(0) == '='){
+                if(date == dateB[i][c].substr(1, 8)){
+                  outputDate = true;
+                  break;
+                }
+              }
+            }
+          }
+          if(outputDate !=false){
+            break;
+          }
+        }
+      }else{
+        outputDate = true;
+      }
+
+      if(outputActor == true &amp;&amp; outputName == true &amp;&amp; outputDate == true){
+        output = true;
+      }else{
+        output = false;
+      }
+    }else{ // no parameters !
+      for(var i = 0; i &lt; acteurs.length; i++){
+        if(acteurs[i].toLowerCase().indexOf(text.toLowerCase()) != -1){
+          output = true;
+          break;
+        }else{
+          output = false;
+        }
+      }
+      if(titre.toLowerCase().indexOf(text.toLowerCase()) != -1){
+        output = true;
+      }
+    }
+    return output;
+
+  }
+
+  /**
+   * this.setTitle - permetde définir uniquement le titre du film et définit l'objet comme a ne pas rafraichir
+   *
+   * @param  {string} title le titre du film
+   */
+  this.setTitle=function(title){
+    this.dontUpdate=true;
+    this.data.title=title;
+  }
+
+  if(typeof data != 'undefined')this.setData(data);
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#data">data</a></li><li><a href="global.html#includeToList">includeToList</a></li><li><a href="global.html#ItemZMov">ItemZMov</a></li><li><a href="global.html#match">match</a></li><li><a href="global.html#removeFromList">removeFromList</a></li><li><a href="global.html#setData">setData</a></li><li><a href="global.html#setTitle">setTitle</a></li><li><a href="global.html#updateCard">updateCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 16 2016 10:04:43 GMT+0100 (Europe de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
