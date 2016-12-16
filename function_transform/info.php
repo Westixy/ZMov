@@ -40,7 +40,8 @@
 		));
 		$response = curl_exec($cha);
 		curl_close($cha);
-		$actorsResults = json_decode($response, true)['results'][0];
+		$actorsResults = json_decode($response, true);
+		//die(var_dump($actorsResults));
 		$movieResults['actors'] = $actorsResults['cast'];
 		$movieResults['directors'] = [];
 		$movieResults['directors'][] = $actorsResults['crew'][0];

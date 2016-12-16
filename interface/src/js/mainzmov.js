@@ -203,8 +203,10 @@ function mainZMov(){
   this.onAjaxDone=function(datas){
     var d={};
     try {
+      //console.log(datas);
+      //return;
       d = JSON.parse(datas);
-
+      console.log(d);
       var it = that.il.getFromFname(d.fname);
 
       if(typeof it!='undefined'){

@@ -147,12 +147,12 @@ function ItemZMov(data){
     $(that.css.full.desc).html(that.data.more);
     var m="";
     that.data.acteurs.forEach(function(act){
-      m+=act+'<br>';
+      m+=act.name+'<br>';
     });
     $(that.css.full.acteurs).html(m);
     m="";
     that.data.directors.forEach(function(act){
-      m+=act+'<br>';
+      m+=act.name+'<br>';
     });
     $(that.css.full.directors).html(m);
     $(that.css.full.date).html(that.data.date);
@@ -173,7 +173,7 @@ function ItemZMov(data){
    */
   this.match = function(text){
     var titre = that.data.title;
-    var acteurs = that.data.acteurs; // thats an ARRAY !
+    var acteurs = that.data.acteurs; // thats an ARRAY ! ... of object
     var date = that.data.date.replace('-',''); // "2013-03-21"
 
     var output = false;
@@ -257,7 +257,7 @@ function ItemZMov(data){
           for(var c = 0; c < actor[i].length; c++){ // for each actor name
             if(actor[i][c] != ""){ // if the actor cell isn't empty
               for(var d = 0; d < acteurs.length; d++){ // for each actor name in the array
-                if(acteurs[d].toLowerCase().indexOf(actor[i][c].toLowerCase()) != -1){ // if actor searched match to actor stocked
+                if(acteurs[d].name.toLowerCase().indexOf(actor[i][c].toLowerCase()) != -1){ // if actor searched match to actor stocked
                   outputActor = true;
                   break;
                 }else{
@@ -343,7 +343,7 @@ function ItemZMov(data){
       }
     }else{ // no parameters !
       for(var i = 0; i < acteurs.length; i++){
-        if(acteurs[i].toLowerCase().indexOf(text.toLowerCase()) != -1){
+        if(acteurs[i].name.toLowerCase().indexOf(text.toLowerCase()) != -1){
           output = true;
           break;
         }else{
