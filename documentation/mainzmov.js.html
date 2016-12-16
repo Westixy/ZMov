@@ -41,22 +41,36 @@
 
 
 /**
- * mainZMov - description
- *
- * @return {type}  description
+ * mainZMov - Classe principal de l'application cliente
  */
 function mainZMov(){
   var that=this;
 
   this.prop={};
+
+  /**
+   * tableau contenants les loaders
+   */
   this.l={};
 
+  /**
+   * Objet itemList servant a la gestion des items (films)
+   */
   this.il=new ItemListZMov();
 
+  /**
+   * Objet de gestion de lenvoi des requètes
+   */
   this.ajx=new AjaxSender();
 
+  /**
+   * Objet de gestion des settings de l'application
+   */
   this.stgs=new ZMovSettings();
 
+  /**
+   *  Objet de gestion des communications
+   */
   this.c=new CommEmmiter('web','#FromExt','#FromWeb');
 
   this.css={
@@ -71,8 +85,9 @@ function mainZMov(){
     fail:0
   }
 
-
-  // INITERS //
+  /**
+   * this.init - Fonction d'initialisation de l'application
+   */
   this.init=function(){
     that.initAjax();
     that.initLoaders();
@@ -82,11 +97,18 @@ function mainZMov(){
     that.undump();
   }
 
+  /**
+   * this.initLoaders - Instancie les loaders
+   */
   this.initLoaders=function(){
     that.l.b=new Loader(that.css.body);
     that.l.flst=new Loader(that.css.flst,'Loading&lt;br>&lt;span id="flst_pbt">0%&lt;/span>');
     that.l.info=new Loader(that.css.info);
   }
+
+  /**
+   * this.initAjax - donnes les paramètres à l'objet ajx(AjaxSender) et définition des actions a affectuer lors des evenements
+   */
   this.initAjax=function(){
     that.ajx.url="../function_transform/index1.php";
     that.ajx.onSendAll=this.onAjaxSendAll;
@@ -95,6 +117,10 @@ function mainZMov(){
     that.ajx.onResult=this.onAjaxResult;
     that.ajx.onEnd=this.onAjaxEnd;
   }
+
+  /**
+   * this.initSettings - définition des actions a affectuer lors des evenements des settings
+   */
   this.initSettings=function(){
     that.stgs.onClose=function(){};
     that.stgs.onCIl=function(){
@@ -103,7 +129,6 @@ function mainZMov(){
       that.dump();
     };
     that.stgs.onAddFolder=function(n,l){
-      //console.log(l);
       that.exmit('flist_set',l);
       that.exmit('flist_get');
       that.dump();
@@ -117,10 +142,13 @@ function mainZMov(){
     };
     that.stgs.onExtChage=function(n){that.exmit('ext_set',n);};
     that.stgs.onFcbClick=function(){
-      console.log(233454);
       that.exmit('folder_choose');
     };
   }
+
+  /**
+   * this.initComm - initialisation du CommEmmiter et activation des evenements de réception
+   */
   this.initComm=function(){
     that.c.init();
     that.c.on('DEBUG',console.log);
@@ -136,8 +164,11 @@ function mainZMov(){
     },6000);
 
   }
-
-  // vvv COMM EVENTS vvv //
+  /**
+   * this.onFlistOk - COMM EVENTS - action executee lorsque lextention renvoie la liste des fichiers des répertoires donnés par flist_set
+   *
+   * @param  {objet} n le contenu de retour de l'extention (flist_ok)
+   */
   this.onFlistOk=function(n){
     var tmplist = [];
     for (var i=0 ; i&lt;n.length ; i++){
@@ -163,6 +194,12 @@ function mainZMov(){
       that.ajx.sendAll();
     }
   }
+
+  /**
+   * this.onSyncOk - COMM EVENT - validation de l'existance de l'extention et débloquage de l'app si sa version est bonne.
+   *
+   * @param  {string} ver version de l'extention associée
+   */
   this.onSyncOk=function(ver){
     mainZMov.ext_found=true;
      // control que la version minimal soit acceptée.
@@ -176,6 +213,9 @@ function mainZMov(){
   }
 
   // vvv AJAX EVENTS vvv //
+  /**
+   * this.onAjaxSendAll - Actions a executer lors d'un ajx.sendAll
+   */
   this.onAjaxSendAll=function(){
     that.ratio={ok:0,fail:0};
     that.l.flst.show();
@@ -183,11 +223,15 @@ function mainZMov(){
     $('#flst_pbt').text('0.0%');
   }
 
+  /**
+   * this.onAjaxDone - actions a executer apres un ajx.done (quand une requete a reussi)
+   *
+   * @param  {objet} datas les données du film retournée par le script php qui va chercher les information sur l'api  de themoviedatabase
+   */
   this.onAjaxDone=function(datas){
     var d={};
     try {
       d = JSON.parse(datas);
-      //console.log(d);
 
       var it = that.il.getFromFname(d.fname);
 
@@ -226,25 +270,41 @@ function mainZMov(){
       console.log(err);
     }
   }
+
+  /**
+   * this.onAjaxFail - actions a executer apres un ajx.fail (quand une requete a échoué)
+   *
+   * @param  {string} err    l'erreur retournée par l'objet jquery.ajax
+   * @param  {int} status le status http de l'erreur
+   */
   this.onAjaxFail=function(err,status){
     console.error("-X- AJAX_ERROR --- "+status+" -> ");
     console.log(err);
     that.ajx.abortAll();
     that.l.flst.h();
   }
+
+  /**
+   * this.onAjaxResult - actions a executer apres un ajx.result (quand une requete est terminée) (fail ou pas)
+   */
   this.onAjaxResult=function(){
     //console.log(that.ajx.nbrended+'/'+that.ajx.tot());
     var pc=(that.ajx.nbrended/that.ajx.tot()*100).toFixed(1);
     $('#flst_pbt').text(pc+'%');
-
   }
+
+  /**
+   * this.onAjaxEnd - actions a executer apres un ajx.end (quand toutes les requetes sont terminées)
+   */
   this.onAjaxEnd=function(){
       that.l.flst.hide();
       console.log('ratio : '+ (that.ratio.ok*100/(that.ratio.ok+that.ratio.fail)) +'%');
       that.dump();
   }
 
-  // vvv EVENTS USER vvv //
+  /**
+   * this.initEvents - activation des événements (utilisateur) de l'application
+   */
   this.initEvents=function(){
     $(window).on("resize",that.onWinResize);
     $('#in-search').on("change",that.onSearchChange);
@@ -258,10 +318,19 @@ function mainZMov(){
     });
   }
 
+  /**
+   * this.onWinResize - actions a executer lorsque la page se redimentionne
+   */
   this.onWinResize=function(){
     //console.log("WinResized");
   }
 
+  /**
+   * this.onSearchChange - actions a executer lors qu'un changement a eu lieu dans le champ de recherche de l'app&lt;br>
+   * affiche la liste selon les critere recherchés
+   *
+   * @param  {string} val le contenu du champ
+   */
   this.onSearchChange=function(val){
     //console.log(val.target.value);
     that.il.match(val.target.value);
@@ -270,6 +339,12 @@ function mainZMov(){
     //var x = setTimeout(function(){that.l.flst.hide();},10);
   }
 
+  /**
+   * this.onItemClick - actions a executer lorseque l'utilisateur clique sur un item (film)&lt;br>
+   *  affiche l'item dans la card (partie de droite)
+   *
+   * @param  {DOMEvent} ev événemets retourné par un click sur un item
+   */
   this.onItemClick=function(ev){
     var elem = ev.currentTarget;
     var id = $(elem).attr('data-itemid');
@@ -279,12 +354,15 @@ function mainZMov(){
     //var x = setTimeout(function(){that.l.info.hide();},1000);
   }
 
+  /**
+   * this.onSettingsClick - actions a executer quand on clic sur le bouton settings&lt;br>
+   *  affiche la fenetre de settings
+   */
   this.onSettingsClick=function(){
     $(that.css.settings).removeClass('hidden');
   }
 
   // vvv EVENTS ZMov vvv //
-
   this.onLoad=function(){}
   this.afterInit=function(){}
   this.onDataRecived=function(data){}
@@ -293,12 +371,19 @@ function mainZMov(){
   this.on=function(){}
   this.onx=function(){}
 
-  // Alias
+  /**
+   * this.exmit - [alias] simplification pour envoyer une action à l'extention avec des parametres(ou pas)
+   *
+   * @param  {string} action le nom de l'action a executer par l'extention
+   * @param  {rainbow} vars   [facultatif] le parametre a envoyer
+   */
   this.exmit=function(action,vars){
     that.c.emit('ext',action,vars);
   }
 
-
+  /**
+   * this.dump - enregistrement de l'etat actuel de l'application dans le local storage afin de pouvoir le récuperer plus tard (fonction de "cache")
+   */
   this.dump=function(){
     if(!localStorage.zmovmain){
       localStorage.setItem('zmovmain',JSON.stringify(that));
@@ -307,6 +392,10 @@ function mainZMov(){
       localStorage.zmovmain=JSON.stringify(that);
     }
   }
+
+  /**
+   * this.undump - récupération du contenu du dernier dump dans le localstorage et réinsertion des données dans l'application
+   */
   this.undump=function(){
     if(localStorage.zmovmain){
       var lsz=JSON.parse(localStorage.zmovmain);
@@ -317,6 +406,13 @@ function mainZMov(){
       }
     }
   }
+
+  /**
+   * this.sort - description
+   *
+   * @param  {string} how comment trier la liste ( id | title | title_rev | date | date_rev )
+   * @return {type}     description
+   */
   this.sort=function(how){
     let type={
       id:function(a,b){
@@ -354,6 +450,10 @@ function mainZMov(){
     }
   }
 }
+
+/**
+ * version minimal de l extention pour que ça fonctionne :DD
+ */
 mainZMov.ext_min_v="1.0.1";
 mainZMov.ext_found=false;
 mainZMov.versionSpliter=function(version){
@@ -364,6 +464,13 @@ mainZMov.versionSpliter=function(version){
   }
   return ret;
 }
+
+/**
+ * mainZMov.versionAccept - permet de déterminer si la version données est compatible avec celle de l'application
+ *
+ * @param  {string} other la version a tester
+ * @return {boolean}       true si la version est compatible
+ */
 mainZMov.versionAccept=function(other){
   var min=mainZMov.versionSpliter(mainZMov.ext_min_v);
   var oth=mainZMov.versionSpliter(other);
@@ -374,6 +481,13 @@ mainZMov.versionAccept=function(other){
   }
   return true;
 }
+
+/**
+ * n - [helper] servant a obtenir le text donné moins la premiere lettre
+ *
+ * @param  {string} text le texte a transformer
+ * @return {string}      le texte de base moins le premier caractere
+ */
 
 function n(text){
   return text.substring(1, text.length);
@@ -388,13 +502,13 @@ function n(text){
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#mainZMov">mainZMov</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#ajx">ajx</a></li><li><a href="global.html#c">c</a></li><li><a href="global.html#dump">dump</a></li><li><a href="global.html#exmit">exmit</a></li><li><a href="global.html#il">il</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAjax">initAjax</a></li><li><a href="global.html#initComm">initComm</a></li><li><a href="global.html#initEvents">initEvents</a></li><li><a href="global.html#initLoaders">initLoaders</a></li><li><a href="global.html#initSettings">initSettings</a></li><li><a href="global.html#l">l</a></li><li><a href="global.html#mainZMov">mainZMov</a></li><li><a href="global.html#n">n</a></li><li><a href="global.html#onAjaxDone">onAjaxDone</a></li><li><a href="global.html#onAjaxEnd">onAjaxEnd</a></li><li><a href="global.html#onAjaxFail">onAjaxFail</a></li><li><a href="global.html#onAjaxResult">onAjaxResult</a></li><li><a href="global.html#onAjaxSendAll">onAjaxSendAll</a></li><li><a href="global.html#onFlistOk">onFlistOk</a></li><li><a href="global.html#onItemClick">onItemClick</a></li><li><a href="global.html#onSearchChange">onSearchChange</a></li><li><a href="global.html#onSettingsClick">onSettingsClick</a></li><li><a href="global.html#onSyncOk">onSyncOk</a></li><li><a href="global.html#onWinResize">onWinResize</a></li><li><a href="global.html#sort">sort</a></li><li><a href="global.html#stgs">stgs</a></li><li><a href="global.html#undump">undump</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Dec 13 2016 16:13:57 GMT+0100 (Europe de l’Ouest)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 16 2016 11:58:56 GMT+0100 (Europe de l’Ouest)
 </footer>
 
 <script> prettyPrint(); </script>
