@@ -428,7 +428,7 @@ function mainZMov(){
 /**
  * version minimal de l extention pour que ça fonctionne :DD
  */
-mainZMov.ext_min_v="1.0.1";
+mainZMov.ext_min_v="1.0.4";
 mainZMov.ext_found=false;
 mainZMov.versionSpliter=function(version){
   var v = version.split('.');
