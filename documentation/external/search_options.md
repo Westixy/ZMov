@@ -15,7 +15,6 @@
     - la date doit commencer par un opérateur de compraison:
       - `<` plus petit que la date(`<yyyymmdd`)
       - `>` plus grand que la date(`>yyyymmdd`)
-      - `=` égal à la date(`=yyyymmdd`)
   - séparé à l'intérieur par des portes :
     - `|` OU
     - `&` ET

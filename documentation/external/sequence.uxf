@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>1280</w>
+      <h>1630</h>
+    </coordinates>
+    <panel_attributes>title=ZMov\nGenerals
+autoTick=true
+obj=User~u
+obj=Interface~i
+obj=Extension~e
+obj=PHP Server~p
+obj=API TMDB~a
+
+// extention exist
+u:ON LOAD;i-&gt;&gt;&gt;e :sync_get(); on=i; on=e;
+e.&gt;i :sync_ok(version); off=i; off=e;
+tick=
+
+// define folder
+u:DEFINE FOLDER
+u-&gt;&gt;&gt;i :open settings; on=u;on=i;
+off=u;off=i;
+u-&gt;&gt;&gt;i :onchange folders; on=u;on=i;
+i-&gt;&gt;&gt;e :flist_set(folders[]); on=e;
+e-&gt;e + :set\nfolders;
+tick=
+i-&gt;&gt;&gt;e :flist_get();u:OBTAIN FILELIST
+i-&gt;i + :show\nloader;
+e-&gt;e + :scan\nfolders\n;
+tick=
+e.&gt;i :flist_ok(fileList[]);off=e;
+i-&gt;i + :create\nitems;
+tick=
+
+combinedFragment=loop~l0 i a; i:foreach\nfilelist[];u:OBTAIN MOVIES\nINFO
+i-&gt;&gt;&gt;p :getInfoFromTMDB(raw_filename);on=p
+p-&gt;p + :clean\nfilename
+tick=
+p-&gt;&gt;&gt;a:api_movie(fname_clean);on=a;on=p
+a.&gt;p:JSON of movie info;off=a;off=p
+p-&gt;&gt;&gt;a:api_actors(movie_id);on=a;on=p
+a.&gt;p:JSON of movie actors;off=a;off=p
+p-&gt;p + :concat\napi\nresults
+tick=
+p.&gt;i:JSON of the results of the request on api;off=p;
+i-&gt;i + :insert\ndata on\nitems
+tick=
+i-&gt;i + :include\nitem on\nvisual\nlist
+tick=
+--=l0; i:wait:1s
+
+i-&gt;i + :hide\nloader
+off=i;off=u
+tick=
+
+// Click on an item
+u:CLICK ITEM
+u-&gt;&gt;&gt;i:click on an item;on=u;on=i;
+i-&gt;i+:update\nvisual\ncard;
+off=u;off=i;
+tick=
+
+// click on openFile
+u:FILE OPEN
+u-&gt;&gt;&gt;i:fopen(path);on=u;on=i;
+i-&gt;&gt;&gt;e:fopen(path);on=e;off=i;
+e-&gt;&gt;&gt;u:os.file(path).launch()\nopen the file with default app;off=e;off=u;
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
