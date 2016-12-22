@@ -1,7 +1,7 @@
 # Search option
 
 <b>Exemple :</b>
-`a:John Cena|Edit Piaf;n:My&title;d:<20101231|>20160731|=20161014`
+`a:John Cena|Edit Piaf;n:My&title;d:<20101231|>20160731`
 
 <b>Explication</b>
 - Bloc
