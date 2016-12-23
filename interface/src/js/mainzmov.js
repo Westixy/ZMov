@@ -129,11 +129,19 @@ function mainZMov(){
     that.c.on('folder_ok',function(value){that.stgs.setFcbInputValue(value);});
 
     // teste si l'extention est présente
-    setTimeout(function(){that.exmit('sync_get');},1000);
-    setTimeout(function(){
-      if(mainZMov.ext_found==false)
+    var n = 0;
+
+    var tryExt=function(){
+      that.exmit('sync_get',n);
+      if(n<=6 && !mainZMov.ext_found){
+        setTimeout(function(){tryExt()},1000);
+      }else{
         $('#blocked>div.noext').html('<h1>No extention found</h1><h4>Please install ZMov-ext to use this app</h4>');
-    },6000);
+      }
+      n++;
+    }
+
+    tryExt(); 
 
   }
   /**
